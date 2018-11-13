@@ -9,9 +9,9 @@ public class GUIFormulario extends JFrame {
 
 
     private Container contenedor;
-    private JLabel usuario, identificacion, nombre, apellido, direccion, celular;
+    private JLabel usuario, nombre, apellido, direccion, celular;
     private JLabel eMail, contrasena, tipoEmpleado, sede;
-    private JTextField nombreIn, apellidoIn, identificacionIn, usuarioIn;
+    private JTextField nombreIn, apellidoIn, usuarioIn;
     private JTextField direccionIn, celularIn, eMailIn;
     private JComboBox tipoEmpleadoIn, sedeIn;
     private JPasswordField contrasenaIn;
@@ -30,7 +30,7 @@ public class GUIFormulario extends JFrame {
         contenedor = getContentPane();
         contenedor.removeAll();
 
-        JPanel panelUsuario = new JPanel(new GridLayout(11,2));
+        JPanel panelUsuario = new JPanel(new GridLayout(10,2));
         contenedor.add(panelUsuario);
 
         nombre = new JLabel("Nombre:");
@@ -44,12 +44,6 @@ public class GUIFormulario extends JFrame {
 
         apellidoIn = new JTextField();
         panelUsuario.add(apellidoIn);
-
-        identificacion = new JLabel("Identificacion:");
-        panelUsuario.add(identificacion);
-
-        identificacionIn = new JTextField();
-        panelUsuario.add(identificacionIn);
 
         usuario =  new JLabel("Usuario:");
         panelUsuario.add(usuario);
@@ -104,7 +98,7 @@ public class GUIFormulario extends JFrame {
         panelUsuario.add(crear);
 
         setResizable(false);
-        setSize(400,600);
+        setSize(400,500);
         setVisible(true);
         setLocationRelativeTo(null);
     }
