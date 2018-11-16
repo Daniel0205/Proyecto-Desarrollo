@@ -41,9 +41,89 @@ public class BaseDeDatos {
             e.printStackTrace();
             return false;
         }
-
-
-
     }
 
+    public boolean verificarId(int id) {
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+            String sql ="SELECT * from empleados";
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            ResultSet rs = psSql.executeQuery();
+            int verify = 0;
+            
+            while (rs.next()){
+                if(Integer.parseInt(rs.getString("id"))==id){
+                    verify++;
+                }
+            }
+
+            if(verify==1){
+                return true;
+            }else return false;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public String obtenerS(int identifier, String campo) {
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+            String sql ="SELECT "+campo+" FROM empleados WHERE id = "+identifier;
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            ResultSet rs = psSql.executeQuery();
+
+            rs.next();
+            String resultado = rs.getString(1);
+            return resultado;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public boolean obtenerB(int identifier, String campo) {
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+            String sql ="SELECT "+campo+" FROM empleados WHERE id = "+identifier;
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            ResultSet rs = psSql.executeQuery();
+
+            rs.next();
+            boolean resultado = rs.getBoolean(1);
+            return resultado;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean actualizarUsuario(int identifier, String usuario, String nombres, String apellidos,
+                                     String direccion, int celular, String email, String tipo, String sede, boolean activo) {
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+            String sql ="UPDATE empleados SET user_alias = '"+usuario+"', names = '"+nombres+
+                    "', surnames = '"+apellidos+"', address = '"+direccion+"', phone_number = "+celular+
+                    ", email = '"+email+"', user_type = '"+tipo+"', headquarter = '"+sede+"', active = "+activo+
+                    " WHERE id = "+identifier+";";
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            psSql.executeUpdate();
+
+            return true;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -104,7 +104,7 @@ public class GUIFormulario extends JFrame {
         panelUsuario.add(crear);
 
         setResizable(false);
-        setSize(400,600);
+        setSize(300,400);
         setVisible(true);
         setLocationRelativeTo(null);
     }
@@ -120,11 +120,15 @@ public class GUIFormulario extends JFrame {
                        eMailIn.getText(),(String)tipoEmpleadoIn.getSelectedItem(),
                        (String)sedeIn.getSelectedItem(), Integer.parseInt(celularIn.getText()));
 
-               if (var) JOptionPane.showMessageDialog(null, "Usuario creado exitosamente");
+               if (var){
+                   JOptionPane.showMessageDialog(null, "Usuario creado exitosamente");
+                   contenedor.removeAll();
+                   crearComponentes();
+               }
                else JOptionPane.showMessageDialog(null, "Error al crear usuario.");
 
             }
-            if (actionEvent.getSource()==cancelar) System.exit(0);
+            if (actionEvent.getSource()==cancelar) dispose();
         }
     }
 }

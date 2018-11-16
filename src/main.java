@@ -6,11 +6,8 @@ public class main {
 
         BaseDeDatos bd = new BaseDeDatos();
 
-        JFrame formulario = new GUIFormulario(bd);
-        formulario.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
-
+        JFrame principal = new GUInitAction(bd);
+        principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
 }
