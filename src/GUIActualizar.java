@@ -133,11 +133,13 @@ public class GUIActualizar extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int identifier = Integer.parseInt(idIn.getText());
+
 
             if(e.getSource()==cancelar){
                 dispose();
             }else if(e.getSource()==aceptar){
+                int identifier = Integer.parseInt(idIn.getText());
+
                 if(bd.verificarId(identifier)){
                     initGUI2(identifier);
                 }else{
@@ -145,6 +147,7 @@ public class GUIActualizar extends JFrame {
                     dispose();
                 }
             }else if(e.getSource()==actualizar){
+                int identifier = Integer.parseInt(idIn.getText());
                 boolean var = bd.actualizarUsuario(identifier,usuarioIn.getText(),nombreIn.getText(),apellidosIn.getText(),
                         direccionIn.getText(),Integer.parseInt(celularIn.getText()),eMailIn.getText(),(String) tipoEmpleadoIn.getSelectedItem(),
                         (String) sedeIn.getSelectedItem(),Boolean.parseBoolean((String)estadoIn.getSelectedItem()));

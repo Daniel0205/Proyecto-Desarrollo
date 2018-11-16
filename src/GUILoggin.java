@@ -99,9 +99,9 @@ public class GUILoggin extends JFrame {
                     setVisible(false);
 
                     BaseDeDatos bd = new BaseDeDatos();
-                    GUIFormulario add = new GUIFormulario(bd);
+                    GUInitAction menu = new GUInitAction(bd);
 
-                    add.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 }
             }
