@@ -14,6 +14,5 @@ public class main {
         GUILoggin login = new GUILoggin();
         login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-
     }
 }

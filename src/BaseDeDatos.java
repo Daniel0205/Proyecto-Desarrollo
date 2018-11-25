@@ -1,20 +1,17 @@
 import java.sql.*;
 
-import static org.postgresql.jdbc.SslMode.VALUES;
 
 public class BaseDeDatos {
 
 	private final static String DB = "xyz";
-
 	private final static String USUARIO = "postgres";
-
 	private final static String PASSWORD = "1234";
-
 	private final static String URL = "jdbc:postgresql://localhost:5432/" + DB;
+
 
 	public boolean insertarUsuario(String usuario,String contrasena, String nombre,
 			String apellido,String direccion,String eMail,
-			String tipoUsuario, String sede, int celular){
+			String tipoUsuario, String sede, String celular){
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
@@ -24,8 +21,7 @@ public class BaseDeDatos {
 
 			String sql ="INSERT INTO public.empleados(user_alias, password, names,"+
 					"surnames, address, phone_number, email, user_type,"+
-					"headquarter, active) " +
-					"VALUES ('" +
+					"headquarter, active) VALUES ('" +
 					usuario + "', crypt('" + contrasena + "', gen_salt('md5')),'" +
 					nombre + "','" + apellido + "','" + direccion + "'," +
 					celular + ",'" + eMail + "','"+ tipoUsuario + "','" +
@@ -60,7 +56,8 @@ public class BaseDeDatos {
 
 			if(verify==1){
 				return true;
-			}else return false;
+			}
+			else return false;
 		}
 		catch (SQLException e) {
 			System.out.println("Connection failure");
@@ -108,9 +105,9 @@ public class BaseDeDatos {
 	}
 
 	public boolean actualizarUsuario(int identifier, String usuario, String nombres, String apellidos,
-			String direccion, int celular, String email, String tipo, String sede, boolean activo) {
-		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			String direccion, String celular, String email, String tipo, String sede, boolean activo) {
 
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			String sql ="UPDATE empleados SET user_alias = '"+usuario+"', names = '"+nombres+
 					"', surnames = '"+apellidos+"', address = '"+direccion+"', phone_number = "+celular+
 					", email = '"+email+"', user_type = '"+tipo+"', headquarter = '"+sede+"', active = "+activo+
