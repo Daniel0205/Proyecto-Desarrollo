@@ -1,129 +1,170 @@
 import java.sql.*;
 
-import static org.postgresql.jdbc.SslMode.VALUES;
 
 public class BaseDeDatos {
 
-    private final static String DB = "xyz";
+	private final static String DB = "xyz";
+	private final static String USUARIO = "postgres";
+	private final static String PASSWORD = "1234";
+	private final static String URL = "jdbc:postgresql://localhost:5432/" + DB;
 
-    private final static String USUARIO = "postgres";
 
-    private final static String PASSWORD = "1234";
+	public boolean insertarUsuario(String usuario,String contrasena, String nombre,
+			String apellido,String direccion,String eMail,
+			String tipoUsuario, String sede, String celular){
 
-    private final static String URL = "jdbc:postgresql://localhost:5432/" + DB;
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-    public boolean insertarUsuario(String usuario,String contrasena, String nombre,
-                                String apellido,String direccion,String eMail,
-                                String tipoUsuario, String sede, int celular){
+			System.out.println("Establishing connection with the database...");
+			Statement statement = connection.createStatement();
+			System.out.println("Connected to PostgreSQL database!");
 
-        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			String sql ="INSERT INTO public.empleados(user_alias, password, names,"+
+					"surnames, address, phone_number, email, user_type,"+
+					"headquarter, active) VALUES ('" +
+					usuario + "', crypt('" + contrasena + "', gen_salt('md5')),'" +
+					nombre + "','" + apellido + "','" + direccion + "'," +
+					celular + ",'" + eMail + "','"+ tipoUsuario + "','" +
+					sede + "'," +"true);";
+			System.out.print(sql);
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			psSql.execute();
 
-            System.out.println("Establishing connection with the database...");
-            Statement statement = connection.createStatement();
-            System.out.println("Connected to PostgreSQL database!");
+			return true;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return false;
+		}
+	}
 
-            String sql ="INSERT INTO public.empleados(user_alias, password, names,"+
-                    "surnames, address, phone_number, email, user_type,"+
-                    "headquarter, active) " +
-                    "VALUES ('" +
-                    usuario + "', crypt('" + contrasena + "', gen_salt('md5')),'" +
-                    nombre + "','" + apellido + "','" + direccion + "'," +
-                    celular + ",'" + eMail + "','"+ tipoUsuario + "','" +
-                    sede + "'," +"true);";
-            System.out.print(sql);
-            PreparedStatement psSql = connection.prepareStatement(sql);
-            psSql.execute();
+	public boolean verificarId(int id) {
 
-            return true;
-        }
-        catch (SQLException e) {
-            System.out.println("Connection failure");
-            e.printStackTrace();
-            return false;
-        }
-    }
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-    public boolean verificarId(int id) {
+			String sql ="SELECT * from empleados";
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			ResultSet rs = psSql.executeQuery();
+			int verify = 0;
 
-        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			while (rs.next()){
+				if(Integer.parseInt(rs.getString("id"))==id){
+					verify++;
+				}
+			}
 
-            String sql ="SELECT * from empleados";
-            PreparedStatement psSql = connection.prepareStatement(sql);
-            ResultSet rs = psSql.executeQuery();
-            int verify = 0;
-            
-            while (rs.next()){
-                if(Integer.parseInt(rs.getString("id"))==id){
-                    verify++;
-                }
-            }
+			if(verify==1){
+				return true;
+			}
+			else return false;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return false;
+		}
+	}
 
-            if(verify==1){
-                return true;
-            }else return false;
-        }
-        catch (SQLException e) {
-            System.out.println("Connection failure");
-            e.printStackTrace();
-            return false;
-        }
-    }
+	public String obtenerS(int identifier, String campo) {
 
-    public String obtenerS(int identifier, String campo) {
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			String sql ="SELECT "+campo+" FROM empleados WHERE id = "+identifier;
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			ResultSet rs = psSql.executeQuery();
 
-            String sql ="SELECT "+campo+" FROM empleados WHERE id = "+identifier;
-            PreparedStatement psSql = connection.prepareStatement(sql);
-            ResultSet rs = psSql.executeQuery();
+			rs.next();
+			String resultado = rs.getString(1);
+			return resultado;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return "";
+		}
+	}
 
-            rs.next();
-            String resultado = rs.getString(1);
-            return resultado;
-        }
-        catch (SQLException e) {
-            System.out.println("Connection failure");
-            e.printStackTrace();
-            return "";
-        }
-    }
+	public boolean obtenerB(int identifier, String campo) {
 
-    public boolean obtenerB(int identifier, String campo) {
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			String sql ="SELECT "+campo+" FROM empleados WHERE id = "+identifier;
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			ResultSet rs = psSql.executeQuery();
 
-            String sql ="SELECT "+campo+" FROM empleados WHERE id = "+identifier;
-            PreparedStatement psSql = connection.prepareStatement(sql);
-            ResultSet rs = psSql.executeQuery();
+			rs.next();
+			boolean resultado = rs.getBoolean(1);
+			return resultado;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return false;
+		}
+	}
 
-            rs.next();
-            boolean resultado = rs.getBoolean(1);
-            return resultado;
-        }
-        catch (SQLException e) {
-            System.out.println("Connection failure");
-            e.printStackTrace();
-            return false;
-        }
-    }
+	public boolean actualizarUsuario(int identifier, String usuario, String nombres, String apellidos,
+			String direccion, String celular, String email, String tipo, String sede, boolean activo) {
 
-    public boolean actualizarUsuario(int identifier, String usuario, String nombres, String apellidos,
-                                     String direccion, int celular, String email, String tipo, String sede, boolean activo) {
-        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			String sql ="UPDATE empleados SET user_alias = '"+usuario+"', names = '"+nombres+
+					"', surnames = '"+apellidos+"', address = '"+direccion+"', phone_number = "+celular+
+					", email = '"+email+"', user_type = '"+tipo+"', headquarter = '"+sede+"', active = "+activo+
+					" WHERE id = "+identifier+";";
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			psSql.executeUpdate();
 
-            String sql ="UPDATE empleados SET user_alias = '"+usuario+"', names = '"+nombres+
-                    "', surnames = '"+apellidos+"', address = '"+direccion+"', phone_number = "+celular+
-                    ", email = '"+email+"', user_type = '"+tipo+"', headquarter = '"+sede+"', active = "+activo+
-                    " WHERE id = "+identifier+";";
-            PreparedStatement psSql = connection.prepareStatement(sql);
-            psSql.executeUpdate();
+			return true;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return false;
+		}
+	}
 
-            return true;
-        }
-        catch (SQLException e) {
-            System.out.println("Connection failure");
-            e.printStackTrace();
-            return false;
-        }
-    }
+
+	//Metodo para obtener una lista de usuarios segun un 'criterio' de busqueda
+	//y una palabra clave en este caso llamada 'busqueda'
+	public String[][] consultarUsuarios(String criterio, String busqueda) { 
+
+		String sql = "SELECT user_alias, id, names, surnames, address, phone_number, "
+				+ "email, user_type,  headquarter, active FROM public.Empleados";
+
+		if(criterio=="Id") sql += " WHERE id = " + busqueda;
+		if(criterio=="Nombres") sql += " WHERE names = '" + busqueda + "'";
+		if(criterio=="Apellidos") sql += " WHERE surnames = '" + busqueda + "'";
+
+
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			ResultSet resultSet = statement.executeQuery(sql);
+
+			resultSet.last();
+			int rows = resultSet.getRow(); //# de filas resulado de la consulta 
+			resultSet.beforeFirst();
+
+			Array arraySQL = null;
+			int columns = 10; //# de columnas a mostrar (predeterminado)
+			String[][] resultadoConsulta = new String[rows][columns];
+
+			int j = 0;
+			while (resultSet.next()) {
+				for (int i = 0; i < columns; i++) {
+					arraySQL = resultSet.getArray(i+1);
+					resultadoConsulta[j][i] = arraySQL.toString();
+				} j++;
+			}
+
+			return resultadoConsulta;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

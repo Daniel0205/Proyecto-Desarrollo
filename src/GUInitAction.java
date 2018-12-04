@@ -2,64 +2,117 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
+
+@SuppressWarnings("serial")
 public class GUInitAction extends JFrame {
 
-    private Container contenedor;
-    private JLabel instruccion;
-    private JButton registrar,actualizar;
-    private BaseDeDatos bd;
+	private Container contenedor;
+	private JButton registrarUsuario,actualizarUsuario,mostrarUsuarios;
+	private JButton actualizarSede, registrarSede, mostrarSedes, salir;
+	private JSeparator separator_1, separator_2;
+	private JLabel icon;
+	private Font font;
+	private ActionListener listener;
+	private BaseDeDatos bd;
 
-    public GUInitAction(BaseDeDatos bdIn){
-        super("Acciones");
 
-        initGUI();
-        bd=bdIn;
-    }
+	public GUInitAction(BaseDeDatos bdIn){
 
-    private void initGUI() {
+		super("Acciones");
+		font = new Font("Tahoma", Font.PLAIN, 14);
+		initGUI();
+		bd = bdIn;
+	}
 
-        contenedor = getContentPane();
-        contenedor.removeAll();
+	private void initGUI() {
 
-        JPanel panel1 = new JPanel(new GridLayout(2,1));
-        contenedor.add(panel1);
+		contenedor = getContentPane();
+		contenedor.removeAll();
+		getContentPane().setLayout(null);
 
-        instruccion = new JLabel("Selecciona la acción que deseas realizar");
-        instruccion.setHorizontalAlignment(JLabel.CENTER);
-        instruccion.setVerticalAlignment(JLabel.CENTER);
-        panel1.add(instruccion);
+		listener = new ManejadorDeBotones();
 
-        JPanel panel2 = new JPanel(new GridLayout(1,2));
-        panel1.add(panel2);
+		actualizarUsuario = new JButton("Actualizar usuario");
+		actualizarUsuario.setFont(font);
+		actualizarUsuario.setBounds(22, 144, 142, 32);
+		actualizarUsuario.addActionListener(listener);
+		getContentPane().add(actualizarUsuario);
 
-        ActionListener listener = new ManejadorDeBotones();
+		registrarUsuario = new JButton("Registrar usuario");
+		registrarUsuario.setFont(font);
+		registrarUsuario.setBounds(22, 101, 142, 32);
+		registrarUsuario.addActionListener(listener);
+		getContentPane().add(registrarUsuario);
 
-        registrar = new JButton("Registrar usuario");
-        registrar.addActionListener(listener);
-        panel2.add(registrar);
+		mostrarUsuarios = new JButton("Mostrar usuarios");
+		mostrarUsuarios.setFont(font);
+		mostrarUsuarios.setBounds(22, 187, 142, 32);
+		mostrarUsuarios.addActionListener(listener);
+		getContentPane().add(mostrarUsuarios);
 
-        actualizar = new JButton("Actualizar usuario");
-        actualizar.addActionListener(listener);
-        panel2.add(actualizar);
+		mostrarSedes = new JButton("Mostrar sedes");
+		mostrarSedes.setFont(font);
+		mostrarSedes.setBounds(187, 187, 142, 32);
+		getContentPane().add(mostrarSedes);
 
-        setSize(300,100);
-        setResizable(false);
-        setVisible(true);
-        setLocationRelativeTo(null);
-    }
+		registrarSede = new JButton("Registrar Sede");
+		registrarSede.setFont(font);
+		registrarSede.setBounds(187, 101, 142, 32);
+		getContentPane().add(registrarSede);
 
-    private class ManejadorDeBotones implements ActionListener{
+		actualizarSede = new JButton("Actualizar sede");
+		actualizarSede.setFont(font);
+		actualizarSede.setBounds(187, 144, 142, 32);
+		getContentPane().add(actualizarSede);
 
-        public void actionPerformed(ActionEvent actionEvent){
-           if (actionEvent.getSource() == registrar){
-               JFrame formulario = new GUIFormulario(bd);
-               formulario.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-           } else if (actionEvent.getSource() == actualizar){
-               JFrame formulario2 = new GUIActualizar(bd);
-               formulario2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-           }
-        }
+		salir = new JButton("Salir");
+		salir.addActionListener(listener);
+		salir.setFont(font);
+		salir.setBounds(193, 267, 136, 32);
+		getContentPane().add(salir);
 
-    }
+		icon = new JLabel("");
+		URL filePath = this.getClass().getResource("/images/home.png");
+		icon.setIcon(new ImageIcon(filePath));
+		icon.setBounds(31, 11, 66, 66);
+		getContentPane().add(icon);
+
+		separator_1 = new JSeparator();
+		separator_1.setBounds(22, 88, 307, 2);
+		getContentPane().add(separator_1);
+
+		separator_2 = new JSeparator();
+		separator_2.setBounds(22, 258, 307, 2);
+		getContentPane().add(separator_2);
+		
+		setSize(359,339);
+		setResizable(false);
+		setVisible(true);  
+		setLocationRelativeTo(null);
+	}
+
+	//Manejador de eventos sobre los botones
+	private class ManejadorDeBotones implements ActionListener{
+
+		public void actionPerformed(ActionEvent actionEvent){
+			if (actionEvent.getSource() == registrarUsuario){
+				JFrame formulario1 = new GUIFormulario(bd);
+				formulario1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			} 
+			else if (actionEvent.getSource() == actualizarUsuario){
+				JFrame formulario2 = new GUIActualizar(bd);
+				formulario2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+			else if (actionEvent.getSource() == mostrarUsuarios){
+				JFrame formulario3 = new GUIConsultarEmpleados(bd);
+				formulario3.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+			else if (actionEvent.getSource() == salir){
+				System.exit(0);
+			}
+		}
+
+	}
 }
