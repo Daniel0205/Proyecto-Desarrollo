@@ -1,7 +1,5 @@
 import java.sql.*;
 
-import static org.postgresql.jdbc.SslMode.VALUES;
-
 public class BaseDeDatos {
 
     private final static String DB = "xyz";
