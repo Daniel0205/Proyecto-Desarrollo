@@ -1,6 +1,5 @@
 import java.sql.*;
 
-
 public class BaseDeDatos {
 
 	private final static String DB = "xyz";

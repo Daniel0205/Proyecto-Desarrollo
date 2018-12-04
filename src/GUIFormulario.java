@@ -1,10 +1,10 @@
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @SuppressWarnings("serial")
@@ -168,27 +168,84 @@ public class GUIFormulario extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
+    private boolean validar(){
+        boolean val=true;
+        if(nombreIn.getText().compareTo("")==0){
+            val=false;
+        }
+        if(apellidoIn.getText().compareTo("")==0){
+            val=false;
+        }
+        if(usuarioIn.getText().compareTo("")==0){
+            val=false;
+        }
+        if(direccionIn.getText().compareTo("")==0){
+            val=false;
+        }
+        if(celularIn.getText().compareTo("")==0){
+            val=false;
+        }
+        if(eMailIn.getText().compareTo("")==0){
+            val=false;
+        }
+        String p = new String(contrasenaIn.getPassword());
+        if(p.compareTo("")==0){
+            val=false;
+        }
+        return val;
+    }
 
-	private class ManejadorDeBotones implements ActionListener {
+    private String validar2(){
+        String mensaje = "";
+        try{
+            Integer.parseInt(celularIn.getText());
 
-		@Override
-		public void actionPerformed(ActionEvent actionEvent) {
-			if (actionEvent.getSource() == crear){
-				boolean var = bd.insertarUsuario(usuarioIn.getText(),new String(contrasenaIn.getPassword()),
-						nombreIn.getText(),apellidoIn.getText(),direccionIn.getText(),
-						eMailIn.getText(),(String)tipoEmpleadoIn.getSelectedItem(),
-						(String)sedeIn.getSelectedItem(), celularIn.getText());  
+        } catch (NumberFormatException excepcion){
+            mensaje = mensaje +" Digite un número valido en el campo del celular";
+        }
 
-				if (var){
-					JOptionPane.showMessageDialog(null, "Usuario creado exitosamente");
-					contenedor.removeAll();
-					crearComponentes();
-				}
-				else JOptionPane.showMessageDialog(null, "Error al crear usuario.");
+        Pattern patron = Pattern.compile("[^A-Za-z ]");
+        Matcher nombre = patron.matcher(nombreIn.getText());
+        Matcher apellido = patron.matcher(apellidoIn.getText());
 
-			}
-			if (actionEvent.getSource()==cancelar) 
-				dispose();
-		}
-	}
+
+        if(nombre.find()){
+            mensaje = mensaje +" Digite un nombre válido";
+        }
+        if(apellido.find()){
+            mensaje = mensaje +" Digite un apellido válido";
+        }
+
+        if(mensaje.compareTo("")==0){
+            mensaje="true";
+        }
+
+        return mensaje;
+
+    }
+
+    private class ManejadorDeBotones implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            if (actionEvent.getSource() == crear) {
+                if (validar()) {
+                    if (validar2().compareTo("true") == 0) {
+                        boolean var = bd.insertarUsuario(usuarioIn.getText(), new String(contrasenaIn.getPassword()),
+                                nombreIn.getText(), apellidoIn.getText(), direccionIn.getText(),
+                                eMailIn.getText(), (String) tipoEmpleadoIn.getSelectedItem(),
+                                (String) sedeIn.getSelectedItem(), celularIn.getText());
+                        if (var) {
+                            JOptionPane.showMessageDialog(null, "Usuario creado exitosamente");
+                            contenedor.removeAll();
+                            crearComponentes();
+                        } else JOptionPane.showMessageDialog(null, "Error al crear usuario.");
+                    } else JOptionPane.showMessageDialog(null, validar2());
+
+                } else JOptionPane.showMessageDialog(null, "Debe llenar todas los campos");
+            }
+            if (actionEvent.getSource() == cancelar)
+                dispose();
+        }
+    }
 }

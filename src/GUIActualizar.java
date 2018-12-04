@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @SuppressWarnings("serial")
@@ -216,39 +218,115 @@ public class GUIActualizar extends JFrame {
 		setResizable(false);
 	}
 
-	
-	private class ManejadorDeBotones implements ActionListener{
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
+    private boolean validar(){
+        boolean val=true;
+        if(nombreIn.getText().compareTo("")==0){
+            val=false;
+        }
+        if(apellidosIn.getText().compareTo("")==0){
+            val=false;
+        }
+        if(usuarioIn.getText().compareTo("")==0){
+            val=false;
+        }
+        if(direccionIn.getText().compareTo("")==0){
+            val=false;
+        }
+        if(celularIn.getText().compareTo("")==0){
+            val=false;
+        }
+        if(eMailIn.getText().compareTo("")==0){
+            val=false;
+        }
 
-			if(e.getSource()==salir1 || e.getSource()==cancelar2){
-				dispose();
-			}
-			else if(e.getSource()==buscar){
-				int identifier = Integer.parseInt(idIn.getText());
+        return val;
+    }
 
-				if(bd.verificarId(identifier)){
-					initGUI2(identifier);
-				}
-				else{
-					JOptionPane.showMessageDialog(null, "El empleado con id: "+ idIn.getText() +" no se encuentra registrado");
-					dispose();
-				}
-			}
-			else if(e.getSource()==actualizar){
-				int identifier = Integer.parseInt(idIn.getText());
-				boolean var = bd.actualizarUsuario(identifier,usuarioIn.getText(),nombreIn.getText(),apellidosIn.getText(),
-						direccionIn.getText(),celularIn.getText(),eMailIn.getText(),(String) tipoEmpleadoIn.getSelectedItem(),
-						(String) sedeIn.getSelectedItem(),Boolean.parseBoolean((String)estadoIn.getSelectedItem()));
+    private String validar2(){
+        String mensaje = "";
+        try{
+            Integer.parseInt(celularIn.getText());
 
-				if (var){
-					JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");
-					dispose();
-				}
-				else JOptionPane.showMessageDialog(null, "Error al actualizar usuario");
-				dispose();
-			}
-		}
-	}
+        } catch (NumberFormatException excepcion){
+            mensaje = mensaje +" Digite un número valido en el campo del celular";
+        }
+
+        Pattern patron = Pattern.compile("[^A-Za-z ]");
+        Matcher nombre = patron.matcher(nombreIn.getText());
+        Matcher apellido = patron.matcher(apellidosIn.getText());
+
+
+        if(nombre.find()){
+            mensaje = mensaje +" Digite un nombre válido";
+        }
+        if(apellido.find()){
+            mensaje = mensaje +" Digite un apellido válido";
+        }
+
+        if(mensaje.compareTo("")==0){
+            mensaje="true";
+        }
+
+        return mensaje;
+
+    }
+
+    private boolean validarId() {
+        boolean val = true;
+        try {
+            Integer.parseInt(idIn.getText());
+
+        } catch (NumberFormatException excepcion) {
+            val=false;
+        }
+        return val;
+    }
+
+
+    private class ManejadorDeBotones implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+
+            if(e.getSource()==salir1 || e.getSource()==cancelar2){
+                dispose();
+            }else if(e.getSource()==buscar){
+                if(!(idIn.getText().compareTo("")==0)){
+                    if(validarId()){
+                        int identifier = Integer.parseInt(idIn.getText());
+
+                        if(bd.verificarId(identifier)){
+                            initGUI2(identifier);
+                        }else{
+                            JOptionPane.showMessageDialog(null, "El empleado con id: "+ idIn.getText() +" no se encuentra registrado");
+                            dispose();
+                        }
+
+                    }else JOptionPane.showMessageDialog(null, "Digite un ID válido");
+                } else JOptionPane.showMessageDialog(null, "Digite el ID del empleado");
+            }else if(e.getSource()==actualizar){
+                if(validar()){
+                    if(validar2().compareTo("true")==0){
+                        int identifier = Integer.parseInt(idIn.getText());
+                        boolean var = bd.actualizarUsuario(identifier,usuarioIn.getText(),nombreIn.getText(),apellidosIn.getText(),
+                                direccionIn.getText(),celularIn.getText(),eMailIn.getText(),(String) tipoEmpleadoIn.getSelectedItem(),
+                                (String) sedeIn.getSelectedItem(),Boolean.parseBoolean((String)estadoIn.getSelectedItem()));
+
+                        if (var){
+                            JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");
+                            dispose();
+                        }
+                        else JOptionPane.showMessageDialog(null, "Error al actualizar usuario.");
+                        dispose();
+
+                    } else JOptionPane.showMessageDialog(null, validar2());
+
+
+                } else JOptionPane.showMessageDialog(null, "Digite todos los campos requeridos.");
+
+            }
+        }
+    }
 }
