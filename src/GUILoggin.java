@@ -6,6 +6,7 @@ import java.net.URL;
 
 
 
+
 @SuppressWarnings("serial")
 public class GUILoggin extends JFrame {
 
@@ -80,24 +81,42 @@ public class GUILoggin extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
-	
-	private class ManejadorDeBotones implements ActionListener{
+    private boolean validar(){
+        boolean val=true;
+        if(user.getText().compareTo("")==0){
+            val=false;
+        }
+        String p = new String(password.getPassword());
+        if(p.compareTo("")==0){
+            val=false;
+        }
 
-		@Override
-		public void actionPerformed(ActionEvent actionEvent) {
+        return val;
+    }
 
-			if (actionEvent.getSource()==btnLogin){
-				String id=user.getText(), pass = new String(password.getPassword());
+    private class ManejadorDeBotones implements ActionListener {
 
-				if (id.compareTo("admin")==0 && pass.compareTo("admin")==0){
-					setVisible(false);
-					BaseDeDatos bd = new BaseDeDatos();
-					GUInitAction menu = new GUInitAction(bd);
-					menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				}
-			}
 
-			if (actionEvent.getSource()==btnCancel) System.exit(0);
-		}
-	}
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+
+            if (actionEvent.getSource() == btnLogin) {
+                if (validar()) {
+                    String id = user.getText(), pass = new String(password.getPassword());
+
+                    if (id.compareTo("admin") == 0 && pass.compareTo("admin") == 0) {
+                        setVisible(false);
+
+                        BaseDeDatos bd = new BaseDeDatos();
+                        GUInitAction menu = new GUInitAction(bd);
+
+                        menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                    }
+
+                } else JOptionPane.showMessageDialog(null, "Debe llenar todas los campos");
+            }
+            if (actionEvent.getSource() == btnCancel) System.exit(0);
+        }
+    }
 }
