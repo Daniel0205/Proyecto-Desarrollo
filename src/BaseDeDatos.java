@@ -38,7 +38,7 @@ public class BaseDeDatos {
 			return false;
 		}
 	}
-
+	//Verifica que el id de un empleado se encuentre en la Base de Datos
 	public boolean verificarId(int id) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
@@ -66,6 +66,35 @@ public class BaseDeDatos {
 		}
 	}
 
+	//Verifica que el id de una sede se encuentre en la Base de Datos
+	public boolean verificarIdSede(int id) {
+
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+			String sql ="SELECT * from sedes";
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			ResultSet rs = psSql.executeQuery();
+			int verify = 0;
+
+			while (rs.next()){
+				if(Integer.parseInt(rs.getString("id"))==id){
+					verify++;
+				}
+			}
+
+			if(verify==1){
+				return true;
+			}
+			else return false;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	//Método para obtener un elemento de tipo String perteneciente al valor de algún atributo de un empleado.
 	public String obtenerS(int identifier, String campo) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
@@ -85,6 +114,27 @@ public class BaseDeDatos {
 		}
 	}
 
+	//Método para obtener un elemento de tipo String perteneciente al valor de algún atributo de una sede.
+	public String obtenerSsede(int identifier, String campo) {
+
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+			String sql ="SELECT "+campo+" FROM sedes WHERE id = "+identifier;
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			ResultSet rs = psSql.executeQuery();
+
+			rs.next();
+			String resultado = rs.getString(1);
+			return resultado;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	//Método para obtener un elemento de tipo boolean perteneciente al valor de algún atributo.
 	public boolean obtenerB(int identifier, String campo) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
@@ -112,6 +162,22 @@ public class BaseDeDatos {
 					"', surnames = '"+apellidos+"', address = '"+direccion+"', phone_number = "+celular+
 					", email = '"+email+"', user_type = '"+tipo+"', headquarter = '"+sede+"', active = "+activo+
 					" WHERE id = "+identifier+";";
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			psSql.executeUpdate();
+
+			return true;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean actualizarSede(int identifier, String direccion, String telefono, String empleadoACargo) {
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			String sql ="UPDATE sedes SET address = '"+direccion+"', phone_number = "+telefono+
+					", employee_in_charge = "+empleadoACargo+" WHERE id = "+identifier+";";
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			psSql.executeUpdate();
 

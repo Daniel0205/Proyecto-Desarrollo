@@ -65,6 +65,7 @@ public class GUInitAction extends JFrame {
 		actualizarSede = new JButton("Actualizar sede");
 		actualizarSede.setFont(font);
 		actualizarSede.setBounds(187, 144, 142, 32);
+		actualizarSede.addActionListener(listener);
 		getContentPane().add(actualizarSede);
 
 		salir = new JButton("Salir");
@@ -109,6 +110,10 @@ public class GUInitAction extends JFrame {
 				JFrame formulario3 = new GUIConsultarEmpleados(bd);
 				formulario3.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
+			else if(actionEvent.getSource() == actualizarSede){
+                JFrame formulario5 = new GUIActualizarSede(bd);
+                formulario5.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            }
 			else if (actionEvent.getSource() == salir){
 				System.exit(0);
 			}
