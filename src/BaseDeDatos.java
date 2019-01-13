@@ -15,6 +15,7 @@ public class BaseDeDatos {
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
 			System.out.println("Establishing connection with the database...");
+			@SuppressWarnings("unused")
 			Statement statement = connection.createStatement();
 			System.out.println("Connected to PostgreSQL database!");
 
@@ -125,7 +126,7 @@ public class BaseDeDatos {
 
 
 	//Metodo para obtener una lista de usuarios segun un 'criterio' de busqueda
-	//y una palabra clave en este caso llamada 'busqueda'
+	//y una palabra clave, en este caso llamada 'busqueda'
 	public String[][] consultarUsuarios(String criterio, String busqueda) { 
 
 		String sql = "SELECT user_alias, id, names, surnames, address, phone_number, "
@@ -135,9 +136,7 @@ public class BaseDeDatos {
 		if(criterio=="Nombres") sql += " WHERE names = '" + busqueda + "'";
 		if(criterio=="Apellidos") sql += " WHERE surnames = '" + busqueda + "'";
 
-
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-
 			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
 			ResultSet resultSet = statement.executeQuery(sql);
@@ -166,4 +165,56 @@ public class BaseDeDatos {
 			return null;
 		}
 	}
+	
+	//---------------------------------------------------
+	public boolean verificarIdSede(int id) {
+
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+			String sql ="SELECT * from sedes";
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			ResultSet rs = psSql.executeQuery();
+			int verify = 0;
+
+			while (rs.next()){
+				if(Integer.parseInt(rs.getString("id"))==id){
+					verify++;
+				}
+			}
+
+			if(verify==1){
+				return true;
+			}
+			else return false;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return false;
+		}
+	}
+	//---------------------------------------------------
+	public boolean registraSede(String id, String direccion,String telefono,
+			String idEncargado){
+
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			@SuppressWarnings("unused")
+			Statement statement = connection.createStatement();
+			String sql ="INSERT INTO public.sedes(id, address, phone_number, "
+					+ "employee_in_charge) VALUES ("+ id +",'"+ direccion +"',"+
+					telefono +","+ idEncargado +");";
+			System.out.print(sql);
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			psSql.execute();
+
+			return true;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	//---------------------------------------------------
 }
