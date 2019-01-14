@@ -125,7 +125,7 @@ public class BaseDeDatos {
 	}
 
 
-	//Metodo para obtener una lista de usuarios segun un 'criterio' de busqueda
+	//Funcion para obtener una lista de usuarios segun un 'criterio' de busqueda
 	//y una palabra clave, en este caso llamada 'busqueda'
 	public String[][] consultarUsuarios(String criterio, String busqueda) { 
 
@@ -166,7 +166,8 @@ public class BaseDeDatos {
 		}
 	}
 	
-	//---------------------------------------------------
+
+	//Funcion para verificar si el id de una sede 
 	public boolean verificarIdSede(int id) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
@@ -193,7 +194,10 @@ public class BaseDeDatos {
 			return false;
 		}
 	}
-	//---------------------------------------------------
+
+	
+	//Funcion para acceder a la base de datos y registrar una sede
+	//Si la operacion se realiza con exito retorna true y en caso contrario false
 	public boolean registraSede(String id, String direccion,String telefono,
 			String idEncargado){
 
@@ -216,5 +220,4 @@ public class BaseDeDatos {
 		}
 	}
 	
-	//---------------------------------------------------
 }

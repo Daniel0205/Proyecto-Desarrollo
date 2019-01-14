@@ -6,6 +6,16 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Esta clase permite mostrar una interfaz sencilla para el registro
+ * de nuevas sedes en la base de datos de la empresa.
+ * 
+ *  Los campos requeridos son: 'Id', 'Direccion', 'Telefono' e 'Id del Encargado''.
+ *  
+ *  El resultado del registro satisfactorio o las fallas se notifican
+ *  por medio cuadros de dialogo.
+ */
+
 
 @SuppressWarnings("serial")
 public class GUIRegistrarSedes extends JFrame{
@@ -29,6 +39,7 @@ public class GUIRegistrarSedes extends JFrame{
 	}
 
 
+	//Funcion que crea la interfaz y sus componentes
 	private void crearComponentes() {
 
 		contenedor = getContentPane();
@@ -112,7 +123,78 @@ public class GUIRegistrarSedes extends JFrame{
 		setLocationRelativeTo(null);
 	}
 
+	
+	//Funcion que valida si algun campo a registrar esta vacio
+	private boolean validar1(){
+		boolean val=true;
+		val = (idIn.getText().compareTo("")==0) ? false : true;      
+		val = (direccionIn.getText().compareTo("")==0) ? false : true;
+		val = (telefonoIn.getText().compareTo("")==0) ? false : true;
+		val = (idEncargadoIn.getText().compareTo("")==0) ? false : true;
 
+		return val;
+	}
+
+
+	//Funcion para validar el dominio de los datos ingresados
+	private String validar2(){
+		String mensaje = "";
+
+		if(!validarDatoEntero(idIn))
+			mensaje = mensaje + " El id de la sede debe ser un numero entero \n";
+
+		Pattern patron = Pattern.compile("[^A-Za-z0-9 #-]");
+		Matcher direccion = patron.matcher(direccionIn.getText());
+		if(direccion.find()|| direccionIn.getText().length()>40) 
+			mensaje = mensaje + " Digite una direccion valida \n";
+
+		patron = Pattern.compile("[^0-9]");
+		Matcher tel = patron.matcher(telefonoIn.getText());
+		if(tel.find()|| telefonoIn.getText().length()>40|| telefonoIn.getText().length()<7) 
+			mensaje = mensaje + " Digite un numero de telefono valido \n";
+
+		if(!validarDatoEntero(idEncargadoIn))
+			mensaje = mensaje + " El id del encargado debe ser un numero entero \n";
+
+		if(mensaje.compareTo("")==0)
+			mensaje="true";
+
+		return mensaje;
+	}
+
+	
+	//Funcion para validar la disponibilidad de los id ingresados
+	private String validar3(){
+		String mensaje = "";
+		if (bd.verificarIdSede( Integer.parseInt(idIn.getText()) )) 
+			mensaje = mensaje + " El Id ingresado ya esta siendo utilizado para otra sede \n";
+		if( !bd.obtenerB(Integer.parseInt(idEncargadoIn.getText()), "active") )
+			mensaje = mensaje + " El empleado con el id "+idEncargadoIn.getText()+" no esta activo \n";
+		if(mensaje.compareTo("")==0)
+			mensaje="true";
+
+		return mensaje;
+	}
+
+	
+	//Funcion que valida sí un dato ingresado a traves de un JTextField es entero
+	private boolean validarDatoEntero(JTextField dato) {
+		boolean val = true;
+		try {
+			Integer.parseInt(dato.getText());
+
+		} catch (NumberFormatException excepcion) {
+			val = false;
+		}
+		return val;
+	}
+
+	
+	//Manejador de eventos para los botones del apartado Registrar-Sede
+	//Si se presiona <cancelar>, la interfaz del menu se cierra
+	//Si se presiona <registrar>, se valida que:
+	//		no hayan campos vacios, los datos esten dentro del dominio y 
+	//		las id ingresadas esten disponibles 
 	private class ManejadorDeBotones implements ActionListener {
 
 		@Override
@@ -120,24 +202,23 @@ public class GUIRegistrarSedes extends JFrame{
 			if(actionEvent.getSource() == cancelar){
 				dispose();
 			}
-
 			else if(actionEvent.getSource() == registrar){
-				if (bd.verificarIdSede( Integer.parseInt(idIn.getText()) )) 
-					JOptionPane.showMessageDialog(null, "El Id ingresado ya esta siendo utilizado para otra sede", null, 1);
-				else if (!bd.obtenerB(Integer.parseInt(idEncargadoIn.getText()), "active")) { 
-					JOptionPane.showMessageDialog(null, 
-							"El empleado con el id "+idIn.getText()+" no esta activo", null, 1);
-				}
-				else { //conexion a la bd para registrar la sede
-					if(bd.registraSede( idIn.getText(), direccionIn.getText(), 
-							telefonoIn.getText(), idEncargadoIn.getText() )) {
-						JOptionPane.showMessageDialog(null, 
-								"La sede ha sido regitrada satisfactoriamente", null, 1);
-						dispose();
+				if(validar1()) {
+					if(validar2().compareTo("true")==0) {
+						if(validar3().compareTo("true")==0) {
+							boolean var = bd.registraSede( idIn.getText(), direccionIn.getText(), 
+									telefonoIn.getText(), idEncargadoIn.getText());
+							if (var) JOptionPane.showMessageDialog(null, "Sede registrada exitosamente");
+							else JOptionPane.showMessageDialog(null, "Error al actualizar usuario.");
+							dispose();
+						}
+						else JOptionPane.showMessageDialog(null, validar3());
 					}
-					else JOptionPane.showMessageDialog(null, "no se pudo realizar la accion", "operacion", 1);
+					else JOptionPane.showMessageDialog(null, validar2());
 				}
+				else JOptionPane.showMessageDialog(null, "Digite todos los campos");
 			}
+
 		}
 	}
 }
