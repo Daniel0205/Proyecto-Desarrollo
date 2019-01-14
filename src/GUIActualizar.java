@@ -346,7 +346,7 @@ public class GUIActualizar extends JFrame {
                             dispose();
                         }
 
-                    }else JOptionPane.showMessageDialog(null, "Digite un ID válido");
+                    }else JOptionPane.showMessageDialog(null, "Digite un ID valido");
                 } else JOptionPane.showMessageDialog(null, "Digite el ID del empleado");
             }else if(e.getSource()==actualizar){
                 if(validar()){

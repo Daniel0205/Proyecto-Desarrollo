@@ -9,8 +9,8 @@ import java.net.URL;
 public class GUInitAction extends JFrame {
 
 	private Container contenedor;
-	private JButton registrarUsuario,actualizarUsuario,mostrarUsuarios;
-	private JButton actualizarSede, registrarSede, mostrarSedes, salir;
+	private JButton registrarUsuario, actualizarUsuario, mostrarUsuarios;
+	private JButton registrarSede, actualizarSede, mostrarSedes, salir;
 	private JSeparator separator_1, separator_2;
 	private JLabel icon;
 	private Font font;
@@ -52,14 +52,10 @@ public class GUInitAction extends JFrame {
 		mostrarUsuarios.addActionListener(listener);
 		getContentPane().add(mostrarUsuarios);
 
-		mostrarSedes = new JButton("Mostrar sedes");
-		mostrarSedes.setFont(font);
-		mostrarSedes.setBounds(187, 187, 142, 32);
-		getContentPane().add(mostrarSedes);
-
 		registrarSede = new JButton("Registrar Sede");
 		registrarSede.setFont(font);
 		registrarSede.setBounds(187, 101, 142, 32);
+		registrarSede.addActionListener(listener);
 		getContentPane().add(registrarSede);
 
 		actualizarSede = new JButton("Actualizar sede");
@@ -67,6 +63,11 @@ public class GUInitAction extends JFrame {
 		actualizarSede.setBounds(187, 144, 142, 32);
 		actualizarSede.addActionListener(listener);
 		getContentPane().add(actualizarSede);
+		
+		mostrarSedes = new JButton("Mostrar sedes");
+		mostrarSedes.setFont(font);
+		mostrarSedes.setBounds(187, 187, 142, 32);
+		getContentPane().add(mostrarSedes);
 
 		salir = new JButton("Salir");
 		salir.addActionListener(listener);
@@ -109,6 +110,10 @@ public class GUInitAction extends JFrame {
 			else if (actionEvent.getSource() == mostrarUsuarios){
 				JFrame formulario3 = new GUIConsultarEmpleados(bd);
 				formulario3.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+			else if (actionEvent.getSource() == registrarSede){
+				JFrame formulario4 = new GUIRegistrarSedes(bd);
+				formulario4.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 			else if(actionEvent.getSource() == actualizarSede){
                 JFrame formulario5 = new GUIActualizarSede(bd);
