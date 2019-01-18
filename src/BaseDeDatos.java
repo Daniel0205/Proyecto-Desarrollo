@@ -7,7 +7,8 @@ public class BaseDeDatos {
 	private final static String PASSWORD = "1234";
 	private final static String URL = "jdbc:postgresql://localhost:5432/" + DB;
 
-
+    //Método usado para insertar un usuario en la base de datos, retorna true si fue insertado
+    //correctamente y false si ocurrio un error
 	public boolean insertarUsuario(String usuario,String contrasena, String nombre,
 			String apellido,String direccion,String eMail,
 			String tipoUsuario, String sede, String celular){
@@ -38,6 +39,8 @@ public class BaseDeDatos {
 			return false;
 		}
 	}
+
+
 	//Verifica que el id de un empleado se encuentre en la Base de Datos
 	public boolean verificarId(int id) {
 
@@ -115,7 +118,7 @@ public class BaseDeDatos {
 	}
 
 	//Método para obtener un elemento de tipo String perteneciente al valor de algún atributo de una sede.
-	public String obtenerSsede(int identifier, String campo) {
+	public String obtenerSede(int identifier, String campo) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
@@ -155,7 +158,7 @@ public class BaseDeDatos {
 	}
 
 	public boolean actualizarUsuario(int identifier, String usuario, String nombres, String apellidos,
-			String direccion, String celular, String email, String tipo, String sede, boolean activo) {
+ 			String direccion, String celular, String email, String tipo, String sede, boolean activo) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			String sql ="UPDATE empleados SET user_alias = '"+usuario+"', names = '"+nombres+
@@ -173,6 +176,7 @@ public class BaseDeDatos {
 			return false;
 		}
 	}
+
 
 	public boolean actualizarSede(int identifier, String direccion, String telefono, String empleadoACargo) {
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
@@ -193,10 +197,9 @@ public class BaseDeDatos {
 
 	//Funcion para obtener una lista de usuarios segun un 'criterio' de busqueda
 	//y una palabra clave, en este caso llamada 'busqueda'
-	public String[][] consultarUsuarios(String criterio, String busqueda) { 
-
-		String sql = "SELECT user_alias, id, names, surnames, address, phone_number, "
-				+ "email, user_type,  headquarter, active FROM public.Empleados";
+	public String[][] consultarUsuarios(String criterio, String busqueda) {
+        String sql = "SELECT user_alias, id, names, surnames, address, phone_number, "
+                    + "email, user_type,  headquarter, active FROM public.Empleados";
 
 		if(criterio=="Id") sql += " WHERE id = " + busqueda;
 		if(criterio=="Nombres") sql += " WHERE names = '" + busqueda + "'";
@@ -256,5 +259,31 @@ public class BaseDeDatos {
 			return false;
 		}
 	}
+
+	//
+	public boolean validarLogin( String user, String pass, String tipoUsuario){
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+            String sql ="SELECT active FROM empleados WHERE user_alias = '"+ user
+                        + "' AND password = "
+                        + " crypt('"+pass+"',password) AND user_type =  '" +tipoUsuario+"'" ;
+
+            System.out.print(sql+"\n");
+
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            ResultSet result = psSql.executeQuery();
+
+            result.next();
+
+            if (result.getBoolean("active"))return true;
+            else return false;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 	
 }

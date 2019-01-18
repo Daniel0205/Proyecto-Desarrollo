@@ -88,7 +88,7 @@ public class GUIActualizarSede extends JFrame {
         direccion.setFont(font);
         panel2.add(direccion);
 
-        direccionIn = new JTextField(bd.obtenerSsede(identifier,"address"));
+        direccionIn = new JTextField(bd.obtenerSede(identifier,"address"));
         direccionIn.setBounds(136, 101, 234, 32);
         direccionIn.setFont(font);
         panel2.add(direccionIn);
@@ -98,7 +98,7 @@ public class GUIActualizarSede extends JFrame {
         celular.setFont(font);
         panel2.add(celular);
 
-        celularIn = new JTextField(bd.obtenerSsede(identifier,"phone_number"));
+        celularIn = new JTextField(bd.obtenerSede(identifier,"phone_number"));
         celularIn.setBounds(136, 141, 234, 32);
         celularIn.setFont(font);
         panel2.add(celularIn);
@@ -108,7 +108,7 @@ public class GUIActualizarSede extends JFrame {
         aCargoDe.setFont(font);
         panel2.add(aCargoDe);
 
-        aCargoDeIn = new JTextField(bd.obtenerSsede(identifier,"employee_in_charge"));
+        aCargoDeIn = new JTextField(bd.obtenerSede(identifier,"employee_in_charge"));
         aCargoDeIn.setBounds(136, 184, 234, 32);
         aCargoDeIn.setFont(font);
         panel2.add(aCargoDeIn);

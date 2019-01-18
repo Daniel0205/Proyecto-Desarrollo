@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 
 @SuppressWarnings("serial")
-public class GUIActualizar extends JFrame {
+public class GUIActualizarUser extends JFrame {
 
 	private BaseDeDatos bd;
 	private Container contenedor;
@@ -24,7 +24,7 @@ public class GUIActualizar extends JFrame {
 	private Font font;
 	private ActionListener listener = new ManejadorDeBotones();
 
-	public GUIActualizar(BaseDeDatos bdIn){
+	public GUIActualizarUser(BaseDeDatos bdIn){
 
 		setResizable(false);
 		setTitle("ACTUALIZAR EMPLEADO");
@@ -187,7 +187,7 @@ public class GUIActualizar extends JFrame {
 		tipoEmpleado.setFont(font);
 		panel2.add(tipoEmpleado);
 
-		String[] listaTipo = new String[] { "jefe de taller" , "vendedor" };
+		String[] listaTipo = new String[] { "jefe de taller", "vendedor"};
 		tipoEmpleadoIn = new JComboBox<>(listaTipo);
 		tipoEmpleadoIn.setBounds(169, 442, 201, 32);
 		tipoEmpleadoIn.setSelectedItem(bd.obtenerS(identifier,"user_type"));

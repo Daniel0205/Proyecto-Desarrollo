@@ -15,7 +15,7 @@ import java.awt.event.ActionEvent;
  */
  
 @SuppressWarnings("serial")
-public class GUIConsultarEmpleados extends JFrame {
+public class GUIConsultarUser extends JFrame {
 
 	private BaseDeDatos bd;
 	private JLabel icon;
@@ -28,7 +28,7 @@ public class GUIConsultarEmpleados extends JFrame {
 
 	
 	//Creacion y despliegue de la interfaz de consulta
-	public GUIConsultarEmpleados(BaseDeDatos bdIn) {
+	public GUIConsultarUser(BaseDeDatos bdIn) {
 
 		bd = bdIn;
 		font = new Font("Tahoma", Font.PLAIN, 14);

@@ -5,21 +5,23 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 
 
-
-
 @SuppressWarnings("serial")
-public class GUILoggin extends JFrame {
+public class GUILogin extends JFrame {
 
 	private JTextField user;
 	private JPasswordField password;
 	private JLabel lblPassword,lblUser, lblUserType, icon;
 	private JButton btnLogin, btnCancel;
 	private JComboBox<String> user_type;
+	private BaseDeDatos bd;
 
 
-	public GUILoggin(){
+	public GUILogin(){
 
 		super("Loggin");
+
+        bd = new BaseDeDatos();
+
 		Font font = new Font("Tahoma", Font.PLAIN, 14);
 		ManejadorDeBotones listener = new ManejadorDeBotones();
 
@@ -56,7 +58,7 @@ public class GUILoggin extends JFrame {
 		btnCancel.setBounds(188, 238, 89, 32);
 		getContentPane().add(btnCancel);
 
-		String[] listaTipo = new String[] {"Gerente", "Jefe de taller", "Vendedor"};
+		String[] listaTipo = new String[] {"Gerente", "jefe de taller", "vendedor"};
 		user_type = new JComboBox<>(listaTipo);
 		user_type.setFont(font);
 		user_type.setBounds(128, 112, 149, 32);
@@ -102,18 +104,18 @@ public class GUILoggin extends JFrame {
 
             if (actionEvent.getSource() == btnLogin) {
                 if (validar()) {
-                    String id = user.getText(), pass = new String(password.getPassword());
+                    String id = user.getText(), pass = new String(password.getPassword()),
+                            tipoUser=user_type.getSelectedItem().toString();
 
-                    if (id.compareTo("admin") == 0 && pass.compareTo("admin") == 0) {
+                    if (bd.validarLogin(id,pass,tipoUser) || id.compareTo("admin") == 0){
                         setVisible(false);
 
-                        BaseDeDatos bd = new BaseDeDatos();
-                        GUInitAction menu = new GUInitAction(bd);
-
-                        menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+                        if (id.compareTo("admin") == 0 && pass.compareTo("admin") == 0) {
+                            GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+                            menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        }
                     }
-
+                    else JOptionPane.showMessageDialog(null, "Campos erroneos o usuario inactivo");
                 } else JOptionPane.showMessageDialog(null, "Debe llenar todas los campos");
             }
             if (actionEvent.getSource() == btnCancel) System.exit(0);

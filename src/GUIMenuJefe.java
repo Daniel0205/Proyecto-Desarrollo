@@ -1,0 +1,2 @@
+public class GUIMenuJefe {
+}

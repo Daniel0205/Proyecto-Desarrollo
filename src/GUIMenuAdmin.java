@@ -6,11 +6,11 @@ import java.net.URL;
 
 
 @SuppressWarnings("serial")
-public class GUInitAction extends JFrame {
+public class GUIMenuAdmin extends JFrame {
 
 	private Container contenedor;
 	private JButton registrarUsuario, actualizarUsuario, mostrarUsuarios;
-	private JButton registrarSede, actualizarSede, mostrarSedes, salir;
+	private JButton registrarSede, actualizarSede, mostrarSedes, salir,generarInforme;
 	private JSeparator separator_1, separator_2;
 	private JLabel icon;
 	private Font font;
@@ -18,7 +18,7 @@ public class GUInitAction extends JFrame {
 	private BaseDeDatos bd;
 
 
-	public GUInitAction(BaseDeDatos bdIn){
+    public GUIMenuAdmin(BaseDeDatos bdIn){
 
 		super("Acciones");
 		font = new Font("Tahoma", Font.PLAIN, 14);
@@ -69,10 +69,15 @@ public class GUInitAction extends JFrame {
 		mostrarSedes.setBounds(187, 187, 142, 32);
 		getContentPane().add(mostrarSedes);
 
+		generarInforme = new JButton("Generar Informe");
+        generarInforme.setFont(font);
+        generarInforme.setBounds(100, 230, 142, 32);
+		getContentPane().add(generarInforme);
+
 		salir = new JButton("Salir");
 		salir.addActionListener(listener);
 		salir.setFont(font);
-		salir.setBounds(193, 267, 136, 32);
+		salir.setBounds(193, 293, 136, 32);
 		getContentPane().add(salir);
 
 		icon = new JLabel("");
@@ -86,10 +91,10 @@ public class GUInitAction extends JFrame {
 		getContentPane().add(separator_1);
 
 		separator_2 = new JSeparator();
-		separator_2.setBounds(22, 258, 307, 2);
+		separator_2.setBounds(22, 280, 307, 2);
 		getContentPane().add(separator_2);
 		
-		setSize(359,339);
+		setSize(359,363);
 		setResizable(false);
 		setVisible(true);  
 		setLocationRelativeTo(null);
@@ -100,15 +105,15 @@ public class GUInitAction extends JFrame {
 
 		public void actionPerformed(ActionEvent actionEvent){
 			if (actionEvent.getSource() == registrarUsuario){
-				JFrame formulario1 = new GUIFormulario(bd);
+				JFrame formulario1 = new GUIRegistrarUser(bd);
 				formulario1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			} 
 			else if (actionEvent.getSource() == actualizarUsuario){
-				JFrame formulario2 = new GUIActualizar(bd);
+				JFrame formulario2 = new GUIActualizarUser(bd);
 				formulario2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 			else if (actionEvent.getSource() == mostrarUsuarios){
-				JFrame formulario3 = new GUIConsultarEmpleados(bd);
+				JFrame formulario3 = new GUIConsultarUser(bd);
 				formulario3.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 			else if (actionEvent.getSource() == registrarSede){

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 
 @SuppressWarnings("serial")
-public class GUIFormulario extends JFrame {
+public class GUIRegistrarUser extends JFrame {
 
 	private Container contenedor;
 	private JLabel usuario, nombre, apellido, direccion, celular;
@@ -22,7 +22,7 @@ public class GUIFormulario extends JFrame {
 	private Font font;
 	private BaseDeDatos bd;
 
-	public GUIFormulario(BaseDeDatos bdIn){
+	public GUIRegistrarUser(BaseDeDatos bdIn){
 		setResizable(false);
 		setTitle("CREAR EMPLEADO");
 
@@ -117,7 +117,7 @@ public class GUIFormulario extends JFrame {
 		tipoEmpleado.setBounds(21, 405, 138, 32);
 		panelUsuario.add(tipoEmpleado);
 
-		String[] listaTipo = new String[] { "jefe de taller" , "vendedor" };
+		String[] listaTipo = new String[] { "jefe de taller", "vendedor"};
 		tipoEmpleadoIn = new JComboBox<>(listaTipo);
 		tipoEmpleadoIn.setEditable(false);
 		tipoEmpleadoIn.setFont(font);
