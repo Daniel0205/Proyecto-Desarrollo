@@ -234,6 +234,42 @@ public class BaseDeDatos {
 			return null;
 		}
 	}
+
+	public String[][] consultarSede(String busqueda) {
+		String sql = "SELECT id, adress, phone_number, "
+				+ "employee_in_charge FROM public.sedes";
+
+		sql += " WHERE id = " + busqueda;
+
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			ResultSet resultSet = statement.executeQuery(sql);
+
+			resultSet.last();
+			int rows = resultSet.getRow(); //# de filas resulado de la consulta
+			resultSet.beforeFirst();
+
+			Array arraySQL = null;
+			int columns = 4; //# de columnas a mostrar (predeterminado)
+			String[][] resultadoConsulta = new String[rows][columns];
+
+			int j = 0;
+			while (resultSet.next()) {
+				for (int i = 0; i < columns; i++) {
+					arraySQL = resultSet.getArray(i+1);
+					resultadoConsulta[j][i] = arraySQL.toString();
+				} j++;
+			}
+
+			return resultadoConsulta;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	
 	//Funcion para acceder a la base de datos y registrar una sede

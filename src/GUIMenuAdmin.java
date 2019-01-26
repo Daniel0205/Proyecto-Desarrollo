@@ -65,6 +65,7 @@ public class GUIMenuAdmin extends JFrame {
 		getContentPane().add(actualizarSede);
 		
 		mostrarSedes = new JButton("Mostrar sedes");
+		mostrarSedes.addActionListener(listener);
 		mostrarSedes.setFont(font);
 		mostrarSedes.setBounds(187, 187, 142, 32);
 		getContentPane().add(mostrarSedes);
@@ -114,6 +115,10 @@ public class GUIMenuAdmin extends JFrame {
 			}
 			else if (actionEvent.getSource() == mostrarUsuarios){
 				JFrame formulario3 = new GUIConsultarUser(bd);
+				formulario3.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+			else if (actionEvent.getSource() == mostrarSedes){
+				JFrame formulario3 = new GUIConsultarSede(bd);
 				formulario3.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 			else if (actionEvent.getSource() == registrarSede){
