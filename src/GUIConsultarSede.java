@@ -33,7 +33,7 @@ public class GUIConsultarSede extends JFrame {
         getContentPane().setLayout(null);
         listener = new ManejadorDeBotones();
 
-        icon = new JLabel("");
+        icon = new JLabel("id");
         URL filePath = this.getClass().getResource("/images/search.png");
         icon.setIcon(new ImageIcon(filePath));
         icon.setBounds(21, 23, 66, 66);
