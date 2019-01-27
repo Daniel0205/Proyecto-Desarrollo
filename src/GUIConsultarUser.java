@@ -103,7 +103,7 @@ public class GUIConsultarUser extends JFrame {
 
 		else{
 			JFrame frame = new JFrame();
-			String column[]={"Usuario", "id", "Nombres", "Apellidos", "Direccion" ,"Telefono",
+			String column[]={"id", "Nombres", "Apellidos", "Direccion" ,"Telefono",
 					"Correo electronico" , "Tipo de usuario", "Sede", "Activo"};
 			JTable table = new JTable(board,column); 
 			table.setRowMargin(0); 

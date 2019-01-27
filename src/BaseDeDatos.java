@@ -9,7 +9,7 @@ public class BaseDeDatos {
 
     //Método usado para insertar un usuario en la base de datos, retorna true si fue insertado
     //correctamente y false si ocurrio un error
-	public boolean insertarUsuario(String usuario,String contrasena, String nombre,
+	public boolean insertarUsuario(String id,String contrasena, String nombre,
 			String apellido,String direccion,String eMail,
 			String tipoUsuario, String sede, String celular){
 
@@ -20,10 +20,10 @@ public class BaseDeDatos {
 			Statement statement = connection.createStatement();
 			System.out.println("Connected to PostgreSQL database!");
 
-			String sql ="INSERT INTO public.empleados(user_alias, password, names,"+
+			String sql ="INSERT INTO public.empleados(id, password, names,"+
 					"surnames, address, phone_number, email, user_type,"+
 					"headquarter, active) VALUES ('" +
-					usuario + "', crypt('" + contrasena + "', gen_salt('md5')),'" +
+					id + "', crypt('" + contrasena + "', gen_salt('md5')),'" +
 					nombre + "','" + apellido + "','" + direccion + "'," +
 					celular + ",'" + eMail + "','"+ tipoUsuario + "','" +
 					sede + "'," +"true);";
@@ -157,11 +157,11 @@ public class BaseDeDatos {
 		}
 	}
 
-	public boolean actualizarUsuario(int identifier, String usuario, String nombres, String apellidos,
+	public boolean actualizarUsuario(int identifier, String nombres, String apellidos,
  			String direccion, String celular, String email, String tipo, String sede, boolean activo) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-			String sql ="UPDATE empleados SET user_alias = '"+usuario+"', names = '"+nombres+
+			String sql ="UPDATE empleados SET names = '"+nombres+
 					"', surnames = '"+apellidos+"', address = '"+direccion+"', phone_number = "+celular+
 					", email = '"+email+"', user_type = '"+tipo+"', headquarter = '"+sede+"', active = "+activo+
 					" WHERE id = "+identifier+";";
@@ -198,7 +198,7 @@ public class BaseDeDatos {
 	//Funcion para obtener una lista de usuarios segun un 'criterio' de busqueda
 	//y una palabra clave, en este caso llamada 'busqueda'
 	public String[][] consultarUsuarios(String criterio, String busqueda) {
-        String sql = "SELECT user_alias, id, names, surnames, address, phone_number, "
+        String sql = "SELECT  id, names, surnames, address, phone_number, "
                     + "email, user_type,  headquarter, active FROM public.Empleados";
 
 		if(criterio=="Id") sql += " WHERE id = " + busqueda;
@@ -215,7 +215,7 @@ public class BaseDeDatos {
 			resultSet.beforeFirst();
 
 			Array arraySQL = null;
-			int columns = 10; //# de columnas a mostrar (predeterminado)
+			int columns = 9; //# de columnas a mostrar (predeterminado)
 			String[][] resultadoConsulta = new String[rows][columns];
 
 			int j = 0;
@@ -236,7 +236,7 @@ public class BaseDeDatos {
 	}
 
 	public String[][] consultarSede(String busqueda) {
-		String sql = "SELECT id, adress, phone_number, "
+		String sql = "SELECT id, address, phone_number, "
 				+ "employee_in_charge FROM public.sedes";
 
 		sql += " WHERE id = " + busqueda;
@@ -300,7 +300,7 @@ public class BaseDeDatos {
 	public boolean validarLogin( String user, String pass, String tipoUsuario){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-            String sql ="SELECT active FROM empleados WHERE user_alias = '"+ user
+            String sql ="SELECT active FROM empleados WHERE id = '"+ user
                         + "' AND password = "
                         + " crypt('"+pass+"',password) AND user_type =  '" +tipoUsuario+"'" ;
 

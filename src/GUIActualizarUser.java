@@ -98,13 +98,14 @@ public class GUIActualizarUser extends JFrame {
         id.setFont(new Font("Tahoma", Font.PLAIN, 18));
         panel2.add(id);
 
-		usuario = new JLabel("Usuario:");
+		usuario = new JLabel("id/Documento:");
 		usuario.setBounds(21, 101, 105, 32);
 		usuario.setFont(font);
 		panel2.add(usuario);
 
-		usuarioIn = new JTextField(bd.obtenerS(identifier,"user_alias"));
+		usuarioIn = new JTextField(bd.obtenerS(identifier,"id"));
 		usuarioIn.setBounds(136, 101, 234, 32);
+		usuarioIn.setEditable(false);
 		usuarioIn.setFont(font);
 		panel2.add(usuarioIn);
 
@@ -187,7 +188,7 @@ public class GUIActualizarUser extends JFrame {
 		tipoEmpleado.setFont(font);
 		panel2.add(tipoEmpleado);
 
-		String[] listaTipo = new String[] { "jefe de taller", "vendedor"};
+		String[] listaTipo = new String[] { "Jefe de taller", "Vendedor"};
 		tipoEmpleadoIn = new JComboBox<>(listaTipo);
 		tipoEmpleadoIn.setBounds(169, 442, 201, 32);
 		tipoEmpleadoIn.setSelectedItem(bd.obtenerS(identifier,"user_type"));
@@ -352,7 +353,7 @@ public class GUIActualizarUser extends JFrame {
                 if(validar()){
                     if(validar2().compareTo("true")==0){
                         int identifier = Integer.parseInt(idIn.getText());
-                        boolean var = bd.actualizarUsuario(identifier,usuarioIn.getText(),nombreIn.getText(),apellidosIn.getText(),
+                        boolean var = bd.actualizarUsuario(identifier,nombreIn.getText(),apellidosIn.getText(),
                                 direccionIn.getText(),celularIn.getText(),eMailIn.getText(),(String) tipoEmpleadoIn.getSelectedItem(),
                                 (String) sedeIn.getSelectedItem(),Boolean.parseBoolean((String)estadoIn.getSelectedItem()));
 

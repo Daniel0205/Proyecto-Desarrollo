@@ -33,14 +33,15 @@ public class GUIConsultarSede extends JFrame {
         getContentPane().setLayout(null);
         listener = new ManejadorDeBotones();
 
-        icon = new JLabel("id");
+        icon = new JLabel();
         URL filePath = this.getClass().getResource("/images/search.png");
         icon.setIcon(new ImageIcon(filePath));
         icon.setBounds(21, 23, 66, 66);
         getContentPane().add(icon);
 
-        idl = new JLabel("id");
-        idl.setBounds(21, 23, 66, 66);
+        idl = new JLabel("id:");
+        idl.setFont(font);
+        idl.setBounds(30, 100, 66, 66);
         getContentPane().add(idl);
 
         consultar = new JButton("Consultar");

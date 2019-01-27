@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
 public class GUIRegistrarUser extends JFrame {
 
 	private Container contenedor;
-	private JLabel usuario, nombre, apellido, direccion, celular;
+	private JLabel id, nombre, apellido, direccion, celular;
 	private JLabel eMail, contrasena, tipoEmpleado, sede;
-	private JTextField nombreIn, apellidoIn, usuarioIn;
+	private JTextField nombreIn, apellidoIn, idIn;
 	private JTextField direccionIn, celularIn, eMailIn;
 	private JComboBox<String> tipoEmpleadoIn, sedeIn;
 	private JPasswordField contrasenaIn;
@@ -62,15 +62,15 @@ public class GUIRegistrarUser extends JFrame {
 		apellidoIn.setBounds(136, 141, 234, 32);
 		panelUsuario.add(apellidoIn);
 
-		usuario =  new JLabel("Usuario:");
-		usuario.setFont(font);
-		usuario.setBounds(21, 183, 105, 32);
-		panelUsuario.add(usuario);
+		id =  new JLabel("Id/Documento:");
+		id.setFont(font);
+		id.setBounds(21, 183, 105, 32);
+		panelUsuario.add(id);
 
-		usuarioIn = new JTextField();
-		usuarioIn.setFont(font);
-		usuarioIn.setBounds(136, 184, 234, 32);
-		panelUsuario.add(usuarioIn);
+		idIn = new JTextField();
+		idIn.setFont(font);
+		idIn.setBounds(136, 184, 234, 32);
+		panelUsuario.add(idIn);
 
 		contrasena = new JLabel("Contrasena:");
 		contrasena.setFont(font);
@@ -117,7 +117,7 @@ public class GUIRegistrarUser extends JFrame {
 		tipoEmpleado.setBounds(21, 405, 138, 32);
 		panelUsuario.add(tipoEmpleado);
 
-		String[] listaTipo = new String[] { "jefe de taller", "vendedor"};
+		String[] listaTipo = new String[] { "Jefe de taller", "Vendedor"};
 		tipoEmpleadoIn = new JComboBox<>(listaTipo);
 		tipoEmpleadoIn.setEditable(false);
 		tipoEmpleadoIn.setFont(font);
@@ -176,7 +176,7 @@ public class GUIRegistrarUser extends JFrame {
         if(apellidoIn.getText().compareTo("")==0){
             return false;
         }
-        if(usuarioIn.getText().compareTo("")==0){
+        if(idIn.getText().compareTo("")==0){
             return false;
         }
         if(direccionIn.getText().compareTo("")==0){
@@ -210,13 +210,14 @@ public class GUIRegistrarUser extends JFrame {
             mensaje = mensaje +" Digite un apellido válido \n";
         }
 
-        Pattern patron1 = Pattern.compile("[^A-Za-z0-9_]");
-        Matcher usuario = patron1.matcher(usuarioIn.getText());
-        Matcher pass = patron1.matcher(new String(contrasenaIn.getPassword()));
+        Pattern patron1 = Pattern.compile("[^0-9]");
+        Matcher usuario = patron1.matcher(idIn.getText());
 
-        if(usuario.find() || usuarioIn.getText().length()>30){
+        if(usuario.find() || idIn.getText().length()>30){
             mensaje = mensaje +" Digite un usuario valido \n";
         }
+        patron1 = Pattern.compile("[^A-Za-z0-9_]");
+        Matcher pass = patron1.matcher(new String(contrasenaIn.getPassword()));
 
         if(pass.find()){
             mensaje = mensaje +" Digite una contrasena valida \n";
@@ -254,7 +255,7 @@ public class GUIRegistrarUser extends JFrame {
             if (actionEvent.getSource() == crear) {
                 if (validar()) {
                     if (validar2().compareTo("true") == 0) {
-                        boolean var = bd.insertarUsuario(usuarioIn.getText(), new String(contrasenaIn.getPassword()),
+                        boolean var = bd.insertarUsuario(idIn.getText(), new String(contrasenaIn.getPassword()),
                                 nombreIn.getText(), apellidoIn.getText(), direccionIn.getText(),
                                 eMailIn.getText(), (String) tipoEmpleadoIn.getSelectedItem(),
                                 (String) sedeIn.getSelectedItem(), celularIn.getText());

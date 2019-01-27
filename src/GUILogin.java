@@ -8,7 +8,7 @@ import java.net.URL;
 @SuppressWarnings("serial")
 public class GUILogin extends JFrame {
 
-	private JTextField user;
+	private JTextField id;
 	private JPasswordField password;
 	private JLabel lblPassword,lblUser, lblUserType, icon;
 	private JButton btnLogin, btnCancel;
@@ -25,21 +25,21 @@ public class GUILogin extends JFrame {
 		Font font = new Font("Tahoma", Font.PLAIN, 14);
 		ManejadorDeBotones listener = new ManejadorDeBotones();
 
-		lblUser = new JLabel("User");
+		lblUser = new JLabel("User/Id:");
 		lblUser.setFont(font);
 		lblUser.setBounds(53, 153, 70, 32);
 		getContentPane().add(lblUser);
 
-		lblPassword = new JLabel("Password");
+		lblPassword = new JLabel("Password:");
 		lblPassword.setFont(font);
 		lblPassword.setBounds(53, 196, 70, 32);
 		getContentPane().add(lblPassword);
 
-		user = new JTextField();
-		user.setFont(font);
-		user.setBounds(128, 152, 149, 32);
-		getContentPane().add(user);
-		user.setColumns(10);
+		id = new JTextField();
+		id.setFont(font);
+		id.setBounds(128, 152, 149, 32);
+		getContentPane().add(id);
+		id.setColumns(10);
 
 		password = new JPasswordField();
 		password.setFont(font);
@@ -58,7 +58,7 @@ public class GUILogin extends JFrame {
 		btnCancel.setBounds(188, 238, 89, 32);
 		getContentPane().add(btnCancel);
 
-		String[] listaTipo = new String[] {"Gerente", "jefe de taller", "vendedor"};
+		String[] listaTipo = new String[] {"Gerente", "Jefe de taller", "Vendedor"};
 		user_type = new JComboBox<>(listaTipo);
 		user_type.setFont(font);
 		user_type.setBounds(128, 112, 149, 32);
@@ -85,7 +85,7 @@ public class GUILogin extends JFrame {
 
     private boolean validar(){
         boolean val=true;
-        if(user.getText().compareTo("")==0){
+        if(id.getText().compareTo("")==0){
             val=false;
         }
         String p = new String(password.getPassword());
@@ -104,16 +104,21 @@ public class GUILogin extends JFrame {
 
             if (actionEvent.getSource() == btnLogin) {
                 if (validar()) {
-                    String id = user.getText(), pass = new String(password.getPassword()),
+                    String user = id.getText(), pass = new String(password.getPassword()),
                             tipoUser=user_type.getSelectedItem().toString();
 
-                    if (bd.validarLogin(id,pass,tipoUser) || id.compareTo("admin") == 0){
+					if (user.compareTo("admin") == 0 && pass.compareTo("admin") == 0 && 0==tipoUser.compareTo("Gerente")) {
+						GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+						menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         setVisible(false);
 
-                        if (id.compareTo("admin") == 0 && pass.compareTo("admin") == 0) {
-                            GUIMenuAdmin menu = new GUIMenuAdmin(bd);
-                            menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					}else if (bd.validarLogin(user,pass,tipoUser)){
+					    if(tipoUser.compareTo("Jefe de taller")==0){
+					        GUIMenuJefe menu = new GUIMenuJefe(bd);
+					        menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
                         }
+                        setVisible(false);
                     }
                     else JOptionPane.showMessageDialog(null, "Campos erroneos o usuario inactivo");
                 } else JOptionPane.showMessageDialog(null, "Debe llenar todas los campos");
