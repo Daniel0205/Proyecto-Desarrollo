@@ -93,11 +93,6 @@ public class GUIActualizarUser extends JFrame {
 		contenedor.add(panel2);
 		panel2.setLayout(null);
 
-        id = new JLabel("Id: "+ bd.obtenerS(identifier,"id"));
-        id.setBounds(270, 55, 105, 32);
-        id.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        panel2.add(id);
-
 		usuario = new JLabel("id/Documento:");
 		usuario.setBounds(21, 101, 105, 32);
 		usuario.setFont(font);
@@ -144,7 +139,7 @@ public class GUIActualizarUser extends JFrame {
 		direccion.setFont(font);
 		panel2.add(direccion);
 
-		direccionIn = new JTextField(bd.obtenerS(identifier,"address").replaceAll("\\s",""));
+		direccionIn = new JTextField(bd.obtenerS(identifier,"address"));//.replaceAll("\\s",""));
 		direccionIn.setBounds(136, 270, 234, 32);
 		direccionIn.setHorizontalAlignment(JTextField.LEFT);
 		direccionIn.setFont(font);
@@ -191,7 +186,7 @@ public class GUIActualizarUser extends JFrame {
 		String[] listaTipo = new String[] { "Jefe de taller", "Vendedor"};
 		tipoEmpleadoIn = new JComboBox<>(listaTipo);
 		tipoEmpleadoIn.setBounds(169, 442, 201, 32);
-		tipoEmpleadoIn.setSelectedItem(bd.obtenerS(identifier,"user_type"));
+		tipoEmpleadoIn.setSelectedItem(bd.obtenerS(identifier,"user_type").replaceAll("\\s",""));
 		tipoEmpleadoIn.setEditable(false);
 		tipoEmpleadoIn.setFont(font);
 		panel2.add(tipoEmpleadoIn);

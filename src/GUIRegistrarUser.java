@@ -261,7 +261,7 @@ public class GUIRegistrarUser extends JFrame {
                                 (String) sedeIn.getSelectedItem(), celularIn.getText());
                         if (var) {
                             JOptionPane.showMessageDialog(null, "Usuario creado exitosamente");
-                            crearComponentes();
+                            dispose();
                         } else JOptionPane.showMessageDialog(null, "Error al crear usuario.");
                     } else JOptionPane.showMessageDialog(null, validar2());
 
