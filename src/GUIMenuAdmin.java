@@ -124,13 +124,6 @@ public class GUIMenuAdmin extends JFrame {
 				JFrame formulario3 = new GUIConsultarSede(bd);
 				formulario3.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
-<<<<<<< HEAD
-=======
-            else if (actionEvent.getSource() == mostrarSedes){
-                JFrame formulario7 = new GUIConsultarSede(bd);
-                formulario7.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            }
->>>>>>> master
 			else if (actionEvent.getSource() == registrarSede){
 				JFrame formulario4 = new GUIRegistrarSedes(bd);
 				formulario4.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -146,6 +139,10 @@ public class GUIMenuAdmin extends JFrame {
             else if(actionEvent.getSource() == generarInforme){
                 JFrame formulario6 = new GUICrearInformes(bd);
                 formulario6.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            }
+            else if (actionEvent.getSource() == mostrarSedes){
+                JFrame formulario7 = new GUIConsultarSede(bd);
+                formulario7.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
 			else if (actionEvent.getSource() == salir){
 				System.exit(0);
