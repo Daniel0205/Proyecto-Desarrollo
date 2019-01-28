@@ -88,7 +88,7 @@ public class GUIActualizarSede extends JFrame {
         direccion.setFont(font);
         panel2.add(direccion);
 
-        direccionIn = new JTextField(bd.obtenerSede(identifier,"address"));
+        direccionIn = new JTextField(bd.obtenerSede(identifier,"address").trim());
         direccionIn.setBounds(136, 101, 234, 32);
         direccionIn.setFont(font);
         panel2.add(direccionIn);

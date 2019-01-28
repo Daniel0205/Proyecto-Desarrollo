@@ -119,7 +119,7 @@ public class GUIActualizarUser extends JFrame {
 		nombre.setFont(font);
 		panel2.add(nombre);
 
-		nombreIn = new JTextField(bd.obtenerS(identifier,"names"));
+		nombreIn = new JTextField(bd.obtenerS(identifier,"names").trim());
 		nombreIn.setBounds(136, 184, 234, 32);
 		nombreIn.setFont(font);
 		panel2.add(nombreIn);
@@ -129,7 +129,7 @@ public class GUIActualizarUser extends JFrame {
 		apellidos.setFont(font);
 		panel2.add(apellidos);
 
-		apellidosIn = new JTextField(bd.obtenerS(identifier,"surnames"));
+		apellidosIn = new JTextField(bd.obtenerS(identifier,"surnames").trim());
 		apellidosIn.setBounds(136, 227, 234, 32);
 		apellidosIn.setFont(font);
 		panel2.add(apellidosIn);
@@ -139,7 +139,7 @@ public class GUIActualizarUser extends JFrame {
 		direccion.setFont(font);
 		panel2.add(direccion);
 
-		direccionIn = new JTextField(bd.obtenerS(identifier,"address"));//.replaceAll("\\s",""));
+		direccionIn = new JTextField(bd.obtenerS(identifier,"address").trim());
 		direccionIn.setBounds(136, 270, 234, 32);
 		direccionIn.setHorizontalAlignment(JTextField.LEFT);
 		direccionIn.setFont(font);

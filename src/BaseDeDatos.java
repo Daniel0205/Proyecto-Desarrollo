@@ -222,7 +222,7 @@ public class BaseDeDatos {
 			while (resultSet.next()) {
 				for (int i = 0; i < columns; i++) {
 					arraySQL = resultSet.getArray(i+1);
-					resultadoConsulta[j][i] = arraySQL.toString();
+					resultadoConsulta[j][i] = arraySQL.toString().trim();
 				} j++;
 			}
 

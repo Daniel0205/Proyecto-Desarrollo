@@ -123,7 +123,7 @@ public class GUIRegistrarSedes extends JFrame{
 		setLocationRelativeTo(null);
 	}
 
-	
+
 	//Funcion que valida si algun campo a registrar esta vacio
 	private boolean validar1(){
 		boolean val=true;
@@ -162,7 +162,7 @@ public class GUIRegistrarSedes extends JFrame{
 		return mensaje;
 	}
 
-	
+
 	//Funcion para validar la disponibilidad de los id ingresados
 	private String validar3(){
 		String mensaje = "";
@@ -170,13 +170,15 @@ public class GUIRegistrarSedes extends JFrame{
 			mensaje = mensaje + " El Id ingresado ya esta siendo utilizado para otra sede \n";
 		if( !bd.obtenerB(Integer.parseInt(idEncargadoIn.getText()), "active") )
 			mensaje = mensaje + " El empleado con el id "+idEncargadoIn.getText()+" no esta activo \n";
+		if( ! (bd.obtenerS(Integer.parseInt(idEncargadoIn.getText()), "user_type").equals("Jefe de taller")) ) 
+			mensaje = mensaje + " El empleado encargado debe ser un Jefe de Taller \n";
 		if(mensaje.compareTo("")==0)
 			mensaje="true";
 
 		return mensaje;
 	}
 
-	
+
 	//Funcion que valida sí un dato ingresado a traves de un JTextField es entero
 	private boolean validarDatoEntero(JTextField dato) {
 		boolean val = true;
@@ -189,7 +191,7 @@ public class GUIRegistrarSedes extends JFrame{
 		return val;
 	}
 
-	
+
 	//Manejador de eventos para los botones del apartado Registrar-Sede
 	//Si se presiona <cancelar>, la interfaz del menu se cierra
 	//Si se presiona <registrar>, se valida que:
