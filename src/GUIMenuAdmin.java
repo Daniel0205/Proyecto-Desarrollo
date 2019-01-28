@@ -19,9 +19,8 @@ public class GUIMenuAdmin extends JFrame {
 
 
     public GUIMenuAdmin(BaseDeDatos bdIn){
-
 		super("Acciones");
-		font = new Font("Tahoma", Font.PLAIN, 14);
+
 		initGUI();
 		bd = bdIn;
 	}
@@ -33,6 +32,10 @@ public class GUIMenuAdmin extends JFrame {
 		getContentPane().setLayout(null);
 
 		listener = new ManejadorDeBotones();
+
+        font = new Font("Tahoma", Font.PLAIN, 14);
+
+		font = new Font("Tahoma", Font.PLAIN, 14);
 
 		actualizarUsuario = new JButton("Actualizar usuario");
 		actualizarUsuario.setFont(font);
@@ -121,6 +124,13 @@ public class GUIMenuAdmin extends JFrame {
 				JFrame formulario3 = new GUIConsultarSede(bd);
 				formulario3.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
+<<<<<<< HEAD
+=======
+            else if (actionEvent.getSource() == mostrarSedes){
+                JFrame formulario7 = new GUIConsultarSede(bd);
+                formulario7.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            }
+>>>>>>> master
 			else if (actionEvent.getSource() == registrarSede){
 				JFrame formulario4 = new GUIRegistrarSedes(bd);
 				formulario4.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -128,6 +138,14 @@ public class GUIMenuAdmin extends JFrame {
 			else if(actionEvent.getSource() == actualizarSede){
                 JFrame formulario5 = new GUIActualizarSede(bd);
                 formulario5.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            }
+            else if(actionEvent.getSource() == generarInforme){
+                JFrame formulario6 = new GUICrearInformes(bd);
+                formulario6.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            }
+            else if(actionEvent.getSource() == generarInforme){
+                JFrame formulario6 = new GUICrearInformes(bd);
+                formulario6.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
 			else if (actionEvent.getSource() == salir){
 				System.exit(0);
