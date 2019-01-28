@@ -33,7 +33,7 @@ public class GUIConsultarSede extends JFrame {
         getContentPane().setLayout(null);
         listener = new ManejadorDeBotones();
 
-        icon = new JLabel("id");
+        icon = new JLabel(" ");
         URL filePath = this.getClass().getResource("/images/search.png");
         icon.setIcon(new ImageIcon(filePath));
         icon.setBounds(21, 23, 66, 66);
@@ -97,6 +97,10 @@ public class GUIConsultarSede extends JFrame {
             JOptionPane.showMessageDialog(null, "La busqueda no produjo resultados.");
 
         else{
+            int idEncargado = Integer.parseInt(board[0][4]);
+            String nombreE = bd.obtenerS(idEncargado, "names");
+            String apellidoE = bd.obtenerS(idEncargado, "surnames");
+            board[0][4] = nombreE+" "+apellidoE;
             JFrame frame = new JFrame();
             String column[]={"id", "Direccion" ,"Telefono", "Empleado a cargo"};
             JTable table = new JTable(board,column);
