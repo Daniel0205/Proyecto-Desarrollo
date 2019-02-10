@@ -87,7 +87,8 @@ public class GUIConsultarUser extends JFrame {
 		public void actionPerformed(ActionEvent actionEvent){
 			if (actionEvent.getSource() == consultar){
 				String[][] resultado = bd.consultarUsuarios( 
-						(String)criterio.getSelectedItem(),	(String)busqueda.getText());
+						(String)criterio.getSelectedItem(),	(String)busqueda.getText(),
+						"cedula, nombres, apellidos, direccion, numero, email, tipo_usuario,  sede, activo");
 				resultadosConsultaGUI(resultado);
 			}
 			else if (actionEvent.getSource() == salir)

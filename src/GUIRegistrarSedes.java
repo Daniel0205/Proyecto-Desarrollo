@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 public class GUIRegistrarSedes extends JFrame{
 
 	private Container contenedor;
-	private JLabel id, direccion, telefono, idEncargado;
-	private JTextField idIn, direccionIn, telefonoIn, idEncargadoIn;
+	private JLabel id, direccion, telefono, encargado, nombre;
+	private JTextField idIn, direccionIn, telefonoIn, encargadoIn, nombreIn;
 	private JButton registrar, cancelar;
 	private JSeparator separator_1, separator_2;
 	private Font font;
@@ -61,35 +61,45 @@ public class GUIRegistrarSedes extends JFrame{
 		idIn.setBounds(136, 101, 234, 32);
 		panelUsuario.add(idIn);
 
+		nombre = new JLabel("Nombre:");
+		nombre.setFont(font);
+		nombre.setBounds(21, 143, 105, 32);
+		panelUsuario.add(nombre);
+
+		nombreIn = new JTextField();
+		nombreIn.setFont(font);
+		nombreIn.setBounds(136, 144, 234, 32);
+		panelUsuario.add(nombreIn);
+
 		direccion = new JLabel("Direccion:");
 		direccion.setFont(font);
-		direccion.setBounds(21, 143, 105, 32);
+		direccion.setBounds(21, 186, 105, 32);
 		panelUsuario.add(direccion);
 
 		direccionIn = new JTextField();
 		direccionIn.setFont(font);
-		direccionIn.setBounds(136, 144, 234, 32);
+		direccionIn.setBounds(136, 186, 234, 32);
 		panelUsuario.add(direccionIn);
 
 		telefono =  new JLabel("Telefono:");
 		telefono.setFont(font);
-		telefono.setBounds(21, 186, 105, 32);
+		telefono.setBounds(21, 229, 105, 32);
 		panelUsuario.add(telefono);
 
 		telefonoIn = new JTextField();
 		telefonoIn.setFont(font);
-		telefonoIn.setBounds(136, 187, 234, 32);
+		telefonoIn.setBounds(136, 230, 234, 32);
 		panelUsuario.add(telefonoIn);
 
-		idEncargado = new JLabel("Id Encargado:");
-		idEncargado.setFont(font);
-		idEncargado.setBounds(21, 229, 105, 32);
-		panelUsuario.add(idEncargado);
+		encargado = new JLabel("Encargado:");
+		encargado.setFont(font);
+		encargado.setBounds(21, 272, 105, 32);
+		panelUsuario.add(encargado);
 
-		idEncargadoIn = new JTextField();
-		idEncargadoIn.setFont(font);
-		idEncargadoIn.setBounds(136, 230, 234, 32);
-		panelUsuario.add(idEncargadoIn);
+		encargadoIn = new JTextField();
+		encargadoIn.setFont(font);
+		encargadoIn.setBounds(136, 274, 234, 32);
+		panelUsuario.add(encargadoIn);
 
 		listener = new ManejadorDeBotones();
 
@@ -130,7 +140,7 @@ public class GUIRegistrarSedes extends JFrame{
 		val = (idIn.getText().compareTo("")==0) ? false : true;      
 		val = (direccionIn.getText().compareTo("")==0) ? false : true;
 		val = (telefonoIn.getText().compareTo("")==0) ? false : true;
-		val = (idEncargadoIn.getText().compareTo("")==0) ? false : true;
+		val = (nombreIn.getText().compareTo("")==0) ? false : true;
 
 		return val;
 	}
@@ -148,12 +158,16 @@ public class GUIRegistrarSedes extends JFrame{
 		if(direccion.find()|| direccionIn.getText().length()>40) 
 			mensaje = mensaje + " Digite una direccion valida \n";
 
+		Matcher nombre = patron.matcher(nombreIn.getText());
+        if(nombre.find()|| nombreIn.getText().length()>40)
+            mensaje = mensaje + " Digite un nombre valido \n";
+
 		patron = Pattern.compile("[^0-9]");
 		Matcher tel = patron.matcher(telefonoIn.getText());
 		if(tel.find()|| telefonoIn.getText().length()>40|| telefonoIn.getText().length()<7) 
 			mensaje = mensaje + " Digite un numero de telefono valido \n";
 
-		if(!validarDatoEntero(idEncargadoIn))
+		if(!validarDatoEntero(encargadoIn) && !(encargadoIn.getText().compareTo("")==0))
 			mensaje = mensaje + " El id del encargado debe ser un numero entero \n";
 
 		if(mensaje.compareTo("")==0)
@@ -166,12 +180,15 @@ public class GUIRegistrarSedes extends JFrame{
 	//Funcion para validar la disponibilidad de los id ingresados
 	private String validar3(){
 		String mensaje = "";
-		if (bd.verificarIdSede( Integer.parseInt(idIn.getText()) )) 
-			mensaje = mensaje + " El Id ingresado ya esta siendo utilizado para otra sede \n";
-		if( !bd.obtenerB(Integer.parseInt(idEncargadoIn.getText()), "active") )
-			mensaje = mensaje + " El empleado con el id "+idEncargadoIn.getText()+" no esta activo \n";
-		if( ! (bd.obtenerS(Integer.parseInt(idEncargadoIn.getText()), "user_type").equals("Jefe de taller")) ) 
-			mensaje = mensaje + " El empleado encargado debe ser un Jefe de Taller \n";
+		if(!(encargadoIn.getText().compareTo("")==0)) {
+            if (bd.verificarIdSede(Integer.parseInt(idIn.getText())))
+                mensaje = mensaje + " El Id ingresado ya esta siendo utilizado para otra sede \n";
+            if (!bd.obtenerB(Integer.parseInt(encargadoIn.getText()), "activo") &&
+                    !(encargadoIn.getText().compareTo("") == 0))
+                mensaje = mensaje + " El empleado con el id " + encargadoIn.getText() + " no esta activo \n";
+            if (!(bd.obtenerS(Integer.parseInt(encargadoIn.getText()), "tipo_usuario").equals("Jefe de taller")))
+                mensaje = mensaje + " El empleado encargado debe ser un Jefe de Taller \n";
+        }
 		if(mensaje.compareTo("")==0)
 			mensaje="true";
 
@@ -208,8 +225,10 @@ public class GUIRegistrarSedes extends JFrame{
 				if(validar1()) {
 					if(validar2().compareTo("true")==0) {
 						if(validar3().compareTo("true")==0) {
+						    String encargado=encargadoIn.getText();
+						    if (encargado.compareTo("")==0)encargado=null;
 							boolean var = bd.registraSede( idIn.getText(), direccionIn.getText(), 
-									telefonoIn.getText(), idEncargadoIn.getText());
+									telefonoIn.getText(),encargado,nombreIn.getText());
 							if (var) JOptionPane.showMessageDialog(null, "Sede registrada exitosamente");
 							else JOptionPane.showMessageDialog(null, "Error al actualizar usuario.");
 							dispose();

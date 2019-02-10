@@ -13,8 +13,8 @@ public class GUIActualizarSede extends JFrame {
     private JLabel instruccion,icon, direccion,celular, aCargoDe;
     private JSeparator separator_1, separator_2;
     private JButton salir1, cancelar2, buscar, actualizar;
-    private JTextField direccionIn, celularIn, aCargoDeIn;
-    private JTextField idIn;
+    private JTextField direccionIn, celularIn;
+    private JComboBox idIn,aCargoDeIn;
 
     public GUIActualizarSede(BaseDeDatos bdIn){
 
@@ -22,8 +22,8 @@ public class GUIActualizarSede extends JFrame {
         setTitle("ACTUALIZAR SEDE");
 
         font = new Font("Tahoma", Font.PLAIN, 14);
-        initGUI();
         bd = bdIn;
+        initGUI();
     }
 
     private void initGUI(){
@@ -31,12 +31,12 @@ public class GUIActualizarSede extends JFrame {
         contenedor.removeAll();
         getContentPane().setLayout(null);
 
-        instruccion = new JLabel("ID sede a modificar");
+        instruccion = new JLabel("Id-Nombre de sede");
         instruccion.setFont(font);
         instruccion.setBounds(22, 101, 138, 32);
         getContentPane().add(instruccion);
 
-        idIn = new JTextField();
+        idIn = new JComboBox<>(bd.cambiarDimension(bd.consultarSede(null,"id_Sede,nombre")));
         idIn.setFont(font);
         idIn.setBounds(165, 102, 99, 32);
         getContentPane().add(idIn);
@@ -73,7 +73,8 @@ public class GUIActualizarSede extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void initGUI2(int identifier){
+
+    private void initGUI2(String identifier){
         contenedor.removeAll();
         contenedor.repaint();
         getContentPane().setLayout(null);
@@ -88,7 +89,7 @@ public class GUIActualizarSede extends JFrame {
         direccion.setFont(font);
         panel2.add(direccion);
 
-        direccionIn = new JTextField(bd.obtenerSede(identifier,"address").trim());
+        direccionIn = new JTextField(bd.obtenerSede(identifier,"direccion").trim());
         direccionIn.setBounds(136, 101, 234, 32);
         direccionIn.setFont(font);
         panel2.add(direccionIn);
@@ -98,7 +99,7 @@ public class GUIActualizarSede extends JFrame {
         celular.setFont(font);
         panel2.add(celular);
 
-        celularIn = new JTextField(bd.obtenerSede(identifier,"phone_number"));
+        celularIn = new JTextField(bd.obtenerSede(identifier,"telefono"));
         celularIn.setBounds(136, 141, 234, 32);
         celularIn.setFont(font);
         panel2.add(celularIn);
@@ -108,7 +109,8 @@ public class GUIActualizarSede extends JFrame {
         aCargoDe.setFont(font);
         panel2.add(aCargoDe);
 
-        aCargoDeIn = new JTextField(bd.obtenerSede(identifier,"employee_in_charge"));
+        aCargoDeIn = new JComboBox<>(bd.cambiarDimension(
+                bd.consultarUsuarios("Sede",identifier,"cedula,nombres")));
         aCargoDeIn.setBounds(136, 184, 234, 32);
         aCargoDeIn.setFont(font);
         panel2.add(aCargoDeIn);
@@ -146,19 +148,16 @@ public class GUIActualizarSede extends JFrame {
                 dispose();
             }
             else if(e.getSource()==buscar){
-                int identifier = Integer.parseInt(idIn.getText());
+                String identifier = idIn.getSelectedItem().toString();
+                identifier=identifier.substring(0,identifier.indexOf("-"));
 
-                if(bd.verificarIdSede(identifier)){
-                    initGUI2(identifier);
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "La sede con id: "+ idIn.getText() +" no se encuentra registrada");
-                    dispose();
-                }
+                initGUI2(identifier);
+
             }
             else if(e.getSource()==actualizar){
-                int identifier = Integer.parseInt(idIn.getText());
-                boolean var = bd.actualizarSede(identifier, direccionIn.getText(),celularIn.getText(),aCargoDeIn.getText());
+                int identifier = Integer.parseInt(idIn.getSelectedItem().toString());
+                boolean var = bd.actualizarSede(identifier, direccionIn.getText(),
+                        celularIn.getText(),aCargoDeIn.getSelectedItem().toString());
 
                 if (var){
                     JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");

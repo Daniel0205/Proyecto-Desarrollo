@@ -27,11 +27,21 @@ public class GUIRegistrarUser extends JFrame {
 		setTitle("CREAR EMPLEADO");
 
 		font = new Font("Tahoma", Font.PLAIN, 14);
+        bd = bdIn;
 		crearComponentes();
-		bd = bdIn;
 	}
 
-	private void crearComponentes() {
+    private String[] juntarArray(String[][] datos) {
+        System.out.print("entro");
+        String[] aux = new String[datos.length];
+        for (int i=0;i<datos.length;i++){
+            aux[i]=datos[i][0]+"-"+datos[i][1];
+        }
+        return aux;
+    }
+
+
+    private void crearComponentes() {
 
 		contenedor = getContentPane();
 		contenedor.removeAll();
@@ -129,8 +139,7 @@ public class GUIRegistrarUser extends JFrame {
 		sede.setBounds(21, 448, 138, 32);
 		panelUsuario.add(sede);
 
-		String[] listaSedes = new String[] { "Central", "Cartagena", "Cali", "Medellin"}; 
-		sedeIn = new JComboBox<>(listaSedes);
+		sedeIn = new JComboBox<>(juntarArray(bd.consultarSede(null,"id_Sede,nombre")));
 		sedeIn.setEditable(false);
 		sedeIn.setFont(font);
 		sedeIn.setBounds(169, 449, 201, 32);
@@ -168,7 +177,8 @@ public class GUIRegistrarUser extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
-    private boolean validar(){
+
+	private boolean validar(){
 
         if(nombreIn.getText().compareTo("")==0){
             return false;
@@ -252,13 +262,18 @@ public class GUIRegistrarUser extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
+
             if (actionEvent.getSource() == crear) {
                 if (validar()) {
                     if (validar2().compareTo("true") == 0) {
+                        String idSede = sedeIn.getSelectedItem().toString();
+                        idSede=idSede.substring(0,idSede.indexOf("-"));
+                        System.out.print(idSede);
+
                         boolean var = bd.insertarUsuario(idIn.getText(), new String(contrasenaIn.getPassword()),
                                 nombreIn.getText(), apellidoIn.getText(), direccionIn.getText(),
                                 eMailIn.getText(), (String) tipoEmpleadoIn.getSelectedItem(),
-                                (String) sedeIn.getSelectedItem(), celularIn.getText());
+                                idSede, celularIn.getText());
                         if (var) {
                             JOptionPane.showMessageDialog(null, "Usuario creado exitosamente");
                             dispose();

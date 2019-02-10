@@ -82,7 +82,8 @@ public class GUIConsultarSede extends JFrame {
 
         public void actionPerformed(ActionEvent actionEvent){
             if (actionEvent.getSource() == consultar){
-                String[][] resultado = bd.consultarSede((String)busqueda.getText());
+                String campos = "id_sede, direccion, numero,empleado_a_cargo";
+                String[][] resultado = bd.consultarSede((String)busqueda.getText(),campos);
                 resultadosConsultaGUI(resultado);
             }
             else if (actionEvent.getSource() == salir)

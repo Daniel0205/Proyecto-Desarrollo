@@ -21,9 +21,9 @@ public class BaseDeDatos {
 			Statement statement = connection.createStatement();
 			System.out.println("Connected to PostgreSQL database!");
 
-			String sql ="INSERT INTO public.empleados(id, password, names,"+
-					"surnames, address, phone_number, email, user_type,"+
-					"headquarter, active) VALUES ('" +
+			String sql ="INSERT INTO public.empleados(cedula, contrasena, nombres,"+
+					" apellidos, direccion, numero, email, tipo_usuario,"+
+					"sede, activo) VALUES ('" +
 					id + "', crypt('" + contrasena + "', gen_salt('md5')),'" +
 					nombre + "','" + apellido + "','" + direccion + "'," +
 					celular + ",'" + eMail + "','"+ tipoUsuario + "','" +
@@ -81,7 +81,7 @@ public class BaseDeDatos {
 			int verify = 0;
 
 			while (rs.next()){
-				if(Integer.parseInt(rs.getString("id"))==id){
+				if(Integer.parseInt(rs.getString("id_sede"))==id){
 					verify++;
 				}
 			}
@@ -103,7 +103,7 @@ public class BaseDeDatos {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-			String sql ="SELECT "+campo+" FROM empleados WHERE id = "+identifier;
+			String sql ="SELECT "+campo+" FROM empleados WHERE cedula = "+identifier;
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			ResultSet rs = psSql.executeQuery();
 
@@ -119,11 +119,11 @@ public class BaseDeDatos {
 	}
 
 	//Método para obtener un elemento de tipo String perteneciente al valor de algún atributo de una sede.
-	public String obtenerSede(int identifier, String campo) {
+	public String obtenerSede(String identifier, String campo) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-			String sql ="SELECT "+campo+" FROM sedes WHERE id = "+identifier;
+			String sql ="SELECT "+campo+" FROM sedes WHERE id_sede = "+identifier;
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			ResultSet rs = psSql.executeQuery();
 
@@ -143,7 +143,7 @@ public class BaseDeDatos {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-			String sql ="SELECT "+campo+" FROM empleados WHERE id = "+identifier;
+			String sql ="SELECT "+campo+" FROM empleados WHERE cedula = "+identifier;
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			ResultSet rs = psSql.executeQuery();
 
@@ -162,10 +162,10 @@ public class BaseDeDatos {
  			String direccion, String celular, String email, String tipo, String sede, boolean activo) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-			String sql ="UPDATE empleados SET names = '"+nombres+
-					"', surnames = '"+apellidos+"', address = '"+direccion+"', phone_number = "+celular+
-					", email = '"+email+"', user_type = '"+tipo+"', headquarter = '"+sede+"', active = "+activo+
-					" WHERE id = "+identifier+";";
+			String sql ="UPDATE empleados SET nombres = '"+nombres+
+					"', apellidos = '"+apellidos+"', address = '"+direccion+"', numero = "+celular+
+					", email = '"+email+"', tipo_usuario = '"+tipo+"', sede = '"+sede+"', activo = "+activo+
+					" WHERE cedula = "+identifier+";";
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			psSql.executeUpdate();
 
@@ -181,8 +181,8 @@ public class BaseDeDatos {
 
 	public boolean actualizarSede(int identifier, String direccion, String telefono, String empleadoACargo) {
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-			String sql ="UPDATE sedes SET address = '"+direccion+"', phone_number = "+telefono+
-					", employee_in_charge = "+empleadoACargo+" WHERE id = "+identifier+";";
+			String sql ="UPDATE sedes SET direccion = '"+direccion+"', numero = "+telefono+
+					", empleado_a_cargo = "+empleadoACargo+" WHERE id_sede = "+identifier+";";
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			psSql.executeUpdate();
 
@@ -198,13 +198,13 @@ public class BaseDeDatos {
 
 	//Funcion para obtener una lista de usuarios segun un 'criterio' de busqueda
 	//y una palabra clave, en este caso llamada 'busqueda'
-	public String[][] consultarUsuarios(String criterio, String busqueda) {
-        String sql = "SELECT  id, names, surnames, address, phone_number, "
-                    + "email, user_type,  headquarter, active FROM public.Empleados";
+	public String[][] consultarUsuarios(String criterio, String busqueda,String campos) {
+        String sql = "SELECT "+campos+" FROM public.empleados";
 
-		if(criterio=="Id") sql += " WHERE id = " + busqueda;
-		if(criterio=="Nombres") sql += " WHERE names = '" + busqueda + "'";
-		if(criterio=="Apellidos") sql += " WHERE surnames = '" + busqueda + "'";
+		if(criterio=="Id") sql += " WHERE cedula = " + busqueda;
+		if(criterio=="Nombres") sql += " WHERE nombres = '" + busqueda + "'";
+		if(criterio=="Apellidos") sql += " WHERE apellidos = '" + busqueda + "'";
+        if(criterio=="Sede") sql += " WHERE sede = " + busqueda ;
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -216,7 +216,7 @@ public class BaseDeDatos {
 			resultSet.beforeFirst();
 
 			Array arraySQL = null;
-			int columns = 9; //# de columnas a mostrar (predeterminado)
+			int columns = contarCampos(campos); //# de columnas a mostrar (predeterminado)
 			String[][] resultadoConsulta = new String[rows][columns];
 
 			int j = 0;
@@ -236,11 +236,14 @@ public class BaseDeDatos {
 		}
 	}
 
-	public String[][] consultarSede(String busqueda) {
-		String sql = "SELECT id, address, phone_number, "
-				+ "employee_in_charge FROM public.sedes";
 
-		sql += " WHERE id = " + busqueda;
+	public String[][] consultarSede(String busqueda,String campos) {
+		String sql = "SELECT "+ campos
+				+ " FROM public.sedes";
+
+        int columns = contarCampos(campos);
+
+		if(busqueda!=null)sql += " WHERE id_sede = " + busqueda;
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -252,7 +255,6 @@ public class BaseDeDatos {
 			resultSet.beforeFirst();
 
 			Array arraySQL = null;
-			int columns = 4; //# de columnas a mostrar (predeterminado)
 			String[][] resultadoConsulta = new String[rows][columns];
 
 			int j = 0;
@@ -271,18 +273,35 @@ public class BaseDeDatos {
 			return null;
 		}
 	}
-	
-	
+
+    //Funcion para contar la cantidad de campos a consultar
+    private int contarCampos(String campos){
+        int contador=0;
+        for (int i=0;i< campos.length();i++){
+            if (campos.charAt(i)==',')contador++;
+        }
+        return contador+1;
+    }
+
+    //Funcion para transformar matrics bidimensionales a unidimensionales
+    public String[] cambiarDimension(String[][] array){
+        String[] aux = new String[array.length];
+        for (int i=0;i < array.length;i++){
+            aux[i]=array[i][0]+"-"+array[i][1];
+        }
+        return aux;
+    }
+
 	//Funcion para acceder a la base de datos y registrar una sede
 	//Si la operacion se realiza con exito retorna true y en caso contrario false
 	public boolean registraSede(String id, String direccion,String telefono,
-			String idEncargado){
+			String idEncargado,String nombre){
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			@SuppressWarnings("unused")
 			Statement statement = connection.createStatement();
-			String sql ="INSERT INTO public.sedes(id, address, phone_number, "
-					+ "employee_in_charge) VALUES ("+ id +",'"+ direccion +"',"+
+			String sql ="INSERT INTO public.sedes(id_sede,nombre, direccion, telefono, "
+					+ "empleado_a_cargo) VALUES ("+ id +",'"+ nombre+ "','"+ direccion +"',"+
 					telefono +","+ idEncargado +");";
 			System.out.print(sql);
 			PreparedStatement psSql = connection.prepareStatement(sql);
@@ -301,9 +320,9 @@ public class BaseDeDatos {
 	public boolean validarLogin( String user, String pass, String tipoUsuario){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-            String sql ="SELECT active FROM empleados WHERE id = '"+ user
-                        + "' AND password = "
-                        + " crypt('"+pass+"',password) AND user_type =  '" +tipoUsuario+"'" ;
+            String sql ="SELECT active FROM empleados WHERE cedula = '"+ user
+                        + "' AND contrasena = "
+                        + " crypt('"+pass+"',contrasena) AND user_type =  '" +tipoUsuario+"'" ;
 
             System.out.print(sql+"\n");
 
@@ -312,7 +331,7 @@ public class BaseDeDatos {
 
             result.next();
 
-            if (result.getBoolean("active"))return true;
+            if (result.getBoolean("activo"))return true;
             else return false;
         }
         catch (SQLException e) {
