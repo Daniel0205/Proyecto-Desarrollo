@@ -53,7 +53,7 @@ public class BaseDeDatos {
 			int verify = 0;
 
 			while (rs.next()){
-				if(Integer.parseInt(rs.getString("id"))==id){
+				if(Integer.parseInt(rs.getString("cedula"))==id){
 					verify++;
 				}
 			}
@@ -99,7 +99,7 @@ public class BaseDeDatos {
 	}
 
 	//Método para obtener un elemento de tipo String perteneciente al valor de algún atributo de un empleado.
-	public String obtenerS(int identifier, String campo) {
+	public String obtenerS(String identifier, String campo) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
@@ -139,7 +139,7 @@ public class BaseDeDatos {
 	}
 
 	//Método para obtener un elemento de tipo boolean perteneciente al valor de algún atributo.
-	public boolean obtenerB(int identifier, String campo) {
+	public boolean obtenerB(String identifier, String campo) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
@@ -158,12 +158,12 @@ public class BaseDeDatos {
 		}
 	}
 
-	public boolean actualizarUsuario(int identifier, String nombres, String apellidos,
+	public boolean actualizarUsuario(String identifier, String nombres, String apellidos,
  			String direccion, String celular, String email, String tipo, String sede, boolean activo) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			String sql ="UPDATE empleados SET nombres = '"+nombres+
-					"', apellidos = '"+apellidos+"', address = '"+direccion+"', numero = "+celular+
+					"', apellidos = '"+apellidos+"', direccion = '"+direccion+"', numero = "+celular+
 					", email = '"+email+"', tipo_usuario = '"+tipo+"', sede = '"+sede+"', activo = "+activo+
 					" WHERE cedula = "+identifier+";";
 			PreparedStatement psSql = connection.prepareStatement(sql);
@@ -179,10 +179,13 @@ public class BaseDeDatos {
 	}
 
 
-	public boolean actualizarSede(int identifier, String direccion, String telefono, String empleadoACargo) {
-		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-			String sql ="UPDATE sedes SET direccion = '"+direccion+"', numero = "+telefono+
+	public boolean actualizarSede(String identifier, String direccion, String telefono, String empleadoACargo) {
+
+	    try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			String sql ="UPDATE sedes SET direccion = '"+direccion+"', telefono = "+telefono+
 					", empleado_a_cargo = "+empleadoACargo+" WHERE id_sede = "+identifier+";";
+
+			System.out.print(sql);
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			psSql.executeUpdate();
 
@@ -204,7 +207,7 @@ public class BaseDeDatos {
 		if(criterio=="Id") sql += " WHERE cedula = " + busqueda;
 		if(criterio=="Nombres") sql += " WHERE nombres = '" + busqueda + "'";
 		if(criterio=="Apellidos") sql += " WHERE apellidos = '" + busqueda + "'";
-        if(criterio=="Sede") sql += " WHERE sede = " + busqueda ;
+        if(criterio=="Sede") sql += " WHERE activo=true AND sede = " + busqueda ;
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,

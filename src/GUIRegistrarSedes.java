@@ -183,10 +183,10 @@ public class GUIRegistrarSedes extends JFrame{
 		if(!(encargadoIn.getText().compareTo("")==0)) {
             if (bd.verificarIdSede(Integer.parseInt(idIn.getText())))
                 mensaje = mensaje + " El Id ingresado ya esta siendo utilizado para otra sede \n";
-            if (!bd.obtenerB(Integer.parseInt(encargadoIn.getText()), "activo") &&
+            if (!bd.obtenerB(encargadoIn.getText(), "activo") &&
                     !(encargadoIn.getText().compareTo("") == 0))
                 mensaje = mensaje + " El empleado con el id " + encargadoIn.getText() + " no esta activo \n";
-            if (!(bd.obtenerS(Integer.parseInt(encargadoIn.getText()), "tipo_usuario").equals("Jefe de taller")))
+            if (!(bd.obtenerS(encargadoIn.getText(), "tipo_usuario").equals("Jefe de taller")))
                 mensaje = mensaje + " El empleado encargado debe ser un Jefe de Taller \n";
         }
 		if(mensaje.compareTo("")==0)

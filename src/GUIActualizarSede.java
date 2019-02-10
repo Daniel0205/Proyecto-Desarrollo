@@ -11,9 +11,10 @@ public class GUIActualizarSede extends JFrame {
     private ActionListener listener = new ManejadorDeBotones();
     private Container contenedor;
     private JLabel instruccion,icon, direccion,celular, aCargoDe;
+    private JLabel id,nombre;
     private JSeparator separator_1, separator_2;
     private JButton salir1, cancelar2, buscar, actualizar;
-    private JTextField direccionIn, celularIn;
+    private JTextField direccionIn, celularIn,nombreIn,idT;
     private JComboBox idIn,aCargoDeIn;
 
     public GUIActualizarSede(BaseDeDatos bdIn){
@@ -84,56 +85,83 @@ public class GUIActualizarSede extends JFrame {
         contenedor.add(panel2);
         panel2.setLayout(null);
 
+        id = new JLabel("Nombre:");
+        id.setBounds(21, 101, 105, 32);
+        id.setFont(font);
+        panel2.add(id);
+
+        idT = new JTextField(identifier);
+        idT.setBounds(136, 101, 234, 32);
+        idT.setEditable(false);
+        idT.setFont(font);
+        panel2.add(idT);
+
+        nombre = new JLabel("Nombre:");
+        nombre.setBounds(21, 140, 105, 32);
+        nombre.setFont(font);
+        panel2.add(nombre);
+
+        nombreIn = new JTextField(bd.obtenerSede(identifier,"nombre"));
+        nombreIn.setBounds(136, 141, 234, 32);
+        nombreIn.setFont(font);
+        panel2.add(nombreIn);
+
         direccion = new JLabel("Direccion:");
-        direccion.setBounds(21, 101, 105, 32);
+        direccion.setBounds(21, 183, 105, 32);
         direccion.setFont(font);
         panel2.add(direccion);
 
-        direccionIn = new JTextField(bd.obtenerSede(identifier,"direccion").trim());
-        direccionIn.setBounds(136, 101, 234, 32);
+        direccionIn = new JTextField(bd.obtenerSede(identifier,"direccion"));
+        direccionIn.setBounds(136, 184, 234, 32);
         direccionIn.setFont(font);
         panel2.add(direccionIn);
 
         celular = new JLabel("Telefono:");
-        celular.setBounds(21, 140, 105, 32);
+        celular.setBounds(21, 226, 105, 32);
         celular.setFont(font);
         panel2.add(celular);
 
         celularIn = new JTextField(bd.obtenerSede(identifier,"telefono"));
-        celularIn.setBounds(136, 141, 234, 32);
+        celularIn.setBounds(136, 227, 234, 32);
         celularIn.setFont(font);
         panel2.add(celularIn);
 
         aCargoDe = new JLabel("Empleado encargado:");
-        aCargoDe.setBounds(21, 183, 105, 32);
+        aCargoDe.setBounds(21, 269, 105, 32);
         aCargoDe.setFont(font);
         panel2.add(aCargoDe);
 
         aCargoDeIn = new JComboBox<>(bd.cambiarDimension(
                 bd.consultarUsuarios("Sede",identifier,"cedula,nombres")));
-        aCargoDeIn.setBounds(136, 184, 234, 32);
+        if(bd.obtenerSede(identifier,"empleado_a_cargo")!=null) {
+            aCargoDeIn.setSelectedItem(bd.cambiarDimension(bd.consultarUsuarios("Id",
+                    bd.obtenerSede(identifier, "empleado_a_cargo"),"cedula,nombres")));
+            aCargoDeIn.addItem(null);
+        }
+        else aCargoDeIn.setSelectedItem(null);
+        aCargoDeIn.setBounds(136, 270, 234, 32);
         aCargoDeIn.setFont(font);
         panel2.add(aCargoDeIn);
 
         cancelar2 = new JButton("Cancelar");
-        cancelar2.setBounds(120, 240, 120, 28);
+        cancelar2.setBounds(120, 326, 120, 28);
         cancelar2.setFont(font);
         cancelar2.addActionListener(listener);
         panel2.add(cancelar2);
 
         actualizar = new JButton("Actualizar");
-        actualizar.setBounds(250, 240, 120, 28);
+        actualizar.setBounds(250, 326, 120, 28);
         actualizar.setFont(font);
         actualizar.addActionListener(listener);
         panel2.add(actualizar);
 
         separator_2 = new JSeparator();
-        separator_2.setBounds(21, 227, 349, 2);
+        separator_2.setBounds(21, 313, 349, 2);
         panel2.add(separator_1);
         panel2.add(separator_2);
         panel2.add(icon);
 
-        setSize(400,300);
+        setSize(400,500);
         setVisible(true);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -144,20 +172,25 @@ public class GUIActualizarSede extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            String aCargo,identifier = idIn.getSelectedItem().toString();
+            identifier=identifier.substring(0,identifier.indexOf("-"));
+
             if(e.getSource()==salir1 || e.getSource()==cancelar2){
                 dispose();
             }
             else if(e.getSource()==buscar){
-                String identifier = idIn.getSelectedItem().toString();
-                identifier=identifier.substring(0,identifier.indexOf("-"));
+
 
                 initGUI2(identifier);
-
             }
             else if(e.getSource()==actualizar){
-                int identifier = Integer.parseInt(idIn.getSelectedItem().toString());
+                if (aCargoDeIn.getSelectedItem()!=null) {
+                    aCargo = aCargoDeIn.getSelectedItem().toString();
+                    aCargo = aCargo.substring(0, aCargo.indexOf("-"));
+                }else aCargo =null;
+
                 boolean var = bd.actualizarSede(identifier, direccionIn.getText(),
-                        celularIn.getText(),aCargoDeIn.getSelectedItem().toString());
+                        celularIn.getText(),aCargo);
 
                 if (var){
                     JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");

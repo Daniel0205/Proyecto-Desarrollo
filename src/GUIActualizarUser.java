@@ -12,13 +12,13 @@ public class GUIActualizarUser extends JFrame {
 
 	private BaseDeDatos bd;
 	private Container contenedor;
-	private JLabel instruccion, usuario, nombre, apellidos, direccion, id;
+	private JLabel instruccion, usuario, nombre, apellidos, direccion;
 	private JLabel contrasena, eMail, tipoEmpleado, sede, estado, icon,celular;
 	private JPasswordField contrasenaIn;
 	@SuppressWarnings("unused")
 	private JPanel panel, panel2;
-	private JTextField idIn, usuarioIn, nombreIn, apellidosIn, direccionIn, celularIn, eMailIn;
-	private JComboBox<String>  tipoEmpleadoIn, sedeIn, estadoIn;
+	private JTextField usuarioIn, nombreIn, apellidosIn, direccionIn, celularIn, eMailIn;
+	private JComboBox<String>  tipoEmpleadoIn, sedeIn, estadoIn,idIn;
 	private JButton salir1, cancelar2, buscar, actualizar;
 	private JSeparator separator_1, separator_2;
 	private Font font;
@@ -30,8 +30,8 @@ public class GUIActualizarUser extends JFrame {
 		setTitle("ACTUALIZAR EMPLEADO");
 
 		font = new Font("Tahoma", Font.PLAIN, 14);
-		initGUI(); 
 		bd = bdIn;
+		initGUI();
 	}
 
 	private void initGUI() {
@@ -45,7 +45,8 @@ public class GUIActualizarUser extends JFrame {
 		instruccion.setBounds(22, 101, 138, 32);
 		getContentPane().add(instruccion);
 
-		idIn = new JTextField();
+		idIn = new JComboBox<>(bd.cambiarDimension(
+                bd.consultarUsuarios(null,null,"cedula,nombres")));
 		idIn.setFont(font);
 		idIn.setBounds(165, 102, 99, 32);
 		getContentPane().add(idIn);
@@ -82,7 +83,7 @@ public class GUIActualizarUser extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
-	private void initGUI2(int identifier){
+	private void initGUI2(String identifier){
 
 		contenedor.removeAll();
 		contenedor.repaint();
@@ -98,7 +99,7 @@ public class GUIActualizarUser extends JFrame {
 		usuario.setFont(font);
 		panel2.add(usuario);
 
-		usuarioIn = new JTextField(bd.obtenerS(identifier,"id"));
+		usuarioIn = new JTextField(bd.obtenerS(identifier,"cedula"));
 		usuarioIn.setBounds(136, 101, 234, 32);
 		usuarioIn.setEditable(false);
 		usuarioIn.setFont(font);
@@ -119,7 +120,7 @@ public class GUIActualizarUser extends JFrame {
 		nombre.setFont(font);
 		panel2.add(nombre);
 
-		nombreIn = new JTextField(bd.obtenerS(identifier,"names").trim());
+		nombreIn = new JTextField(bd.obtenerS(identifier,"nombres").trim());
 		nombreIn.setBounds(136, 184, 234, 32);
 		nombreIn.setFont(font);
 		panel2.add(nombreIn);
@@ -129,7 +130,7 @@ public class GUIActualizarUser extends JFrame {
 		apellidos.setFont(font);
 		panel2.add(apellidos);
 
-		apellidosIn = new JTextField(bd.obtenerS(identifier,"surnames").trim());
+		apellidosIn = new JTextField(bd.obtenerS(identifier,"apellidos").trim());
 		apellidosIn.setBounds(136, 227, 234, 32);
 		apellidosIn.setFont(font);
 		panel2.add(apellidosIn);
@@ -139,7 +140,7 @@ public class GUIActualizarUser extends JFrame {
 		direccion.setFont(font);
 		panel2.add(direccion);
 
-		direccionIn = new JTextField(bd.obtenerS(identifier,"address").trim());
+		direccionIn = new JTextField(bd.obtenerS(identifier,"direccion").trim());
 		direccionIn.setBounds(136, 270, 234, 32);
 		direccionIn.setHorizontalAlignment(JTextField.LEFT);
 		direccionIn.setFont(font);
@@ -150,7 +151,7 @@ public class GUIActualizarUser extends JFrame {
 		celular.setFont(font);
 		panel2.add(celular);
 
-		celularIn = new JTextField(bd.obtenerS(identifier,"phone_number"));
+		celularIn = new JTextField(bd.obtenerS(identifier,"numero"));
 		celularIn.setBounds(136, 313, 234, 32);
 		celularIn.setFont(font);
 		panel2.add(celularIn);
@@ -170,10 +171,11 @@ public class GUIActualizarUser extends JFrame {
         sede.setFont(font);
         panel2.add(sede);
 
-        String[] listaSede = new String[] { "Central", "Cartagena", "Cali", "Medellin"};
-        sedeIn = new JComboBox<>(listaSede);
+        sedeIn = new JComboBox<>(bd.cambiarDimension(bd.consultarSede(null,"id_Sede,nombre")));
+        sedeIn.setSelectedItem(bd.cambiarDimension(bd.consultarSede(
+                bd.obtenerS(identifier, "sede"),"id_sede,nombre")));
         sedeIn.setBounds(169, 399, 201, 32);
-        sedeIn.setSelectedItem(bd.obtenerS(identifier,"headquarter"));
+        sedeIn.setSelectedItem(bd.obtenerS(identifier,"sede"));
         sedeIn.setEditable(false);
         sedeIn.setFont(font);
         panel2.add(sedeIn);
@@ -186,7 +188,7 @@ public class GUIActualizarUser extends JFrame {
 		String[] listaTipo = new String[] { "Jefe de taller", "Vendedor"};
 		tipoEmpleadoIn = new JComboBox<>(listaTipo);
 		tipoEmpleadoIn.setBounds(169, 442, 201, 32);
-		tipoEmpleadoIn.setSelectedItem(bd.obtenerS(identifier,"user_type").replaceAll("\\s",""));
+		tipoEmpleadoIn.setSelectedItem(bd.obtenerS(identifier,"tipo_usuario").replaceAll("\\s",""));
 		tipoEmpleadoIn.setEditable(false);
 		tipoEmpleadoIn.setFont(font);
 		panel2.add(tipoEmpleadoIn);
@@ -199,7 +201,7 @@ public class GUIActualizarUser extends JFrame {
 		String[] estado = new String[] {"true", "false"};
 		estadoIn = new JComboBox<>(estado);
 		estadoIn.setBounds(169, 485, 201, 32);
-		if(bd.obtenerB(identifier,"active")){
+		if(bd.obtenerB(identifier,"activo")){
 			estadoIn.setSelectedItem("true");
 		}
 		else estadoIn.setSelectedItem("false");
@@ -310,16 +312,6 @@ public class GUIActualizarUser extends JFrame {
 
     }
 
-    private boolean validarId() {
-        boolean val = true;
-        try {
-            Integer.parseInt(idIn.getText());
-
-        } catch (NumberFormatException excepcion) {
-            val=false;
-        }
-        return val;
-    }
 
 
     private class ManejadorDeBotones implements ActionListener{
@@ -327,30 +319,26 @@ public class GUIActualizarUser extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
+            String identifier = idIn.getSelectedItem().toString();
+            identifier=identifier.substring(0,identifier.indexOf("-"));
 
             if(e.getSource()==salir1 || e.getSource()==cancelar2){
                 dispose();
             }else if(e.getSource()==buscar){
-                if(!(idIn.getText().compareTo("")==0)){
-                    if(validarId()){
-                        int identifier = Integer.parseInt(idIn.getText());
 
-                        if(bd.verificarId(identifier)){
-                            initGUI2(identifier);
-                        }else{
-                            JOptionPane.showMessageDialog(null, "El empleado con id: "+ idIn.getText() +" no se encuentra registrado");
-                            dispose();
-                        }
+                initGUI2(identifier);
 
-                    }else JOptionPane.showMessageDialog(null, "Digite un ID valido");
-                } else JOptionPane.showMessageDialog(null, "Digite el ID del empleado");
             }else if(e.getSource()==actualizar){
                 if(validar()){
                     if(validar2().compareTo("true")==0){
-                        int identifier = Integer.parseInt(idIn.getText());
+
+                        String sede =  sedeIn.getSelectedItem().toString();
+                        sede = sede.substring(0,sede.indexOf("-"));
+
                         boolean var = bd.actualizarUsuario(identifier,nombreIn.getText(),apellidosIn.getText(),
-                                direccionIn.getText(),celularIn.getText(),eMailIn.getText(),(String) tipoEmpleadoIn.getSelectedItem(),
-                                (String) sedeIn.getSelectedItem(),Boolean.parseBoolean((String)estadoIn.getSelectedItem()));
+                                direccionIn.getText(),celularIn.getText(),eMailIn.getText(),
+                                (String) tipoEmpleadoIn.getSelectedItem(),sede,
+                                Boolean.parseBoolean((String)estadoIn.getSelectedItem()));
 
                         if (var){
                             JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");
