@@ -22,7 +22,8 @@ public class GUIRegistrarSedes extends JFrame{
 
 	private Container contenedor;
 	private JLabel id, direccion, telefono, encargado, nombre;
-	private JTextField idIn, direccionIn, telefonoIn, encargadoIn, nombreIn;
+	private JTextField idIn, direccionIn, telefonoIn, nombreIn;
+	private JComboBox encargadoIn;
 	private JButton registrar, cancelar;
 	private JSeparator separator_1, separator_2;
 	private Font font;
@@ -34,8 +35,8 @@ public class GUIRegistrarSedes extends JFrame{
 		setTitle("REGISTRAR SEDE");
 
 		font = new Font("Tahoma", Font.PLAIN, 14);
+        bd = bdIn;
 		crearComponentes();
-		bd = bdIn;
 	}
 
 
@@ -96,7 +97,9 @@ public class GUIRegistrarSedes extends JFrame{
 		encargado.setBounds(21, 272, 105, 32);
 		panelUsuario.add(encargado);
 
-		encargadoIn = new JTextField();
+		encargadoIn = new JComboBox<>(bd.cambiarDimension(
+				bd.consultarUsuarios("Activo",null,"cedula,nombres")));
+		encargadoIn.setSelectedItem(null);
 		encargadoIn.setFont(font);
 		encargadoIn.setBounds(136, 274, 234, 32);
 		panelUsuario.add(encargadoIn);
@@ -167,9 +170,6 @@ public class GUIRegistrarSedes extends JFrame{
 		if(tel.find()|| telefonoIn.getText().length()>40|| telefonoIn.getText().length()<7) 
 			mensaje = mensaje + " Digite un numero de telefono valido \n";
 
-		if(!validarDatoEntero(encargadoIn) && !(encargadoIn.getText().compareTo("")==0))
-			mensaje = mensaje + " El id del encargado debe ser un numero entero \n";
-
 		if(mensaje.compareTo("")==0)
 			mensaje="true";
 
@@ -178,7 +178,7 @@ public class GUIRegistrarSedes extends JFrame{
 
 
 	//Funcion para validar la disponibilidad de los id ingresados
-	private String validar3(){
+	/*private String validar3(){
 		String mensaje = "";
 		if(!(encargadoIn.getText().compareTo("")==0)) {
             if (bd.verificarIdSede(Integer.parseInt(idIn.getText())))
@@ -193,7 +193,7 @@ public class GUIRegistrarSedes extends JFrame{
 			mensaje="true";
 
 		return mensaje;
-	}
+	}*/
 
 
 	//Funcion que valida sí un dato ingresado a traves de un JTextField es entero
@@ -224,16 +224,18 @@ public class GUIRegistrarSedes extends JFrame{
 			else if(actionEvent.getSource() == registrar){
 				if(validar1()) {
 					if(validar2().compareTo("true")==0) {
-						if(validar3().compareTo("true")==0) {
-						    String encargado=encargadoIn.getText();
-						    if (encargado.compareTo("")==0)encargado=null;
-							boolean var = bd.registraSede( idIn.getText(), direccionIn.getText(), 
-									telefonoIn.getText(),encargado,nombreIn.getText());
-							if (var) JOptionPane.showMessageDialog(null, "Sede registrada exitosamente");
-							else JOptionPane.showMessageDialog(null, "Error al actualizar usuario.");
-							dispose();
-						}
-						else JOptionPane.showMessageDialog(null, validar3());
+						String encargado=null;
+						if (!(encargadoIn.getSelectedItem().toString().compareTo("")==0)){
+						    encargado=encargadoIn.getSelectedItem().toString();
+						    encargado=encargado.substring(0,encargado.indexOf("-"));
+                        }
+
+
+						boolean var = bd.registraSede( idIn.getText(), direccionIn.getText(),
+								telefonoIn.getText(),encargado,nombreIn.getText());
+						if (var) JOptionPane.showMessageDialog(null, "Sede registrada exitosamente");
+						else JOptionPane.showMessageDialog(null, "Error al actualizar usuario.");
+						dispose();
 					}
 					else JOptionPane.showMessageDialog(null, validar2());
 				}

@@ -133,12 +133,7 @@ public class GUIActualizarSede extends JFrame {
 
         aCargoDeIn = new JComboBox<>(bd.cambiarDimension(
                 bd.consultarUsuarios("Sede",identifier,"cedula,nombres")));
-        if(bd.obtenerSede(identifier,"empleado_a_cargo")!=null) {
-            aCargoDeIn.setSelectedItem(bd.cambiarDimension(bd.consultarUsuarios("Id",
-                    bd.obtenerSede(identifier, "empleado_a_cargo"),"cedula,nombres")));
-            aCargoDeIn.addItem(null);
-        }
-        else aCargoDeIn.setSelectedItem(null);
+        seleccionarEmpleado(identifier);
         aCargoDeIn.setBounds(136, 270, 234, 32);
         aCargoDeIn.setFont(font);
         panel2.add(aCargoDeIn);
@@ -166,6 +161,20 @@ public class GUIActualizarSede extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
+    }
+
+    private void seleccionarEmpleado(String identifier) {
+        if(bd.obtenerSede(identifier,"empleado_a_cargo")!=null) {
+            String[][] aux = bd.consultarUsuarios("Id",
+                    bd.obtenerSede(identifier, "empleado_a_cargo"),"cedula,nombres,sede");
+
+            if(aux[0][2].compareTo(identifier)!=0){
+             aCargoDeIn.addItem(bd.cambiarDimension(aux)[0]);
+            }
+            aCargoDeIn.addItem(null);
+            aCargoDeIn.setSelectedItem(bd.cambiarDimension(aux)[0]);
+        }
+        else aCargoDeIn.setSelectedItem(null);
     }
 
     private class ManejadorDeBotones implements ActionListener{

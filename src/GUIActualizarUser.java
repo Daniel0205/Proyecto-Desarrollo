@@ -120,7 +120,7 @@ public class GUIActualizarUser extends JFrame {
 		nombre.setFont(font);
 		panel2.add(nombre);
 
-		nombreIn = new JTextField(bd.obtenerS(identifier,"nombres").trim());
+		nombreIn = new JTextField(bd.obtenerS(identifier,"nombres"));
 		nombreIn.setBounds(136, 184, 234, 32);
 		nombreIn.setFont(font);
 		panel2.add(nombreIn);
@@ -130,7 +130,7 @@ public class GUIActualizarUser extends JFrame {
 		apellidos.setFont(font);
 		panel2.add(apellidos);
 
-		apellidosIn = new JTextField(bd.obtenerS(identifier,"apellidos").trim());
+		apellidosIn = new JTextField(bd.obtenerS(identifier,"apellidos"));
 		apellidosIn.setBounds(136, 227, 234, 32);
 		apellidosIn.setFont(font);
 		panel2.add(apellidosIn);
@@ -140,7 +140,7 @@ public class GUIActualizarUser extends JFrame {
 		direccion.setFont(font);
 		panel2.add(direccion);
 
-		direccionIn = new JTextField(bd.obtenerS(identifier,"direccion").trim());
+		direccionIn = new JTextField(bd.obtenerS(identifier,"direccion"));
 		direccionIn.setBounds(136, 270, 234, 32);
 		direccionIn.setHorizontalAlignment(JTextField.LEFT);
 		direccionIn.setFont(font);
@@ -309,9 +309,7 @@ public class GUIActualizarUser extends JFrame {
 
 		return mensaje;
 
-
     }
-
 
 
     private class ManejadorDeBotones implements ActionListener{
@@ -341,6 +339,7 @@ public class GUIActualizarUser extends JFrame {
                                 Boolean.parseBoolean((String)estadoIn.getSelectedItem()));
 
                         if (var){
+
                             JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");
                             dispose();
                         }

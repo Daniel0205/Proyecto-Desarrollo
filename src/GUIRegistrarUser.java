@@ -31,15 +31,6 @@ public class GUIRegistrarUser extends JFrame {
 		crearComponentes();
 	}
 
-    private String[] juntarArray(String[][] datos) {
-        System.out.print("entro");
-        String[] aux = new String[datos.length];
-        for (int i=0;i<datos.length;i++){
-            aux[i]=datos[i][0]+"-"+datos[i][1];
-        }
-        return aux;
-    }
-
 
     private void crearComponentes() {
 
@@ -139,7 +130,7 @@ public class GUIRegistrarUser extends JFrame {
 		sede.setBounds(21, 448, 138, 32);
 		panelUsuario.add(sede);
 
-		sedeIn = new JComboBox<>(juntarArray(bd.consultarSede(null,"id_Sede,nombre")));
+		sedeIn = new JComboBox<>(bd.cambiarDimension(bd.consultarSede(null,"id_Sede,nombre")));
 		sedeIn.setEditable(false);
 		sedeIn.setFont(font);
 		sedeIn.setBounds(169, 449, 201, 32);

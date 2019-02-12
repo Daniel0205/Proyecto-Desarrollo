@@ -109,7 +109,7 @@ public class BaseDeDatos {
 
 			rs.next();
 			String resultado = rs.getString(1);
-			return resultado;
+			return resultado.trim();
 		}
 		catch (SQLException e) {
 			System.out.println("Connection failure");
@@ -129,6 +129,7 @@ public class BaseDeDatos {
 
 			rs.next();
 			String resultado = rs.getString(1);
+			if (resultado!=null)resultado=resultado.trim();
 			return resultado;
 		}
 		catch (SQLException e) {
@@ -158,6 +159,25 @@ public class BaseDeDatos {
 		}
 	}
 
+	private void eliminarEncargado(String encargadoId){
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+            String sql ="UPDATE sedes SET empleado_a_cargo = "+null+
+                " WHERE empleado_a_cargo = "+encargadoId+";";
+
+            System.out.print(sql);
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            psSql.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+
+
 	public boolean actualizarUsuario(String identifier, String nombres, String apellidos,
  			String direccion, String celular, String email, String tipo, String sede, boolean activo) {
 
@@ -168,6 +188,8 @@ public class BaseDeDatos {
 					" WHERE cedula = "+identifier+";";
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			psSql.executeUpdate();
+
+			if(!activo)eliminarEncargado(identifier);
 
 			return true;
 		}
@@ -208,6 +230,7 @@ public class BaseDeDatos {
 		if(criterio=="Nombres") sql += " WHERE nombres = '" + busqueda + "'";
 		if(criterio=="Apellidos") sql += " WHERE apellidos = '" + busqueda + "'";
         if(criterio=="Sede") sql += " WHERE activo=true AND sede = " + busqueda ;
+		if(criterio=="Activo") sql += " WHERE activo=true ";
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -290,7 +313,9 @@ public class BaseDeDatos {
     public String[] cambiarDimension(String[][] array){
         String[] aux = new String[array.length];
         for (int i=0;i < array.length;i++){
-            aux[i]=array[i][0]+"-"+array[i][1];
+
+            aux[i]=array[i][0].trim()+"-"+array[i][1].trim();
+
         }
         return aux;
     }
