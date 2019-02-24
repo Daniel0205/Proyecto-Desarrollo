@@ -25,9 +25,7 @@ public class GUIActualizarUser extends JFrame {
 	private ActionListener listener = new ManejadorDeBotones();
 
 	public GUIActualizarUser(BaseDeDatos bdIn){
-
-		setResizable(false);
-		setTitle("ACTUALIZAR EMPLEADO");
+		super("ACTUALIZAR EMPLEADO");
 
 		font = new Font("Tahoma", Font.PLAIN, 14);
 		bd = bdIn;

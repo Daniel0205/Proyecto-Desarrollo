@@ -29,6 +29,7 @@ public class GUIConsultarUser extends JFrame {
 	
 	//Creacion y despliegue de la interfaz de consulta
 	public GUIConsultarUser(BaseDeDatos bdIn) {
+		super("Consultar Usuario");
 
 		bd = bdIn;
 		font = new Font("Tahoma", Font.PLAIN, 14);

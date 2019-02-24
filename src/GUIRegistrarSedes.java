@@ -31,8 +31,7 @@ public class GUIRegistrarSedes extends JFrame{
 	private ActionListener listener;
 
 	public GUIRegistrarSedes(BaseDeDatos bdIn){
-		setResizable(false);
-		setTitle("REGISTRAR SEDE");
+	    super("REGISTRAR SEDE");
 
 		font = new Font("Tahoma", Font.PLAIN, 14);
         bd = bdIn;
@@ -131,6 +130,7 @@ public class GUIRegistrarSedes extends JFrame{
 		lblNewLabel.setIcon(new ImageIcon(filePath));
 		lblNewLabel.setBounds(21, 11, 66, 66);
 		panelUsuario.add(lblNewLabel);
+		setResizable(false);
 		setSize(400,390);
 		setVisible(true);
 		setLocationRelativeTo(null);
@@ -177,23 +177,6 @@ public class GUIRegistrarSedes extends JFrame{
 	}
 
 
-	//Funcion para validar la disponibilidad de los id ingresados
-	/*private String validar3(){
-		String mensaje = "";
-		if(!(encargadoIn.getText().compareTo("")==0)) {
-            if (bd.verificarIdSede(Integer.parseInt(idIn.getText())))
-                mensaje = mensaje + " El Id ingresado ya esta siendo utilizado para otra sede \n";
-            if (!bd.obtenerB(encargadoIn.getText(), "activo") &&
-                    !(encargadoIn.getText().compareTo("") == 0))
-                mensaje = mensaje + " El empleado con el id " + encargadoIn.getText() + " no esta activo \n";
-            if (!(bd.obtenerS(encargadoIn.getText(), "tipo_usuario").equals("Jefe de taller")))
-                mensaje = mensaje + " El empleado encargado debe ser un Jefe de Taller \n";
-        }
-		if(mensaje.compareTo("")==0)
-			mensaje="true";
-
-		return mensaje;
-	}*/
 
 
 	//Funcion que valida sí un dato ingresado a traves de un JTextField es entero

@@ -10,7 +10,7 @@ public class GUIMenuAdmin extends JFrame {
 
 	private Container contenedor;
 	private JButton registrarUsuario, actualizarUsuario, mostrarUsuarios;
-	private JButton registrarSede, actualizarSede, mostrarSedes, salir,generarInforme;
+	private JButton registrarSede, actualizarSede, mostrarSedes, salir,registrarProducto;
 	private JSeparator separator_1, separator_2;
 	private JLabel icon;
 	private Font font;
@@ -19,7 +19,7 @@ public class GUIMenuAdmin extends JFrame {
 
 
     public GUIMenuAdmin(BaseDeDatos bdIn){
-		super("Acciones");
+		super("MENU GERENTE");
 
 		initGUI();
 		bd = bdIn;
@@ -34,8 +34,6 @@ public class GUIMenuAdmin extends JFrame {
 		listener = new ManejadorDeBotones();
 
         font = new Font("Tahoma", Font.PLAIN, 14);
-
-		font = new Font("Tahoma", Font.PLAIN, 14);
 
 		actualizarUsuario = new JButton("Actualizar usuario");
 		actualizarUsuario.setFont(font);
@@ -73,10 +71,11 @@ public class GUIMenuAdmin extends JFrame {
 		mostrarSedes.setBounds(187, 187, 142, 32);
 		getContentPane().add(mostrarSedes);
 
-		generarInforme = new JButton("Generar Informe");
-        generarInforme.setFont(font);
-        generarInforme.setBounds(100, 230, 142, 32);
-		getContentPane().add(generarInforme);
+		registrarProducto = new JButton("Registrar producto");
+		registrarProducto.addActionListener(listener);
+		registrarProducto.setFont(font);
+		registrarProducto.setBounds(100, 230, 142, 32);
+		getContentPane().add(registrarProducto);
 
 		salir = new JButton("Salir");
 		salir.addActionListener(listener);
@@ -132,12 +131,8 @@ public class GUIMenuAdmin extends JFrame {
                 JFrame formulario5 = new GUIActualizarSede(bd);
                 formulario5.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
-            else if(actionEvent.getSource() == generarInforme){
-                JFrame formulario6 = new GUICrearInformes(bd);
-                formulario6.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            }
-            else if(actionEvent.getSource() == generarInforme){
-                JFrame formulario6 = new GUICrearInformes(bd);
+            else if(actionEvent.getSource() == registrarProducto){
+                JFrame formulario6 = new GUIRegistrarProd(bd);
                 formulario6.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
             else if (actionEvent.getSource() == mostrarSedes){

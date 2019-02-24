@@ -18,9 +18,7 @@ public class GUIActualizarSede extends JFrame {
     private JComboBox idIn,aCargoDeIn;
 
     public GUIActualizarSede(BaseDeDatos bdIn){
-
-        setResizable(false);
-        setTitle("ACTUALIZAR SEDE");
+        super("ACTUALIZAR SEDE");
 
         font = new Font("Tahoma", Font.PLAIN, 14);
         bd = bdIn;

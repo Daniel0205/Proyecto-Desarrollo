@@ -23,8 +23,7 @@ public class GUIRegistrarUser extends JFrame {
 	private BaseDeDatos bd;
 
 	public GUIRegistrarUser(BaseDeDatos bdIn){
-		setResizable(false);
-		setTitle("CREAR EMPLEADO");
+		super("CREAR EMPLEADO");
 
 		font = new Font("Tahoma", Font.PLAIN, 14);
         bd = bdIn;
@@ -165,6 +164,7 @@ public class GUIRegistrarUser extends JFrame {
 		panelUsuario.add(lblNewLabel);
 		setSize(400,602);
 		setVisible(true);
+		setResizable(false);
 		setLocationRelativeTo(null);
 	}
 

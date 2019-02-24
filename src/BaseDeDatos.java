@@ -348,9 +348,9 @@ public class BaseDeDatos {
 	public boolean validarLogin( String user, String pass, String tipoUsuario){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-            String sql ="SELECT active FROM empleados WHERE cedula = '"+ user
+            String sql ="SELECT activo FROM empleados WHERE cedula = '"+ user
                         + "' AND contrasena = "
-                        + " crypt('"+pass+"',contrasena) AND user_type =  '" +tipoUsuario+"'" ;
+                        + " crypt('"+pass+"',contrasena) AND tipo_usuario =  '" +tipoUsuario+"'" ;
 
             System.out.print(sql+"\n");
 
@@ -361,6 +361,26 @@ public class BaseDeDatos {
 
             if (result.getBoolean("activo"))return true;
             else return false;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    public boolean registrarProducto(String id, String nombre, String precio,String descripcion){
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+            @SuppressWarnings("unused")
+            Statement statement = connection.createStatement();
+            String sql ="INSERT INTO public.producto(id_producto,nombre, precio, descripcion) "+
+                    " VALUES ("+ id +",'"+ nombre+ "',"+ precio +",'"+descripcion+"');";
+            System.out.print(sql);
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            psSql.execute();
+
+            return true;
         }
         catch (SQLException e) {
             System.out.println("Connection failure");

@@ -17,7 +17,6 @@ public class GUILogin extends JFrame {
 
 
 	public GUILogin(){
-
 		super("Loggin");
 
         bd = new BaseDeDatos();

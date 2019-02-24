@@ -27,6 +27,7 @@ public class GUIConsultarSede extends JFrame {
 
     //Creacion y despliegue de la interfaz de consulta
     public GUIConsultarSede(BaseDeDatos bdIn) {
+        super("Consultar Sede");
 
         bd = bdIn;
         font = new Font("Tahoma", Font.PLAIN, 14);
