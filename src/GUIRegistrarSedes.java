@@ -225,10 +225,12 @@ public class GUIRegistrarSedes extends JFrame{
 				if(validar1()) {
 					if(validar2().compareTo("true")==0) {
 						String encargado=null;
-						if (!(encargadoIn.getSelectedItem().toString().compareTo("")==0)){
-						    encargado=encargadoIn.getSelectedItem().toString();
-						    encargado=encargado.substring(0,encargado.indexOf("-"));
-                        }
+						if(encargadoIn.getSelectedItem()!=null){
+							if (!(encargadoIn.getSelectedItem().toString().compareTo("")==0)){
+								encargado=encargadoIn.getSelectedItem().toString();
+								encargado=encargado.substring(0,encargado.indexOf("-"));
+							}
+						}
 
 
 						boolean var = bd.registraSede( idIn.getText(), direccionIn.getText(),
