@@ -315,12 +315,15 @@ public class GUIActualizarUser extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            String identifier = idIn.getSelectedItem().toString();
-            identifier=identifier.substring(0,identifier.indexOf("-"));
-
             if(e.getSource()==salir1 || e.getSource()==cancelar2){
                 dispose();
-            }else if(e.getSource()==buscar){
+                return;
+            }
+
+			String identifier = idIn.getSelectedItem().toString();
+			identifier=identifier.substring(0,identifier.indexOf("-"));
+
+			if(e.getSource()==buscar){
 
                 initGUI2(identifier);
 

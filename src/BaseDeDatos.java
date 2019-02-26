@@ -345,12 +345,12 @@ public class BaseDeDatos {
 	}
 
 	//
-	public boolean validarLogin( String user, String pass, String tipoUsuario){
+	public String  validarLogin( String user, String pass){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
             String sql ="SELECT activo FROM empleados WHERE cedula = '"+ user
                         + "' AND contrasena = "
-                        + " crypt('"+pass+"',contrasena) AND tipo_usuario =  '" +tipoUsuario+"'" ;
+                        + " crypt('"+pass+"',contrasena) ";
 
             System.out.print(sql+"\n");
 
@@ -359,13 +359,13 @@ public class BaseDeDatos {
 
             result.next();
 
-            if (result.getBoolean("activo"))return true;
-            else return false;
+            if (result.getBoolean("activo"))return result.getString("tipo_usuario");
+            else return "";
         }
         catch (SQLException e) {
             System.out.println("Connection failure");
             e.printStackTrace();
-            return false;
+            return "";
         }
 
     }
