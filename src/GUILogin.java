@@ -25,23 +25,23 @@ public class GUILogin extends JFrame {
 
 		lblUser = new JLabel("User/Cedula:");
 		lblUser.setFont(font);
-		lblUser.setBounds(53, 153, 70, 32);
+		lblUser.setBounds(39, 151, 94, 32);
 		getContentPane().add(lblUser);
 
 		lblPassword = new JLabel("Password:");
 		lblPassword.setFont(font);
-		lblPassword.setBounds(53, 196, 70, 32);
+		lblPassword.setBounds(53, 194, 70, 32);
 		getContentPane().add(lblPassword);
 
 		id = new JTextField();
 		id.setFont(font);
-		id.setBounds(128, 152, 149, 32);
+		id.setBounds(143, 152, 149, 32);
 		getContentPane().add(id);
 		id.setColumns(10);
 
 		password = new JPasswordField();
 		password.setFont(font);
-		password.setBounds(128, 195, 149, 32);
+		password.setBounds(143, 195, 149, 32);
 		getContentPane().add(password);
 
 		btnLogin = new JButton("Login");
@@ -61,7 +61,7 @@ public class GUILogin extends JFrame {
 		URL filePath = this.getClass().getResource("/images/login.png");
 		icon.setHorizontalAlignment(SwingConstants.CENTER);
 		icon.setIcon(new ImageIcon(filePath));
-		icon.setBounds(122, 11, 118, 90);
+		icon.setBounds(113, 32, 118, 90);
 		getContentPane().add(icon);
 
 		setBounds(0, -22, 353, 322);

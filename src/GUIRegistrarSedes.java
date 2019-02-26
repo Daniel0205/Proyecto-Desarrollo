@@ -47,7 +47,7 @@ public class GUIRegistrarSedes extends JFrame{
 		getContentPane().setLayout(null);
 
 		JPanel panelUsuario = new JPanel();
-		panelUsuario.setBounds(0, 0, 394, 575);
+		panelUsuario.setBounds(0, 0, 394, 475);
 		contenedor.add(panelUsuario);
 		panelUsuario.setLayout(null);
 
@@ -107,18 +107,18 @@ public class GUIRegistrarSedes extends JFrame{
 
 		cancelar = new JButton("Cancelar");
 		cancelar.setFont(font);
-		cancelar.setBounds(120, 317, 113, 28);
+		cancelar.setBounds(120, 351, 113, 28);
 		cancelar.addActionListener(listener);
 		panelUsuario.add(cancelar);
 
 		registrar = new JButton("Registrar Sede");
 		registrar.setFont(font);
-		registrar.setBounds(243, 317, 127, 28);
+		registrar.setBounds(243, 351, 127, 28);
 		registrar.addActionListener(listener);
 		panelUsuario.add(registrar);
 
 		separator_2 = new JSeparator();
-		separator_2.setBounds(21, 304, 349, 2);
+		separator_2.setBounds(21, 338, 349, 2);
 		panelUsuario.add(separator_2);
 
 		separator_1 = new JSeparator();
@@ -131,7 +131,7 @@ public class GUIRegistrarSedes extends JFrame{
 		lblNewLabel.setBounds(21, 11, 66, 66);
 		panelUsuario.add(lblNewLabel);
 		setResizable(false);
-		setSize(400,390);
+		setSize(400,426);
 		setVisible(true);
 		setLocationRelativeTo(null);
 	}

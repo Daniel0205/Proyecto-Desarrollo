@@ -37,37 +37,38 @@ public class GUIConsultarSede extends JFrame {
         icon = new JLabel(" ");
         URL filePath = this.getClass().getResource("/images/search.png");
         icon.setIcon(new ImageIcon(filePath));
-        icon.setBounds(21, 23, 66, 66);
+        icon.setBounds(31, 11, 66, 66);
         getContentPane().add(icon);
 
-        idl = new JLabel("id");
-        idl.setBounds(21, 23, 66, 66);
+        idl = new JLabel("Id");
+        idl.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        idl.setBounds(62, 112, 25, 32);
         getContentPane().add(idl);
 
         consultar = new JButton("Consultar");
         consultar.setFont(font);
-        consultar.setBounds(433, 112, 101, 32);
+        consultar.setBounds(400, 112, 101, 32);
         consultar.addActionListener(listener);
         getContentPane().add(consultar);
 
         busqueda = new JTextField();
         busqueda.setFont(font);
-        busqueda.setBounds(132, 113, 295, 32);
+        busqueda.setBounds(95, 113, 295, 32);
         getContentPane().add(busqueda);
         busqueda.setColumns(10);
 
 
         separator_1 = new JSeparator();
-        separator_1.setBounds(31, 100, 503, 4);
+        separator_1.setBounds(31, 100, 482, 4);
         getContentPane().add(separator_1);
 
         separator_2 = new JSeparator();
-        separator_2.setBounds(21, 181, 513, 4);
+        separator_2.setBounds(21, 181, 492, 4);
         getContentPane().add(separator_2);
 
         salir = new JButton("Salir");
         salir.setFont(font);
-        salir.setBounds(445, 192, 89, 32);
+        salir.setBounds(412, 192, 89, 32);
         salir.addActionListener(listener);
         getContentPane().add(salir);
 

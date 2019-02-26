@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import javax.swing.GroupLayout.Alignment;
 
 public class GUIRegistrarProd extends JFrame {
 
@@ -14,10 +15,12 @@ public class GUIRegistrarProd extends JFrame {
     private JTextField idProductoIn, precioIn, descripcionIn,nombreIn;
     private JButton cancelar, crear;
 
-    public GUIRegistrarProd(BaseDeDatos bdIn) {
-        super("CREAR PRODUCTO");
 
-        font = new Font("Tahoma", Font.PLAIN, 14);
+    public GUIRegistrarProd(BaseDeDatos bdIn) {
+        super("CREAR PRODUCTO"); 
+//        this.getContentPane().setSize(400,400);
+
+        font = new Font("Tahoma", Font.PLAIN, 14); 
         bd = bdIn;
         InitGUI();
     }
@@ -25,11 +28,9 @@ public class GUIRegistrarProd extends JFrame {
     private void InitGUI() {
         contenedor = getContentPane();
         contenedor.removeAll();
-        getContentPane().setLayout(null);
 
         JPanel panelUsuario = new JPanel();
-        panelUsuario.setBounds(0, 0, 394, 575);
-        contenedor.add(panelUsuario);
+        panelUsuario.setBounds(0, 0, 394, 379);
         panelUsuario.setLayout(null);
 
         idProducto = new JLabel("Id Producto:");
@@ -76,18 +77,18 @@ public class GUIRegistrarProd extends JFrame {
 
         cancelar = new JButton("Cancelar");
         cancelar.setFont(font);
-        cancelar.setBounds(120, 526, 120, 28);
+        cancelar.setBounds(92, 322, 120, 28);
         cancelar.addActionListener(listener);
         panelUsuario.add(cancelar);
 
-        crear = new JButton("Crear Usuario");
+        crear = new JButton("Crear Producto");
         crear.setFont(font);
-        crear.setBounds(250, 526, 120, 28);
+        crear.setBounds(222, 322, 148, 28);
         crear.addActionListener(listener);
         panelUsuario.add(crear);
 
         separator_2 = new JSeparator();
-        separator_2.setBounds(21, 513, 349, 2);
+        separator_2.setBounds(21, 309, 349, 2);
         panelUsuario.add(separator_2);
 
         separator_1 = new JSeparator();
@@ -96,12 +97,14 @@ public class GUIRegistrarProd extends JFrame {
 
         JLabel lblNewLabel = new JLabel("");
         URL filePath = this.getClass().getResource("/images/create.png");
+        getContentPane().setLayout(null);
         lblNewLabel.setIcon(new ImageIcon(filePath));
         lblNewLabel.setBounds(21, 11, 66, 66);
         panelUsuario.add(lblNewLabel);
+        getContentPane().add(panelUsuario);
 
         setResizable(false);
-        setSize(400, 602);
+        setSize(400, 406);
         setVisible(true);
         setLocationRelativeTo(null);
     }

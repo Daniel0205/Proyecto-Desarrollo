@@ -74,7 +74,7 @@ public class GUIMenuAdmin extends JFrame {
 		registrarProducto = new JButton("Registrar producto");
 		registrarProducto.addActionListener(listener);
 		registrarProducto.setFont(font);
-		registrarProducto.setBounds(100, 230, 142, 32);
+		registrarProducto.setBounds(94, 230, 169, 32);
 		getContentPane().add(registrarProducto);
 
 		salir = new JButton("Salir");
@@ -134,6 +134,7 @@ public class GUIMenuAdmin extends JFrame {
             else if(actionEvent.getSource() == registrarProducto){
                 JFrame formulario6 = new GUIRegistrarProd(bd);
                 formulario6.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                formulario6.setPreferredSize(new Dimension(400,400));
             }
             else if (actionEvent.getSource() == mostrarSedes){
                 JFrame formulario7 = new GUIConsultarSede(bd);
