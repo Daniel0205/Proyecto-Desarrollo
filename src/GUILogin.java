@@ -17,20 +17,21 @@ public class GUILogin extends JFrame {
 
 	public GUILogin(){
 		super("Loggin");
+		setTitle("Iniciar Sesion");
 
         bd = new BaseDeDatos();
 
 		Font font = new Font("Tahoma", Font.PLAIN, 14);
 		ManejadorDeBotones listener = new ManejadorDeBotones();
 
-		lblUser = new JLabel("User/Cedula:");
+		lblUser = new JLabel("Usuario/Cedula:");
 		lblUser.setFont(font);
-		lblUser.setBounds(39, 151, 94, 32);
+		lblUser.setBounds(21, 151, 112, 32);
 		getContentPane().add(lblUser);
 
-		lblPassword = new JLabel("Password:");
+		lblPassword = new JLabel("Contrase\u00F1a:");
 		lblPassword.setFont(font);
-		lblPassword.setBounds(53, 194, 70, 32);
+		lblPassword.setBounds(29, 194, 94, 32);
 		getContentPane().add(lblPassword);
 
 		id = new JTextField();
