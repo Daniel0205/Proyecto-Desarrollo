@@ -140,10 +140,10 @@ public class GUIRegistrarSedes extends JFrame{
 	//Funcion que valida si algun campo a registrar esta vacio
 	private boolean validar1(){
 		boolean val=true;
-		val = (idIn.getText().compareTo("")==0) ? false : true;      
-		val = (direccionIn.getText().compareTo("")==0) ? false : true;
-		val = (telefonoIn.getText().compareTo("")==0) ? false : true;
-		val = (nombreIn.getText().compareTo("")==0) ? false : true;
+		val = (idIn.getText().compareTo("")==0 ||      
+				direccionIn.getText().compareTo("")==0 ||
+				telefonoIn.getText().compareTo("")==0 ||
+				nombreIn.getText().compareTo("")==0) ? false : true;
 
 		return val;
 	}

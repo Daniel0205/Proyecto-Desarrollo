@@ -114,7 +114,8 @@ public class GUILogin extends JFrame {
 					}
                 } else JOptionPane.showMessageDialog(null, "Debe llenar todas los campos");
             }
-            if (actionEvent.getSource() == btnCancel) System.exit(0);
+            if (actionEvent.getSource() == btnCancel) 
+            	System.exit(0);
         }
     }
 }

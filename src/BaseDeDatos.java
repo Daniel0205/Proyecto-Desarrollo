@@ -139,7 +139,7 @@ public class BaseDeDatos {
 		}
 	}
 
-	//Método para obtener un elemento de tipo boolean perteneciente al valor de algún atributo.
+	//Metodo para obtener un elemento de tipo boolean perteneciente al valor de algún atributo.
 	public boolean obtenerB(String identifier, String campo) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
@@ -159,6 +159,7 @@ public class BaseDeDatos {
 		}
 	}
 
+	
 	private void eliminarEncargado(String encargadoId){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             String sql ="UPDATE sedes SET empleado_a_cargo = "+null+
@@ -177,7 +178,7 @@ public class BaseDeDatos {
     }
 
 
-
+	//
 	public boolean actualizarUsuario(String identifier, String nombres, String apellidos,
  			String direccion, String celular, String email, String tipo, String sede, boolean activo) {
 
@@ -309,7 +310,7 @@ public class BaseDeDatos {
         return contador+1;
     }
 
-    //Funcion para transformar matrics bidimensionales a unidimensionales
+    //Funcion para transformar matrices bidimensionales a unidimensionales
     public String[] cambiarDimension(String[][] array){
         String[] aux = new String[array.length];
         for (int i=0;i < array.length;i++){
@@ -345,21 +346,20 @@ public class BaseDeDatos {
 	}
 
 	//
-	public String  validarLogin( String user, String pass){
+	public String validarLogin( String user, String pass){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-            String sql ="SELECT activo FROM empleados WHERE cedula = '"+ user
+            String sql ="SELECT * FROM empleados WHERE cedula = '"+ user
                         + "' AND contrasena = "
                         + " crypt('"+pass+"',contrasena) ";
-
-            System.out.print(sql+"\n");
 
             PreparedStatement psSql = connection.prepareStatement(sql);
             ResultSet result = psSql.executeQuery();
 
             result.next();
 
-            if (result.getBoolean("activo"))return result.getString("tipo_usuario");
+            if (result.getBoolean("activo"))
+            	return result.getString("tipo_usuario");
             else return "";
         }
         catch (SQLException e) {
@@ -370,6 +370,7 @@ public class BaseDeDatos {
 
     }
 
+	//
     public boolean registrarProducto(String id, String nombre, String precio,String descripcion){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             @SuppressWarnings("unused")
@@ -389,5 +390,66 @@ public class BaseDeDatos {
         }
 
     }
-	
+    
+    //
+    public boolean crearOrdendeTrabajo(String idOrden, String fechaEntrega, String cantidad, 
+    		String idProducto, String idEncargado, String asignadoA, String finalizada){
+
+    	try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+            @SuppressWarnings("unused")
+            Statement statement = connection.createStatement();
+            String sql ="INSERT INTO public.ordenes_de_trabajo(id_ordenes, asignada_a, "
+            		+ "fecha_entrega, cantidad, finalizada, id_producto, id_usuario) "+
+                    " VALUES ("+ idOrden +",'"+ asignadoA +"','"+ fechaEntrega + "',"+ cantidad +"," + 
+            		finalizada + "," + idProducto + ","+ idEncargado +");";
+            System.out.print(sql);
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            psSql.execute();
+
+            return true;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+
+  //Funcion para obtener una lista de usuarios segun un 'criterio' de busqueda
+  	//y una palabra clave, en este caso llamada 'busqueda'
+  	public String[][] consultarProductos(String campos) {
+          String sql = "SELECT "+campos+" FROM public.producto";
+
+  		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+  			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+  					ResultSet.CONCUR_READ_ONLY);
+  			ResultSet resultSet = statement.executeQuery(sql);
+
+  			resultSet.last();
+  			int rows = resultSet.getRow(); //# de filas resulado de la consulta 
+  			resultSet.beforeFirst();
+
+  			Array arraySQL = null;
+  			int columns = contarCampos(campos); //# de columnas a mostrar (predeterminado)
+  			String[][] resultadoConsulta = new String[rows][columns];
+
+  			int j = 0;
+  			while (resultSet.next()) {
+  				for (int i = 0; i < columns; i++) {
+  					arraySQL = resultSet.getArray(i+1);
+  					resultadoConsulta[j][i] = arraySQL.toString().trim();
+  				} j++;
+  			}
+
+  			return resultadoConsulta;
+  		}
+  		catch (SQLException e) {
+  			System.out.println("Connection failure");
+  			e.printStackTrace();
+  			return null;
+  		}
+  	}
+
+    
 }

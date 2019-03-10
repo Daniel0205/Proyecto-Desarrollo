@@ -17,7 +17,6 @@ public class GUIMenuJefe extends JFrame {
         super("MENU JEFE DE TALLER");
 
         this.bd=bd;
-
         InitGUI();
     }
 
@@ -33,13 +32,13 @@ public class GUIMenuJefe extends JFrame {
 
         crearOrden = new JButton("Crear Orden");
         crearOrden.setFont(font);
-        crearOrden.setBounds(22, 144, 142, 32);
+        crearOrden.setBounds(22, 101, 142, 32);
         crearOrden.addActionListener(listener);
         getContentPane().add(crearOrden);
 
         modificarOrden = new JButton("Modificar Orden");
         modificarOrden.setFont(font);
-        modificarOrden.setBounds(22, 101, 142, 32);
+        modificarOrden.setBounds(22, 144, 142, 32);
         modificarOrden.addActionListener(listener);
         getContentPane().add(modificarOrden);
 
@@ -47,8 +46,7 @@ public class GUIMenuJefe extends JFrame {
         consultarOrden.setFont(font);
         consultarOrden.setBounds(22, 187, 142, 32);
         consultarOrden.addActionListener(listener);
-        getContentPane().add(consultarOrden);
-        
+        getContentPane().add(consultarOrden);   
 
         salir = new JButton("Salir");
         salir.addActionListener(listener);
@@ -74,14 +72,18 @@ public class GUIMenuJefe extends JFrame {
         setResizable(false);
         setVisible(true);
         setLocationRelativeTo(null);
-
-
     }
 
+    
     private class ManejadorDeBotones implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
+        	if (actionEvent.getSource() == crearOrden) {
+        		GUIMenuJefe_crearOrden crearOrden = new GUIMenuJefe_crearOrden(bd); 
+        	}
+        	else if(actionEvent.getSource() == salir){
+				dispose();
+			}
 
         }
     }
