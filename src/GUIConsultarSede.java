@@ -100,12 +100,14 @@ public class GUIConsultarSede extends JFrame {
             JOptionPane.showMessageDialog(null, "La busqueda no produjo resultados.");
 
         else{
-            String idEncargado = board[0][3];
-            String nombreE = bd.obtenerS(idEncargado, "nombres");
-            String apellidoE = bd.obtenerS(idEncargado, "apellidos");
-            board[0][3] = nombreE.trim()+" "+apellidoE.trim();
+            String idEncargado = board[0][4],nombreE="Sin",apellidoE=" Empleado";
+            if(idEncargado!=null) {
+                nombreE = bd.obtenerS(idEncargado, "nombres");
+                apellidoE = bd.obtenerS(idEncargado, "apellidos");
+            }
+            board[0][4] = nombreE.trim()+" "+apellidoE.trim();
             JFrame frame = new JFrame();
-            String column[]={"id", "Direccion" ,"Telefono", "Empleado a cargo"};
+            String column[]={"id", "Direccion" ,"Nombre","Telefono", "Empleado a cargo"};
             JTable table = new JTable(board,column);
             table.setRowMargin(0);
             table.setFont(font);

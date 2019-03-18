@@ -104,7 +104,7 @@ public class GUILogin extends JFrame {
 						String tipo_user=bd.validarLogin(user,pass);
 						if (tipo_user.compareTo("")!=0){
 							if(tipo_user.compareTo("Jefe de taller")==0){
-								GUIMenuJefe menu = new GUIMenuJefe(bd);
+								GUIMenuJefe menu = new GUIMenuJefe(bd, user);
 								menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 							}

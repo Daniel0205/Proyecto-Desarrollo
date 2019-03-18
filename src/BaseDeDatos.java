@@ -28,7 +28,7 @@ public class BaseDeDatos {
 					nombre + "','" + apellido + "','" + direccion + "'," +
 					celular + ",'" + eMail + "','"+ tipoUsuario + "','" +
 					sede + "'," +"true);";
-			System.out.print(sql);
+
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			psSql.execute();
 
@@ -107,6 +107,8 @@ public class BaseDeDatos {
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			ResultSet rs = psSql.executeQuery();
 
+			System.out.print(sql);
+
 			rs.next();
 			String resultado = rs.getString(1);
 			return resultado.trim();
@@ -180,13 +182,16 @@ public class BaseDeDatos {
 
 	//
 	public boolean actualizarUsuario(String identifier, String nombres, String apellidos,
- 			String direccion, String celular, String email, String tipo, String sede, boolean activo) {
+ 			String direccion, String celular, String email, String tipo, String sede, boolean activo,String password) {
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			String sql ="UPDATE empleados SET nombres = '"+nombres+
 					"', apellidos = '"+apellidos+"', direccion = '"+direccion+"', numero = "+celular+
-					", email = '"+email+"', tipo_usuario = '"+tipo+"', sede = '"+sede+"', activo = "+activo+
-					" WHERE cedula = "+identifier+";";
+					", email = '"+email+"', tipo_usuario = '"+tipo+"', sede = '"+sede+"', activo = "+activo;
+			if(password!=null) sql+=", contrasena = crypt('" + password + "', gen_salt('md5'))";
+
+            sql+=" WHERE cedula = "+identifier+";";
+
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			psSql.executeUpdate();
 
@@ -221,12 +226,15 @@ public class BaseDeDatos {
 		}
 	}
 
-	public boolean actualizarOrden(String identifier,String fechaEntrega, String cantidad,String idProducto, String idEncargado, String asignadoA, String finalizada){
-		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-			String sql ="UPDATE ordenes_de_trabajo SET asignada_a = '"+asignadoA+"', fecha_entrega = "+fechaEntrega+
-					", cantidad = "+cantidad+", finalizada = "+finalizada+", id_producto = "+idProducto+", id_usuario = "+idEncargado+" WHERE id_ordenes = "+identifier+";";
+	public boolean actualizarOrden(String identifier,String fechaEntrega, String cantidad,String idProducto,
+                                   String idEncargado, String asignadoA, String finalizada){
 
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			String sql ="UPDATE ordenes_de_trabajo SET asignada_a = '"+asignadoA+"', fecha_entrega = '"+fechaEntrega+
+					"', cantidad = "+cantidad+", finalizada = "+finalizada+", id_producto = "+idProducto
+                    +" WHERE id_ordenes = "+identifier+";";
 			System.out.print(sql);
+
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			psSql.executeUpdate();
 
@@ -309,7 +317,9 @@ public class BaseDeDatos {
 			while (resultSet.next()) {
 				for (int i = 0; i < columns; i++) {
 					arraySQL = resultSet.getArray(i+1);
-					resultadoConsulta[j][i] = arraySQL.toString();
+					if(arraySQL!=null) resultadoConsulta[j][i] = arraySQL.toString();
+					else resultadoConsulta[j][i]=null;
+
 				} j++;
 			}
 
@@ -357,6 +367,8 @@ public class BaseDeDatos {
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			psSql.execute();
 
+			crearInventarioSede(id);
+
 			return true;
 		}
 		catch (SQLException e) {
@@ -366,7 +378,27 @@ public class BaseDeDatos {
 		}
 	}
 
-	//
+    private void crearInventarioSede(String id) {
+
+	    String[][] productos = consultarProductos("id_producto");
+
+	    try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+	        for (int i = 0; i <(int)productos.length; i++) {
+                String sql ="INSERT INTO public.sedes_producto(id_sedes,id_producto,cantidad_disponible) VALUES (" +
+                        id+","+productos[i][0]+",0);";
+
+                PreparedStatement psSql = connection.prepareStatement(sql);
+                psSql.execute();
+            }
+        }catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+        }
+    }
+
+
+    //
 	public String validarLogin( String user, String pass){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
@@ -402,6 +434,8 @@ public class BaseDeDatos {
             PreparedStatement psSql = connection.prepareStatement(sql);
             psSql.execute();
 
+            crearInventarioProducto(id);
+
             return true;
         }
         catch (SQLException e) {
@@ -411,17 +445,36 @@ public class BaseDeDatos {
         }
 
     }
-    
+
+    private void crearInventarioProducto(String id) {
+
+        String[][] sedes = consultarSede(null,"id_sede");
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+            for (int i = 0; i <(int)sedes.length; i++) {
+                String sql ="INSERT INTO public.sedes_producto(id_producto,id_sedes,cantidad_disponible) VALUES (" +
+                        id+","+sedes[i][0]+",0);";
+
+                PreparedStatement psSql = connection.prepareStatement(sql);
+                psSql.execute();
+            }
+        }catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+        }
+    }
+
     //
-    public boolean crearOrdendeTrabajo(String idOrden, String fechaEntrega, String cantidad, 
+    public boolean crearOrdendeTrabajo(String fechaEntrega, String cantidad,
     		String idProducto, String idEncargado, String asignadoA, String finalizada){
 
     	try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             @SuppressWarnings("unused")
             Statement statement = connection.createStatement();
-            String sql ="INSERT INTO public.ordenes_de_trabajo(id_ordenes, asignada_a, "
+            String sql ="INSERT INTO public.ordenes_de_trabajo( asignada_a, "
             		+ "fecha_entrega, cantidad, finalizada, id_producto, id_usuario) "+
-                    " VALUES ("+ idOrden +",'"+ asignadoA +"','"+ fechaEntrega + "',"+ cantidad +"," + 
+                    " VALUES ('"+ asignadoA +"','"+ fechaEntrega + "',"+ cantidad +"," +
             		finalizada + "," + idProducto + ","+ idEncargado +");";
             System.out.print(sql);
             PreparedStatement psSql = connection.prepareStatement(sql);
@@ -435,10 +488,7 @@ public class BaseDeDatos {
             return false;
         }
     }
-    
 
-  //Funcion para obtener una lista de usuarios segun un 'criterio' de busqueda
-  	//y una palabra clave, en este caso llamada 'busqueda'
   	public String[][] consultarProductos(String campos) {
           String sql = "SELECT "+campos+" FROM public.producto";
 
@@ -472,5 +522,115 @@ public class BaseDeDatos {
   		}
   	}
 
-    
+    public String[][] consultarOrden(String criterio, String busqueda,String campos) {
+        String sql = "SELECT "+campos+" FROM public.ordenes_de_trabajo natural join public.producto" +
+                     " WHERE finalizada=false";
+
+        if(criterio=="User") sql += " AND id_usuario = " + busqueda;
+        if(criterio=="Id") sql += " AND id_ordenes = " + busqueda ;
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            resultSet.last();
+            int rows = resultSet.getRow(); //# de filas resulado de la consulta
+            resultSet.beforeFirst();
+
+            Array arraySQL = null;
+            int columns = contarCampos(campos); //# de columnas a mostrar (predeterminado)
+            String[][] resultadoConsulta = new String[rows][columns];
+
+
+            int j = 0;
+            while (resultSet.next()) {
+                for (int i = 0; i < columns; i++) {
+                    arraySQL = resultSet.getArray(i+1);
+                    resultadoConsulta[j][i] = arraySQL.toString().trim();
+                } j++;
+            }
+
+            return resultadoConsulta;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public boolean finalizarOrden(String idOrden, String idProducto,String idSede,int cantidad) {
+        String sql = "UPDATE ordenes_de_trabajo SET finalizada=true WHERE id_ordenes = " + idOrden;
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+            int nuevaCantidad= cantidadDisponible(idProducto,idSede)+cantidad;
+            sql= "UPDATE ordenes_de_trabajo SET finalizada=true WHERE id_ordenes = " + idOrden;
+
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            psSql.executeUpdate();
+
+            sql= "UPDATE sedes_producto SET cantidad_disponible="+ nuevaCantidad +
+                    "WHERE id_sedes = " + idSede + "AND id_producto = "+ idProducto+";";
+
+            psSql = connection.prepareStatement(sql);
+            psSql.executeUpdate();
+
+            return true;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    private int cantidadDisponible(String idProducto,String idSede) {
+        String sql = "SELECT cantidad_disponible FROM public.sedes_producto"+
+                     " WHERE id_sedes = " + idSede +" AND id_producto = " + idProducto + ";";
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            resultSet.last();
+            resultSet.beforeFirst();
+
+           resultSet.next();
+
+            System.out.print(resultSet.getInt(1));
+
+            return resultSet.getInt(1);
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return 0;
+        }
+
+    }
+
+
+    public boolean cancelarOrden(String identifier) {
+	    String sql = "DELETE FROM ordenes_de_trabajo WHERE id_ordenes="+identifier;
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            psSql.executeUpdate();
+
+            return true;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return false;
+        }
+
+
+    }
 }

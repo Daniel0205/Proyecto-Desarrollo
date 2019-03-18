@@ -334,10 +334,15 @@ public class GUIActualizarUser extends JFrame {
                         String sede =  sedeIn.getSelectedItem().toString();
                         sede = sede.substring(0,sede.indexOf("-"));
 
+                        String pass = null;
+
+                        if(new String(contrasenaIn.getPassword()).compareTo("")!=0)pass=new String(contrasenaIn.getPassword());
+
+
                         boolean var = bd.actualizarUsuario(identifier,nombreIn.getText(),apellidosIn.getText(),
                                 direccionIn.getText(),celularIn.getText(),eMailIn.getText(),
                                 (String) tipoEmpleadoIn.getSelectedItem(),sede,
-                                Boolean.parseBoolean((String)estadoIn.getSelectedItem()));
+                                Boolean.parseBoolean((String)estadoIn.getSelectedItem()),pass);
 
                         if (var){
 

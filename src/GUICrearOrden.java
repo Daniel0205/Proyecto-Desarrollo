@@ -7,25 +7,28 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("serial")
-public class GUIMenuJefe_crearOrden extends JFrame {
+public class GUICrearOrden extends JFrame {
 
 	private Container contenedor;
-	private JLabel idOrden, fechaEntrega, cantidad, idEncargado, idProducto;
-	private JTextField idOrdenIn, fechaEntregaIn, cantidadIn, asignadoAIn;
-	private JComboBox idEncargadoIn, finalizadaIn;
+	private JLabel  fechaEntrega, cantidad, idEncargado, idProducto;
+	private JTextField  fechaEntregaIn, cantidadIn, asignadoAIn,idEncargadoIn;
 	private JButton crearOrden, salir;
 	private JSeparator separator_1, separator_2;
 	private Font font;
 	private BaseDeDatos bd;
 	private ActionListener listener;
 	private JComboBox idProductoIn;
+	private String idenfier;
 
-	public GUIMenuJefe_crearOrden(BaseDeDatos bdIn) {
+
+	public GUICrearOrden(BaseDeDatos bdIn,String idenfier) {
 		super("REGISTRAR SEDE");
 		setTitle("CREAR ORDEN DE TRABAJO");
 
 		font = new Font("Tahoma", Font.PLAIN, 14);
-		bd = bdIn;
+
+		this.idenfier = idenfier;
+		this.bd = bdIn;
 		crearComponentes();
 	}
 
@@ -40,7 +43,7 @@ public class GUIMenuJefe_crearOrden extends JFrame {
 		panelUsuario.setBounds(0, 0, 415, 475);
 		contenedor.add(panelUsuario);
 		panelUsuario.setLayout(null);
-
+/*
 		idOrden = new JLabel("Id Orden:");
 		idOrden.setFont(font);
 		idOrden.setBounds(21, 101, 105, 32);
@@ -50,7 +53,7 @@ public class GUIMenuJefe_crearOrden extends JFrame {
 		idOrdenIn.setFont(font);
 		idOrdenIn.setBounds(159, 101, 234, 32);
 		panelUsuario.add(idOrdenIn);
-
+*/
 		idProducto = new JLabel("Id-Producto:");
 		idProducto.setFont(font);
 		idProducto.setBounds(21, 143, 105, 32);
@@ -81,12 +84,13 @@ public class GUIMenuJefe_crearOrden extends JFrame {
 		cantidadIn.setBounds(159, 230, 234, 32);
 		panelUsuario.add(cantidadIn);
 
-		idEncargado = new JLabel("Id Encargado:");
+		idEncargado = new JLabel("Id Creador:");
 		idEncargado.setFont(font);
 		idEncargado.setBounds(21, 272, 105, 32);
 		panelUsuario.add(idEncargado);
 
-		idEncargadoIn = new JComboBox<>(bd.cambiarDimension(bd.consultarUsuarios("Activo", "null", "cedula,nombres")));
+		idEncargadoIn = new JTextField(idenfier);
+		idEncargadoIn.setEditable(false);
 		idEncargadoIn.setBounds(159, 274, 234, 32);
 		idEncargadoIn.setFont(font);
 		panelUsuario.add(idEncargadoIn);
@@ -129,18 +133,6 @@ public class GUIMenuJefe_crearOrden extends JFrame {
 		asignadoAIn.setBounds(159, 316, 234, 32);
 		panelUsuario.add(asignadoAIn);
 
-		JLabel finalizada = new JLabel("Finalizada:");
-		finalizada.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		finalizada.setBounds(21, 358, 105, 32);
-		panelUsuario.add(finalizada);
-
-		String[] estado = new String[] { "false", "true" };
-		finalizadaIn = new JComboBox(estado);
-		finalizadaIn.setBounds(212, 359, 181, 32);
-		finalizadaIn.setFont(font);
-		panelUsuario.add(finalizadaIn);
-		
-
 		setResizable(false);
 		setSize(423, 502);
 		setVisible(true);
@@ -150,8 +142,8 @@ public class GUIMenuJefe_crearOrden extends JFrame {
 	// Funcion que valida si algun campo a registrar esta vacio
 	private boolean validar1() {
 		boolean val = true;
-		val = (idOrdenIn.getText().compareTo("") == 0 || fechaEntregaIn.getText().compareTo("") == 0
-				|| cantidadIn.getText().compareTo("") == 0 || asignadoAIn.getText().compareTo("") == 0)
+		val = ( fechaEntregaIn.getText().compareTo("") == 0|| cantidadIn.getText().compareTo("") == 0
+                || asignadoAIn.getText().compareTo("") == 0)
 				? false : true;
 
 		return val;
@@ -161,9 +153,6 @@ public class GUIMenuJefe_crearOrden extends JFrame {
 	private String validar2() {
 		String mensaje = "";
 
-		if (!validarDatoEnteroPositivo(idOrdenIn))
-			mensaje = mensaje + " El id de la orden debe ser un numero entero \n";
-
 		if (!validarDatoEnteroPositivo(cantidadIn))
 			mensaje = mensaje + " La cantidad debe ser un numero entero \n";
 
@@ -172,10 +161,10 @@ public class GUIMenuJefe_crearOrden extends JFrame {
 		if (nombre.find() || asignadoAIn.getText().length() > 40)
 			mensaje = mensaje + " Digite un nombre valido \n";
 
-		Pattern patron_fecha = Pattern.compile("\\d{1,2}-\\d{1,2}-\\d{4}");
+		Pattern patron_fecha = Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}");
 		Matcher fecha = patron_fecha.matcher(fechaEntregaIn.getText());
 		if (!fecha.find())
-			mensaje = mensaje + " Digite una fecha valida (DD-MM-AAAA) \n";
+			mensaje = mensaje + " Digite una fecha valida (AAAA-MM-DD) \n";
 
 		if (mensaje.compareTo("") == 0)
 			mensaje = "true";
@@ -183,7 +172,7 @@ public class GUIMenuJefe_crearOrden extends JFrame {
 		return mensaje;
 	}
 
-	// Funcion que valida sí un dato ingresado a traves de un JTextField es entero
+	// Funcion que valida sï¿½ un dato ingresado a traves de un JTextField es entero
 	// positivo
 	private boolean validarDatoEnteroPositivo(JTextField dato) {
 		boolean val = true;
@@ -211,15 +200,12 @@ public class GUIMenuJefe_crearOrden extends JFrame {
 			} else if (actionEvent.getSource() == crearOrden) {
 				if (validar1()) {
 					if (validar2().compareTo("true") == 0) {
-						
-						String idEncargado = idEncargadoIn.getSelectedItem().toString();
-						idEncargado = idEncargado.substring(0, idEncargado.indexOf("-"));
+
 						String idProducto = idProductoIn.getSelectedItem().toString();
 						idProducto = idProducto.substring(0, idProducto.indexOf("-"));
 						
-						boolean var = bd.crearOrdendeTrabajo(idOrdenIn.getText(), fechaEntregaIn.getText(),
-								cantidadIn.getText(), idProducto, idEncargado, asignadoAIn.getText(), 
-								finalizadaIn.getSelectedItem().toString());
+						boolean var = bd.crearOrdendeTrabajo( fechaEntregaIn.getText(),
+								cantidadIn.getText(), idProducto, idEncargadoIn.getText(), asignadoAIn.getText(),"false");
 						if (var)
 							JOptionPane.showMessageDialog(null, "Orden de trabajo registrada exitosamente");
 						else

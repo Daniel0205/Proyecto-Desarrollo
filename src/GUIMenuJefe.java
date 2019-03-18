@@ -12,11 +12,13 @@ public class GUIMenuJefe extends JFrame {
     private Font font;
     private JButton crearOrden,modificarOrden,consultarOrden,salir;
     private JLabel icon;
+    private String idJefe;
 
-    public GUIMenuJefe(BaseDeDatos bd){
+    public GUIMenuJefe(BaseDeDatos bd,String idJefe){
         super("MENU JEFE DE TALLER");
 
         this.bd=bd;
+        this.idJefe=idJefe;
         InitGUI();
     }
 
@@ -79,13 +81,13 @@ public class GUIMenuJefe extends JFrame {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
         	if (actionEvent.getSource() == crearOrden) {
-        		GUIMenuJefe_crearOrden crearOrden = new GUIMenuJefe_crearOrden(bd); 
+        		GUICrearOrden crearOrden = new GUICrearOrden(bd,idJefe);
         	}
         	else if(actionEvent.getSource() == salir){
-				dispose();
+                System.exit(0);
 			}
         	else if(actionEvent.getSource() == modificarOrden){
-        	    GUIActualizarOrden actualizarOrden = new GUIActualizarOrden(bd);
+        	    GUIActualizarOrden actualizarOrden = new GUIActualizarOrden(bd,idJefe);
             }
 
         }
