@@ -179,7 +179,7 @@ public class GUIRegistrarSedes extends JFrame{
 
 
 
-	//Funcion que valida sí un dato ingresado a traves de un JTextField es entero
+	//Funcion que valida sï¿½ un dato ingresado a traves de un JTextField es entero
 	private boolean validarDatoEntero(JTextField dato) {
 		boolean val = true;
 		try {
@@ -213,6 +213,12 @@ public class GUIRegistrarSedes extends JFrame{
 								encargado=encargadoIn.getSelectedItem().toString();
 								encargado=encargado.substring(0,encargado.indexOf("-"));
 							}
+							else{
+								encargado="-1";
+							}
+						}
+						else{
+							encargado="-1";
 						}
 
 

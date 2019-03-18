@@ -221,6 +221,27 @@ public class BaseDeDatos {
 		}
 	}
 
+	public boolean actualizarOrden(String identifier,String fechaEntrega, String cantidad,String idProducto, String idEncargado, String asignadoA, String finalizada){
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			String sql ="UPDATE ordenes_de_trabajo SET asignada_a = '"+asignadoA+"', fecha_entrega = "+fechaEntrega+
+					", cantidad = "+cantidad+", finalizada = "+finalizada+", id_producto = "+idProducto+", id_usuario = "+idEncargado+" WHERE id_ordenes = "+identifier+";";
+
+			System.out.print(sql);
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			psSql.executeUpdate();
+
+			return true;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return false;
+		}
+
+
+
+	}
+
 
 	//Funcion para obtener una lista de usuarios segun un 'criterio' de busqueda
 	//y una palabra clave, en este caso llamada 'busqueda'
