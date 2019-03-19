@@ -87,7 +87,10 @@ public class GUIMenuJefe extends JFrame {
                 System.exit(0);
 			}
         	else if(actionEvent.getSource() == modificarOrden){
-        	    GUIActualizarOrden actualizarOrden = new GUIActualizarOrden(bd,idJefe);
+                GUIActualizarOrden actualizarOrden = new GUIActualizarOrden(bd,idJefe);
+            }
+            else if(actionEvent.getSource() == consultarOrden){
+                GUIConsultarOrden consultarOrden = new GUIConsultarOrden(bd);
             }
 
         }

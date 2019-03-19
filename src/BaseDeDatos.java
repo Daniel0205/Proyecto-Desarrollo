@@ -332,6 +332,44 @@ public class BaseDeDatos {
 		}
 	}
 
+	public String[][] consultarOrden(String busqueda,String campos) {
+		String sql = "SELECT "+ campos
+				+ " FROM public.ordenes_de_trabajo";
+		int columns = contarCampos(campos);
+
+		if(busqueda!=null)sql += " WHERE id_ordnes = " + busqueda;
+
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			ResultSet resultSet = statement.executeQuery(sql);
+
+			resultSet.last();
+			int rows = resultSet.getRow(); //# de filas resulado de la consulta
+			resultSet.beforeFirst();
+
+			Array arraySQL = null;
+			String[][] resultadoConsulta = new String[rows][columns];
+
+			int j = 0;
+			while (resultSet.next()) {
+				for (int i = 0; i < columns; i++) {
+					arraySQL = resultSet.getArray(i+1);
+					if(arraySQL!=null) resultadoConsulta[j][i] = arraySQL.toString();
+					else resultadoConsulta[j][i]=null;
+
+				} j++;
+			}
+
+			return resultadoConsulta;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
     //Funcion para contar la cantidad de campos a consultar
     private int contarCampos(String campos){
         int contador=0;
