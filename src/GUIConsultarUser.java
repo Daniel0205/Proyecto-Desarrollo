@@ -24,7 +24,7 @@ public class GUIConsultarUser extends JFrame {
 	private JButton salir, consultar;
 	private JSeparator separator_1, separator_2;
 	private Font font;
-	private ActionListener listener; 
+	private ActionListener listener;
 
 	
 	//Creacion y despliegue de la interfaz de consulta
@@ -100,22 +100,23 @@ public class GUIConsultarUser extends JFrame {
 	//Despliegue de la interfaz con el resultado de la consulta
 	private void resultadosConsultaGUI(String[][] board){
 
-		if(board==null || board.length==0) 
+		if(board==null || board.length==0)
 		JOptionPane.showMessageDialog(null, "La busqueda no produjo resultados.");
 
 		else{
 			JFrame frame = new JFrame();
 			String column[]={"id", "Nombres", "Apellidos", "Direccion" ,"Telefono",
 					"Correo electronico" , "Tipo de usuario", "Sede", "Activo"};
-			JTable table = new JTable(board,column); 
-			table.setRowMargin(0); 
+			JTable table = new JTable(board,column);
+			table.setRowMargin(0);
 			table.setFont(font);
 			JScrollPane sp = new JScrollPane(table);
-			frame.getContentPane().add(sp);	
-			frame.setSize(1200,400); 
+			frame.getContentPane().add(sp);
+			frame.setSize(1200,400);
 			frame.setVisible(true);
 		}
 	}
+
 }
 
 

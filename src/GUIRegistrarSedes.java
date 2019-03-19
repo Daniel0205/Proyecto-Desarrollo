@@ -51,16 +51,6 @@ public class GUIRegistrarSedes extends JFrame{
 		contenedor.add(panelUsuario);
 		panelUsuario.setLayout(null);
 
-		id = new JLabel("Id:");
-		id.setFont(font);
-		id.setBounds(21, 101, 105, 32);
-		panelUsuario.add(id);
-
-		idIn = new JTextField();
-		idIn.setFont(font);
-		idIn.setBounds(136, 101, 234, 32);
-		panelUsuario.add(idIn);
-
 		nombre = new JLabel("Nombre:");
 		nombre.setFont(font);
 		nombre.setBounds(21, 143, 105, 32);

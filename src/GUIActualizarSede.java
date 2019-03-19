@@ -83,7 +83,7 @@ public class GUIActualizarSede extends JFrame {
         contenedor.add(panel2);
         panel2.setLayout(null);
 
-        id = new JLabel("Nombre:");
+        id = new JLabel("Id:");
         id.setBounds(21, 101, 105, 32);
         id.setFont(font);
         panel2.add(id);

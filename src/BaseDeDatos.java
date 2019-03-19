@@ -334,10 +334,10 @@ public class BaseDeDatos {
 
 	public String[][] consultarOrden(String busqueda,String campos) {
 		String sql = "SELECT "+ campos
-				+ " FROM public.ordenes_de_trabajo";
+				+ " FROM public.ordenes_de_trabajo NATURAL JOIN producto";
 		int columns = contarCampos(campos);
 
-		if(busqueda!=null)sql += " WHERE id_ordnes = " + busqueda;
+		if(busqueda!=null)sql += " WHERE id_ordenes = " + busqueda;
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -423,7 +423,7 @@ public class BaseDeDatos {
 	    try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
 	        for (int i = 0; i <(int)productos.length; i++) {
-                String sql ="INSERT INTO public.sedes_producto(id_sedes,id_producto,cantidad_disponible) VALUES (" +
+                String sql ="INSERT INTO public.inventario(id_sedes,id_producto,cantidad_disponible) VALUES (" +
                         id+","+productos[i][0]+",0);";
 
                 PreparedStatement psSql = connection.prepareStatement(sql);
@@ -491,7 +491,7 @@ public class BaseDeDatos {
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
             for (int i = 0; i <(int)sedes.length; i++) {
-                String sql ="INSERT INTO public.sedes_producto(id_producto,id_sedes,cantidad_disponible) VALUES (" +
+                String sql ="INSERT INTO public.inventario(id_producto,id_sedes,cantidad_disponible) VALUES (" +
                         id+","+sedes[i][0]+",0);";
 
                 PreparedStatement psSql = connection.prepareStatement(sql);
@@ -668,7 +668,90 @@ public class BaseDeDatos {
             e.printStackTrace();
             return false;
         }
-
-
     }
+
+    public String insertarCot(String id_emp, String fecha_cot, String nombre_cot){
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+            @SuppressWarnings("unused")
+            Statement statement = connection.createStatement();
+            String sql ="INSERT INTO public.venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante," +
+                    "precio_final) VALUES ("+id_emp+",'"+fecha_cot+"','"+nombre_cot+"',0) RETURNING id_cotizacion;";
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            ResultSet rs = psSql.executeQuery();
+
+            System.out.print(sql);
+
+            rs.next();
+            String resultado = rs.getString(1);
+            return resultado.trim();
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return "";
+        }
+	}
+
+	public String obtenerCampoVeCo(String identifier, String campo){
+
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+			String sql ="SELECT "+campo+" FROM venta_cotizaciones WHERE fecha_cotizacion = '"+identifier+"';";
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			ResultSet rs = psSql.executeQuery();
+
+			rs.next();
+			String resultado = rs.getString(1);
+			if (resultado!=null)resultado=resultado.trim();
+			return resultado;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	public boolean agregarProCot(String id_pro, String cantidad, String id_cot){
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+            @SuppressWarnings("unused")
+            Statement statement = connection.createStatement();
+            String sql ="INSERT INTO public.ventas_cotizaciones_producto VALUES ("
+                    +id_pro+","+cantidad+","+id_cot+");";
+            System.out.print(sql);
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            psSql.execute();
+
+            return true;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public String consultarProducto(String identifier, String campo) {
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+            String sql ="SELECT "+campo+" FROM producto WHERE id_producto = "+identifier;
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            ResultSet rs = psSql.executeQuery();
+
+            System.out.print(sql);
+
+            rs.next();
+            String resultado = rs.getString(1);
+            return resultado.trim();
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+
 }

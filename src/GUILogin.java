@@ -10,7 +10,7 @@ public class GUILogin extends JFrame {
 
 	private JTextField id;
 	private JPasswordField password;
-	private JLabel lblPassword,lblUser, lblUserType, icon;
+	private JLabel lblPassword,lblUser, icon;
 	private JButton btnLogin, btnCancel;
 	private BaseDeDatos bd;
 
@@ -59,10 +59,11 @@ public class GUILogin extends JFrame {
 
 
 		icon = new JLabel("");
-		URL filePath = this.getClass().getResource("/images/login.png");
+		URL filePath = this.getClass().getResource("/images/logo.png");
 		icon.setHorizontalAlignment(SwingConstants.CENTER);
 		icon.setIcon(new ImageIcon(filePath));
-		icon.setBounds(113, 32, 118, 90);
+		icon.setBounds(113, 32, 120, 120);
+		icon.setBackground(null);
 		getContentPane().add(icon);
 
 		setBounds(0, -22, 353, 322);
@@ -107,8 +108,14 @@ public class GUILogin extends JFrame {
 								GUIMenuJefe menu = new GUIMenuJefe(bd, user);
 								menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+							}if(tipo_user.compareTo("Vendedor      ")==0){
+								GUIMenuVendedor menu = new GUIMenuVendedor(bd,id.getText());
+								menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 							}
 							setVisible(false);
+
+
 						}
 						else JOptionPane.showMessageDialog(null, "Campos erroneos o usuario inactivo");
 					}
