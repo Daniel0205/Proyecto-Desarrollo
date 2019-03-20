@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 public class GUIRegistrarSedes extends JFrame{
 
 	private Container contenedor;
-	private JLabel id, direccion, telefono, encargado, nombre;
-	private JTextField idIn, direccionIn, telefonoIn, nombreIn;
+	private JLabel direccion, telefono, encargado, nombre;
+	private JTextField direccionIn, telefonoIn, nombreIn;
 	private JComboBox encargadoIn;
 	private JButton registrar, cancelar;
 	private JSeparator separator_1, separator_2;
@@ -130,8 +130,7 @@ public class GUIRegistrarSedes extends JFrame{
 	//Funcion que valida si algun campo a registrar esta vacio
 	private boolean validar1(){
 		boolean val=true;
-		val = (idIn.getText().compareTo("")==0 ||
-				direccionIn.getText().compareTo("")==0 ||
+		val = (direccionIn.getText().compareTo("")==0 ||
 				telefonoIn.getText().compareTo("")==0 ||
 				nombreIn.getText().compareTo("")==0) ? false : true;
 
@@ -143,8 +142,6 @@ public class GUIRegistrarSedes extends JFrame{
 	private String validar2(){
 		String mensaje = "";
 
-		if(!validarDatoEntero(idIn))
-			mensaje = mensaje + " El id de la sede debe ser un numero entero \n";
 
 		Pattern patron = Pattern.compile("[^A-Za-z0-9 #-]");
 		Matcher direccion = patron.matcher(direccionIn.getText());
@@ -164,21 +161,6 @@ public class GUIRegistrarSedes extends JFrame{
 			mensaje="true";
 
 		return mensaje;
-	}
-
-
-
-
-	//Funcion que valida s� un dato ingresado a traves de un JTextField es entero
-	private boolean validarDatoEntero(JTextField dato) {
-		boolean val = true;
-		try {
-			Integer.parseInt(dato.getText());
-
-		} catch (NumberFormatException excepcion) {
-			val = false;
-		}
-		return val;
 	}
 
 
@@ -205,7 +187,7 @@ public class GUIRegistrarSedes extends JFrame{
 							}
 						}
 
-						boolean var = bd.registraSede( idIn.getText(), direccionIn.getText(),
+						boolean var = bd.registraSede( direccionIn.getText(),
 								telefonoIn.getText(),encargado,nombreIn.getText());
 						if (var) JOptionPane.showMessageDialog(null, "Sede registrada exitosamente");
 						else JOptionPane.showMessageDialog(null, "Error al actualizar usuario.");

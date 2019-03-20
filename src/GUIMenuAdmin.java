@@ -77,7 +77,7 @@ public class GUIMenuAdmin extends JFrame {
 		registrarProducto.setBounds(94, 230, 169, 32);
 		getContentPane().add(registrarProducto);
 
-		salir = new JButton("Salir");
+		salir = new JButton("Cerrar Sesion");
 		salir.addActionListener(listener);
 		salir.setFont(font);
 		salir.setBounds(193, 293, 136, 32);
@@ -141,7 +141,9 @@ public class GUIMenuAdmin extends JFrame {
                 formulario7.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
 			else if (actionEvent.getSource() == salir){
-				System.exit(0);
+                GUILogin login = new GUILogin();
+                login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                dispose();
 			}
 		}
 

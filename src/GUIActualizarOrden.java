@@ -45,7 +45,7 @@ public class GUIActualizarOrden extends JFrame {
         getContentPane().add(instruccion);
 
         idOrdenIn = new JComboBox<>(bd.cambiarDimension(
-                bd.consultarOrden("User",idJefe,"id_ordenes,nombre")));;
+                bd.consultarOrden("User",idJefe,"id_ordenes,nombre")));
         idOrdenIn.setFont(font);
         idOrdenIn.setBounds(159, 101, 99, 32);
         getContentPane().add(idOrdenIn);

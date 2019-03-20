@@ -34,23 +34,23 @@ public class GUIMenuJefe extends JFrame {
 
         crearOrden = new JButton("Crear Orden");
         crearOrden.setFont(font);
-        crearOrden.setBounds(22, 101, 142, 32);
+        crearOrden.setBounds(100, 101, 142, 32);
         crearOrden.addActionListener(listener);
         getContentPane().add(crearOrden);
 
         modificarOrden = new JButton("Modificar Orden");
         modificarOrden.setFont(font);
-        modificarOrden.setBounds(22, 144, 142, 32);
+        modificarOrden.setBounds(100, 160, 142, 32);
         modificarOrden.addActionListener(listener);
         getContentPane().add(modificarOrden);
 
         consultarOrden = new JButton("Consultar Orden");
         consultarOrden.setFont(font);
-        consultarOrden.setBounds(22, 187, 142, 32);
+        consultarOrden.setBounds(100, 216, 142, 32);
         consultarOrden.addActionListener(listener);
         getContentPane().add(consultarOrden);   
 
-        salir = new JButton("Salir");
+        salir = new JButton("Cerrar Sesion");
         salir.addActionListener(listener);
         salir.setFont(font);
         salir.setBounds(193, 293, 136, 32);
@@ -84,13 +84,15 @@ public class GUIMenuJefe extends JFrame {
         		GUICrearOrden crearOrden = new GUICrearOrden(bd,idJefe);
         	}
         	else if(actionEvent.getSource() == salir){
-                System.exit(0);
+                GUILogin login = new GUILogin();
+                login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                dispose();
 			}
         	else if(actionEvent.getSource() == modificarOrden){
                 GUIActualizarOrden actualizarOrden = new GUIActualizarOrden(bd,idJefe);
             }
             else if(actionEvent.getSource() == consultarOrden){
-                GUIConsultarOrden consultarOrden = new GUIConsultarOrden(bd);
+                GUIConsultarOrden consultarOrden = new GUIConsultarOrden(bd,idJefe);
             }
 
         }

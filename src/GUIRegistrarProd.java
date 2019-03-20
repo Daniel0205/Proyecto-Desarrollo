@@ -11,8 +11,8 @@ public class GUIRegistrarProd extends JFrame {
     private final BaseDeDatos bd;
     private JSeparator separator_2, separator_1;
     private Container contenedor;
-    private JLabel idProducto, precio, descripcion,nombre;
-    private JTextField idProductoIn, precioIn, descripcionIn,nombreIn;
+    private JLabel  precio, descripcion,nombre;
+    private JTextField  precioIn, descripcionIn,nombreIn;
     private JButton cancelar, crear;
 
 
@@ -32,16 +32,6 @@ public class GUIRegistrarProd extends JFrame {
         JPanel panelUsuario = new JPanel();
         panelUsuario.setBounds(0, 0, 394, 379);
         panelUsuario.setLayout(null);
-
-        idProducto = new JLabel("Id Producto:");
-        idProducto.setFont(font);
-        idProducto.setBounds(21, 101, 105, 32);
-        panelUsuario.add(idProducto);
-
-        idProductoIn = new JTextField();
-        idProductoIn.setFont(font);
-        idProductoIn.setBounds(136, 101, 234, 32);
-        panelUsuario.add(idProductoIn);
 
         nombre = new JLabel("Nombre: ");
         nombre.setFont(font);
@@ -119,8 +109,8 @@ public class GUIRegistrarProd extends JFrame {
                 boolean var;
                 String descrip = null;
                 if (descripcionIn.getText().compareTo("")!=0)descrip=descripcionIn.getText();
-                var= bd.registrarProducto(idProductoIn.getText(),nombreIn.getText(),
-                        precioIn.getText(),descrip);
+
+                var= bd.registrarProducto(nombreIn.getText(),precioIn.getText(),descrip);
                 if (var) {
                     JOptionPane.showMessageDialog(null, "Producto creado exitosamente");
                     dispose();

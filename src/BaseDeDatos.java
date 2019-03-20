@@ -392,20 +392,18 @@ public class BaseDeDatos {
 
 	//Funcion para acceder a la base de datos y registrar una sede
 	//Si la operacion se realiza con exito retorna true y en caso contrario false
-	public boolean registraSede(String id, String direccion,String telefono,
+	public boolean registraSede( String direccion,String telefono,
 			String idEncargado,String nombre){
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			@SuppressWarnings("unused")
 			Statement statement = connection.createStatement();
-			String sql ="INSERT INTO public.sedes(id_sede,nombre, direccion, telefono, "
-					+ "empleado_a_cargo) VALUES ("+ id +",'"+ nombre+ "','"+ direccion +"',"+
+			String sql ="INSERT INTO public.sedes(nombre, direccion, telefono, "
+					+ "empleado_a_cargo) VALUES ('"+ nombre+ "','"+ direccion +"',"+
 					telefono +","+ idEncargado +");";
 			System.out.print(sql);
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			psSql.execute();
-
-			crearInventarioSede(id);
 
 			return true;
 		}
@@ -416,24 +414,6 @@ public class BaseDeDatos {
 		}
 	}
 
-    private void crearInventarioSede(String id) {
-
-	    String[][] productos = consultarProductos("id_producto");
-
-	    try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-
-	        for (int i = 0; i <(int)productos.length; i++) {
-                String sql ="INSERT INTO public.inventario(id_sedes,id_producto,cantidad_disponible) VALUES (" +
-                        id+","+productos[i][0]+",0);";
-
-                PreparedStatement psSql = connection.prepareStatement(sql);
-                psSql.execute();
-            }
-        }catch (SQLException e) {
-            System.out.println("Connection failure");
-            e.printStackTrace();
-        }
-    }
 
 
     //
@@ -462,17 +442,15 @@ public class BaseDeDatos {
     }
 
 	//
-    public boolean registrarProducto(String id, String nombre, String precio,String descripcion){
+    public boolean registrarProducto( String nombre, String precio,String descripcion){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             @SuppressWarnings("unused")
             Statement statement = connection.createStatement();
-            String sql ="INSERT INTO public.producto(id_producto,nombre, precio, descripcion) "+
-                    " VALUES ("+ id +",'"+ nombre+ "',"+ precio +",'"+descripcion+"');";
+            String sql ="INSERT INTO public.producto(nombre, precio, descripcion) "+
+                    " VALUES ('"+ nombre+ "',"+ precio +",'"+descripcion+"');";
             System.out.print(sql);
             PreparedStatement psSql = connection.prepareStatement(sql);
             psSql.execute();
-
-            crearInventarioProducto(id);
 
             return true;
         }
@@ -484,24 +462,6 @@ public class BaseDeDatos {
 
     }
 
-    private void crearInventarioProducto(String id) {
-
-        String[][] sedes = consultarSede(null,"id_sede");
-
-        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-
-            for (int i = 0; i <(int)sedes.length; i++) {
-                String sql ="INSERT INTO public.inventario(id_producto,id_sedes,cantidad_disponible) VALUES (" +
-                        id+","+sedes[i][0]+",0);";
-
-                PreparedStatement psSql = connection.prepareStatement(sql);
-                psSql.execute();
-            }
-        }catch (SQLException e) {
-            System.out.println("Connection failure");
-            e.printStackTrace();
-        }
-    }
 
     //
     public boolean crearOrdendeTrabajo(String fechaEntrega, String cantidad,
@@ -610,8 +570,8 @@ public class BaseDeDatos {
             PreparedStatement psSql = connection.prepareStatement(sql);
             psSql.executeUpdate();
 
-            sql= "UPDATE sedes_producto SET cantidad_disponible="+ nuevaCantidad +
-                    "WHERE id_sedes = " + idSede + "AND id_producto = "+ idProducto+";";
+            sql= "UPDATE inventario SET cantidad_disponible="+ nuevaCantidad +
+                    "WHERE id_sede = " + idSede + "AND id_producto = "+ idProducto+";";
 
             psSql = connection.prepareStatement(sql);
             psSql.executeUpdate();
@@ -627,8 +587,8 @@ public class BaseDeDatos {
     }
 
     private int cantidadDisponible(String idProducto,String idSede) {
-        String sql = "SELECT cantidad_disponible FROM public.sedes_producto"+
-                     " WHERE id_sedes = " + idSede +" AND id_producto = " + idProducto + ";";
+        String sql = "SELECT cantidad_disponible FROM public.inventario"+
+                     " WHERE id_sede = " + idSede +" AND id_producto = " + idProducto + ";";
 
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
