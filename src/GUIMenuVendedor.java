@@ -32,25 +32,25 @@ public class GUIMenuVendedor extends JFrame {
 
         font = new Font("Tahoma", Font.PLAIN, 14);
 
-        consultaProducto = new JButton("Productos");
+        consultaProducto = new JButton("Ver Productos");
         consultaProducto.setFont(font);
-        consultaProducto.setBounds(22, 101, 162, 32);
+        consultaProducto.setBounds(100, 101, 162, 32);
         consultaProducto.addActionListener(listener);
         getContentPane().add(consultaProducto);
 
         venta = new JButton("Realizar venta");
         venta.setFont(font);
-        venta.setBounds(22, 144, 162, 32);
+        venta.setBounds(100, 160, 162, 32);
         venta.addActionListener(listener);
         getContentPane().add(venta);
 
         cotizacion = new JButton("Realizar cotizacion");
         cotizacion.setFont(font);
-        cotizacion.setBounds(22, 187, 162, 32);
+        cotizacion.setBounds(100, 216, 162, 32);
         cotizacion.addActionListener(listener);
         getContentPane().add(cotizacion);
 
-        salir = new JButton("Salir");
+        salir = new JButton("Cerrar Sesion");
         salir.addActionListener(listener);
         salir.setFont(font);
         salir.setBounds(193, 293, 136, 32);
@@ -83,6 +83,8 @@ public class GUIMenuVendedor extends JFrame {
                 GUICotizacion cot = new GUICotizacion(bd,id);
                 cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             } else if(actionEvent.getSource() == salir){
+                GUILogin login = new GUILogin();
+                login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 dispose();
             }
         }

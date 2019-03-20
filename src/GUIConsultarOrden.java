@@ -7,16 +7,17 @@ import java.awt.event.ActionEvent;
 public class GUIConsultarOrden extends JFrame{
     private BaseDeDatos bd;
     private JLabel icon,idl;
-    private JTextField busqueda;
+    private JComboBox busqueda;
     private JButton salir, consultar;
     private JSeparator separator_1, separator_2;
     private Font font;
     private ActionListener listener;
+    private String idJefe;
 
-
-public GUIConsultarOrden(BaseDeDatos bdIn){
+public GUIConsultarOrden(BaseDeDatos bdIn,String idJefe){
     super("Consultar Orden");
     bd = bdIn;
+    this.idJefe=idJefe;
     font = new Font("Tahoma", Font.PLAIN, 14);
     getContentPane().setLayout(null);
     listener = new ManejadorDeBotones();
@@ -38,11 +39,12 @@ public GUIConsultarOrden(BaseDeDatos bdIn){
     consultar.addActionListener(listener);
     getContentPane().add(consultar);
 
-    busqueda = new JTextField();
+    busqueda = new JComboBox<>(bd.cambiarDimension(
+            bd.consultarOrden("User",idJefe,"id_ordenes,nombre")));;
     busqueda.setFont(font);
     busqueda.setBounds(95, 113, 295, 32);
     getContentPane().add(busqueda);
-    busqueda.setColumns(10);
+    //busqueda.setColumns(10);
 
 
     separator_1 = new JSeparator();
@@ -69,8 +71,11 @@ public GUIConsultarOrden(BaseDeDatos bdIn){
 
         public void actionPerformed(ActionEvent actionEvent){
             if (actionEvent.getSource() == consultar){
+                String idOrden = busqueda.getSelectedItem().toString();
+                idOrden=idOrden.substring(0,idOrden.indexOf("-"));
+
                 String campos = "id_ordenes, asignada_a, precio,fecha_entrega,cantidad,finalizada,id_producto,id_usuario";
-                String[][] resultado = bd.consultarOrden((String)busqueda.getText().trim(),campos);
+                String[][] resultado = bd.consultarOrden(idOrden,campos);
                 resultadosConsultaGUI(resultado);
             }
             else if (actionEvent.getSource() == salir)
