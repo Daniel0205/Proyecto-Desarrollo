@@ -86,6 +86,9 @@ public class GUIMenuVendedor extends JFrame {
                 GUILogin login = new GUILogin();
                 login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 dispose();
+            }else if(actionEvent.getSource() == venta){
+                GUIVenta ven = new GUIVenta(bd,id);
+                ven.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             }
         }
     }
