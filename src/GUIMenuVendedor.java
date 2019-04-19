@@ -82,7 +82,10 @@ public class GUIMenuVendedor extends JFrame {
             if(actionEvent.getSource() == cotizacion){
                 GUICotizacion cot = new GUICotizacion(bd,id);
                 cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            } else if(actionEvent.getSource() == salir){
+            } else if(actionEvent.getSource() == consultaProducto){
+               GUIProductos prod = new GUIProductos(bd,id);
+               prod.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            }else if(actionEvent.getSource() == salir){
                 GUILogin login = new GUILogin();
                 login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 dispose();

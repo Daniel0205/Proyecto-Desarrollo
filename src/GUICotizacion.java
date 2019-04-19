@@ -3,8 +3,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.ArrayList;
 
 public class GUICotizacion extends JFrame{
 
@@ -19,22 +17,17 @@ public class GUICotizacion extends JFrame{
     private JButton anadirProducto,finalizarCot;
     private JScrollPane scroll;
     private String[] datos;
-    private Date fecha ;
-    private final String fechaF,nombre_cliente;
+    private final String fecha_f,nombre_cliente;
 
     public GUICotizacion(BaseDeDatos bd,String id){
         super("Cotizacion");
         this.bd = bd;
         this.id = id;
-        fecha = new Date();
-        final int dia = 24;
-        final int mes = 11;
-        final int ano = 2018;
-        fechaF = ""+ano+"-"+mes+"-"+dia+"";
 
         nombre_cliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente que solicita la transaccion: ");
 
-        id_cotizacion = bd.insertarCot(id,fechaF,nombre_cliente);
+        id_cotizacion = bd.insertarCot(id,nombre_cliente);
+        fecha_f = bd.getFechacot(id_cotizacion);
 
         nombre = bd.obtenerS(id,"nombres")+" "+bd.obtenerS(id,"apellidos");
         creaTabla();
@@ -65,7 +58,7 @@ public class GUICotizacion extends JFrame{
         fecha1.setBounds(32, 32, 45, 32);
         getContentPane().add(fecha1);
 
-        fecha2 = new JLabel(fechaF);
+        fecha2 = new JLabel(fecha_f);
         fecha2.setFont(font);
         fecha2.setBounds(82, 32, 220, 32);
         getContentPane().add(fecha2);
@@ -171,6 +164,8 @@ public class GUICotizacion extends JFrame{
             }
         }
     }
+
+
 
 
     //Clase privada para el manejo de añadir un nuevo producto

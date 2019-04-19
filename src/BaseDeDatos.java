@@ -630,13 +630,13 @@ public class BaseDeDatos {
         }
     }
 
-    public String insertarCot(String id_emp, String fecha_cot, String nombre_cot){
+    public String insertarCot(String id_emp,String nombre_cot){
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			@SuppressWarnings("unused")
 			Statement statement = connection.createStatement();
 			String sql ="INSERT INTO public.venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante," +
-					"precio_final) VALUES ("+id_emp+",'"+fecha_cot+"','"+nombre_cot+"',0) RETURNING id_cotizacion;";
+					"precio_final) VALUES ("+id_emp+",'NOW()','"+nombre_cot+"',0) RETURNING id_cotizacion";
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			ResultSet rs = psSql.executeQuery();
 
@@ -652,6 +652,28 @@ public class BaseDeDatos {
 			return "";
 		}
 	}
+
+	public String getFechacot(String id_cot){
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+            String sql ="SELECT fecha_cotizacion FROM venta_cotizaciones WHERE id_cotizacion = "+id_cot;
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            ResultSet rs = psSql.executeQuery();
+
+            System.out.print(sql);
+
+            rs.next();
+            String resultado = rs.getString(1);
+            return resultado.trim();
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+
 	public String insertarVentaInfo(String id_emp, String fecha_v, String nombre_c,String precio){
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
