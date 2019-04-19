@@ -2,7 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,222 +14,284 @@ public class GUIActualizarUser extends JFrame {
 	private BaseDeDatos bd;
 	private Container contenedor;
 	private JLabel instruccion, usuario, nombre, apellidos, direccion;
-	private JLabel contrasena, eMail, tipoEmpleado, sede, estado, icon,celular;
+	private JLabel contrasena, eMail, tipoEmpleado, sede, estado,celular;
 	private JPasswordField contrasenaIn;
 	@SuppressWarnings("unused")
-	private JPanel panel, panel2;
+	private JPanel panel;
 	private JTextField usuarioIn, nombreIn, apellidosIn, direccionIn, celularIn, eMailIn;
 	private JComboBox<String>  tipoEmpleadoIn, sedeIn, estadoIn,idIn;
 	private JButton salir1, cancelar2, buscar, actualizar;
-	private JSeparator separator_1, separator_2;
 	private Font font;
 	private ActionListener listener = new ManejadorDeBotones();
+	private int pX, pY;
 
 	public GUIActualizarUser(BaseDeDatos bdIn){
 		super("ACTUALIZAR EMPLEADO");
+		getContentPane().setBackground(Color.BLACK);
 
 		font = new Font("Tahoma", Font.PLAIN, 14);
 		bd = bdIn;
 		initGUI();
 	}
 
+	//FUnciona para inicializar los elemens graficos
 	private void initGUI() {
 
+		//Configuraciones generales de la primer ventana
 		contenedor = getContentPane();
 		contenedor.removeAll();
 		getContentPane().setLayout(null);
+		this.setUndecorated(true);
 
+		//Etiqueta que describe el funcionamiento
 		instruccion = new JLabel("ID usuario a modificar");
 		instruccion.setFont(font);
 		instruccion.setBounds(22, 101, 138, 32);
 		getContentPane().add(instruccion);
 
-		idIn = new JComboBox<>(bd.cambiarDimension(
-                bd.consultarUsuarios(null,null,"cedula,nombres")));
+		idIn = new JComboBox<>(
+				bd.cambiarDimension(
+                bd.consultarUsuarios(null,null,"cedula,nombres"))
+				);
 		idIn.setFont(font);
-		idIn.setBounds(165, 102, 99, 32);
+		idIn.setBounds(170, 101, 243, 32);
 		getContentPane().add(idIn);
 
 		salir1 = new JButton("Salir");
+		salir1.setOpaque(true);
+		salir1.setBackground(new Color(227, 227, 227));
 		salir1.setFont(font);
-		salir1.setBounds(271, 184, 100, 32);
+		salir1.setBounds(433, 184, 100, 32);
 		salir1.addActionListener(listener);
 		getContentPane().add(salir1);
 
 		buscar = new JButton("Buscar");
-		buscar.setBounds(271, 101, 100, 32);
+		buscar.setOpaque(true);
+		buscar.setBackground(new Color(227, 227, 227));
+		buscar.setBounds(433, 101, 100, 32);
 		buscar.setFont(font);
 		buscar.addActionListener(listener);
 		getContentPane().add(buscar);
 		
-		icon = new JLabel("");
-		icon.setBounds(21, 11, 66, 66);
-		URL filePath = this.getClass().getResource("/images/update.png");
-		icon.setIcon(new ImageIcon(filePath));
-		getContentPane().add(icon);
-		
-		separator_1 = new JSeparator();
-		separator_1.setBounds(21, 88, 349, 2);
-		getContentPane().add(separator_1);
-		
-		JSeparator separator = new JSeparator();
-		separator.setBounds(22, 172, 349, 2);
-		getContentPane().add(separator);
+		JSeparator separador = new JSeparator();
+		separador.setBounds(22, 172, 511, 2);
+		getContentPane().add(separador);
 
+		//Icono a la izquierda del titulo
+		JLabel icono = new JLabel("");
+		icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/actualizar.png")));
+		icono.setBounds(11, 1, 48, 90);
+		getContentPane().add(icono);
+		
+		//Etiqueta del titulo de la ventana
+		JLabel titulo = new JLabel("BUSCAR USUARIO");
+		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+		titulo.setForeground(Color.WHITE);
+		titulo.setBounds(69, 28, 175, 32);
+		getContentPane().add(titulo);
+		
+		// -- Fondos azul y gris -- //
+		JLabel fondoAzul = new JLabel("");
+		fondoAzul.setBounds(1, 1, 560, 90);
+		fondoAzul.setOpaque(true);
+		fondoAzul.setBackground(new Color(45, 118, 232));
+		getContentPane().add(fondoAzul);
+		JLabel fondoGris = new JLabel("");
+		fondoGris.setBounds(1, 89, 560, 166);
+		fondoGris.setOpaque(true);
+		fondoGris.setBackground(new Color(227,227,227));//Gris
+		getContentPane().add(fondoGris);
+
+		// Fondo negro para las margenes
+		JLabel fondoNegro = new JLabel("");
+		fondoNegro.setBackground(Color.BLACK);
+		fondoNegro.setForeground(Color.RED);
+		fondoNegro.setOpaque(true);
+		fondoNegro.setBounds(0, 0, 562, 264);
+		getContentPane().add(fondoNegro);
+		
 		setResizable(false);
-		setSize(400,256); 
+		setSize(562,256); 
 		setVisible(true);
 		setLocationRelativeTo(null);
 	}
-
+	
+	//Funcion para inicializar la interfaz grafica para
+	//realizar la actualizacion de un usuario
 	private void initGUI2(String identifier){
 
-		contenedor.removeAll();
-		contenedor.repaint();
-		getContentPane().setLayout(null);
-
-		JPanel panel2 = new JPanel();
-		panel2.setBounds(0, 0, 384, 650);
-		contenedor.add(panel2);
-		panel2.setLayout(null);
+		Container ventana = getContentPane();
+		ventana.setLayout(null);
+		manejadorDesplazamientoVentana(this);
+    	ventana.removeAll();
+		this.setUndecorated(true);
 
 		usuario = new JLabel("id/Documento:");
-		usuario.setBounds(21, 101, 105, 32);
+		usuario.setBounds(25, 128, 105, 32);
 		usuario.setFont(font);
-		panel2.add(usuario);
+		ventana.add(usuario);
 
 		usuarioIn = new JTextField(bd.obtenerS(identifier,"cedula"));
-		usuarioIn.setBounds(136, 101, 234, 32);
+		usuarioIn.setBounds(140, 128, 234, 32);
 		usuarioIn.setEditable(false);
 		usuarioIn.setFont(font);
-		panel2.add(usuarioIn);
+		ventana.add(usuarioIn);
 
 		contrasena = new JLabel("Contrasena:");
-		contrasena.setBounds(21, 140, 105, 32);
+		contrasena.setBounds(25, 167, 105, 32);
 		contrasena.setFont(font);
-		panel2.add(contrasena);
+		ventana.add(contrasena);
 
 		contrasenaIn = new JPasswordField();
-		contrasenaIn.setBounds(136, 141, 234, 32);
+		contrasenaIn.setBounds(140, 168, 234, 32);
 		contrasenaIn.setFont(font);
-		panel2.add(contrasenaIn);
+		ventana.add(contrasenaIn);
 
 		nombre = new JLabel("Nombres:");
-		nombre.setBounds(21, 183, 105, 32);
+		nombre.setBounds(25, 210, 105, 32);
 		nombre.setFont(font);
-		panel2.add(nombre);
+		ventana.add(nombre);
 
 		nombreIn = new JTextField(bd.obtenerS(identifier,"nombres"));
-		nombreIn.setBounds(136, 184, 234, 32);
+		nombreIn.setBounds(140, 211, 234, 32);
 		nombreIn.setFont(font);
-		panel2.add(nombreIn);
+		ventana.add(nombreIn);
 
 		apellidos = new JLabel("Apellidos:");
-		apellidos.setBounds(21, 226, 105, 32);
+		apellidos.setBounds(25, 253, 105, 32);
 		apellidos.setFont(font);
-		panel2.add(apellidos);
+		ventana.add(apellidos);
 
 		apellidosIn = new JTextField(bd.obtenerS(identifier,"apellidos"));
-		apellidosIn.setBounds(136, 227, 234, 32);
+		apellidosIn.setBounds(140, 254, 234, 32);
 		apellidosIn.setFont(font);
-		panel2.add(apellidosIn);
+		ventana.add(apellidosIn);
 
 		direccion = new JLabel("Direccion:");
-		direccion.setBounds(21, 269, 105, 32);
+		direccion.setBounds(25, 296, 105, 32);
 		direccion.setFont(font);
-		panel2.add(direccion);
+		ventana.add(direccion);
 
 		direccionIn = new JTextField(bd.obtenerS(identifier,"direccion"));
-		direccionIn.setBounds(136, 270, 234, 32);
+		direccionIn.setBounds(140, 297, 234, 32);
 		direccionIn.setHorizontalAlignment(JTextField.LEFT);
 		direccionIn.setFont(font);
-		panel2.add(direccionIn);
+		ventana.add(direccionIn);
 
 		celular =  new JLabel("Celular:");
-		celular.setBounds(21, 312, 105, 32);
+		celular.setBounds(25, 339, 105, 32);
 		celular.setFont(font);
-		panel2.add(celular);
+		ventana.add(celular);
 
 		celularIn = new JTextField(bd.obtenerS(identifier,"numero"));
-		celularIn.setBounds(136, 313, 234, 32);
+		celularIn.setBounds(140, 340, 234, 32);
 		celularIn.setFont(font);
-		panel2.add(celularIn);
+		ventana.add(celularIn);
 
 		eMail = new JLabel("E-Mail:");
-		eMail.setBounds(21, 355, 105, 32);
+		eMail.setBounds(25, 382, 105, 32);
 		eMail.setFont(font);
-		panel2.add(eMail);
+		ventana.add(eMail);
 
 		eMailIn = new JTextField(bd.obtenerS(identifier,"email"));
-		eMailIn.setBounds(136, 356, 234, 32);
+		eMailIn.setBounds(140, 383, 234, 32);
 		eMailIn.setFont(font);
-		panel2.add(eMailIn);
+		ventana.add(eMailIn);
 
         sede = new JLabel("Sede:");
-        sede.setBounds(21, 398, 138, 32);
+        sede.setBounds(25, 425, 138, 32);
         sede.setFont(font);
-        panel2.add(sede);
+        ventana.add(sede);
 
         sedeIn = new JComboBox<>(bd.cambiarDimension(bd.consultarSede(null,"id_Sede,nombre")));
         sedeIn.setSelectedItem(bd.cambiarDimension(bd.consultarSede(
                 bd.obtenerS(identifier, "sede"),"id_sede,nombre")));
-        sedeIn.setBounds(169, 399, 201, 32);
+        sedeIn.setBounds(173, 426, 201, 32);
         sedeIn.setSelectedItem(bd.obtenerS(identifier,"sede"));
         sedeIn.setEditable(false);
         sedeIn.setFont(font);
-        panel2.add(sedeIn);
+        ventana.add(sedeIn);
 
 		tipoEmpleado = new JLabel("Tipo de Empleado:");
-		tipoEmpleado.setBounds(21, 441, 138, 32);
+		tipoEmpleado.setBounds(25, 468, 138, 32);
 		tipoEmpleado.setFont(font);
-		panel2.add(tipoEmpleado);
+		ventana.add(tipoEmpleado);
 
 		String[] listaTipo = new String[] { "Jefe de taller", "Vendedor"};
 		tipoEmpleadoIn = new JComboBox<>(listaTipo);
-		tipoEmpleadoIn.setBounds(169, 442, 201, 32);
+		tipoEmpleadoIn.setBounds(173, 469, 201, 32);
 		tipoEmpleadoIn.setSelectedItem(bd.obtenerS(identifier,"tipo_usuario").replaceAll("\\s",""));
 		tipoEmpleadoIn.setEditable(false);
 		tipoEmpleadoIn.setFont(font);
-		panel2.add(tipoEmpleadoIn);
+		ventana.add(tipoEmpleadoIn);
 
 		estado = new JLabel("Empleado activo:");
-		estado.setBounds(21, 484, 120, 32);
+		estado.setBounds(25, 511, 120, 32);
 		estado.setFont(font);
-		panel2.add(estado);
+		ventana.add(estado);
 
 		String[] estado = new String[] {"true", "false"};
 		estadoIn = new JComboBox<>(estado);
-		estadoIn.setBounds(169, 485, 201, 32);
+		estadoIn.setBounds(173, 512, 201, 32);
 		if(bd.obtenerB(identifier,"activo")){
 			estadoIn.setSelectedItem("true");
 		}
 		else estadoIn.setSelectedItem("false");
 		estadoIn.setEditable(false);
 		estadoIn.setFont(font);
-		panel2.add(estadoIn);
+		ventana.add(estadoIn);
 
 		cancelar2 = new JButton("Cancelar");
-		cancelar2.setBounds(120, 542, 120, 28);
+		cancelar2.setOpaque(true);
+		cancelar2.setBackground(new Color(227, 227, 227));
+		cancelar2.setBounds(124, 569, 120, 28);
 		cancelar2.setFont(font);
 		cancelar2.addActionListener(listener);
-		panel2.add(cancelar2);
+		ventana.add(cancelar2);
 
 		actualizar = new JButton("Actualizar");
-		actualizar.setBounds(250, 542, 120, 28);
+		actualizar.setOpaque(true);
+		actualizar.setBackground(new Color(227, 227, 227));
+		actualizar.setBounds(254, 569, 120, 28);
 		actualizar.setFont(font);
 		actualizar.addActionListener(listener);
-		panel2.add(actualizar);
+		ventana.add(actualizar);
 
-		separator_2 = new JSeparator();
-		separator_2.setBounds(21, 529, 349, 2);
-		panel2.add(separator_1);
-		panel2.add(separator_2);
-		panel2.add(icon);
+		JSeparator separador = new JSeparator();
+		separador.setBounds(25, 556, 349, 2);
+		ventana.add(separador);
+		ventana.add(separador);
 
-		setSize(400,610);
-		setVisible(true);
-		setLocationRelativeTo(null);
-		setResizable(false);
+		//Icono a la izquierda del titulo
+		JLabel icono = new JLabel("");
+		icono.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/actualizar.png")));
+		icono.setBounds(11, 1, 48, 90);
+		ventana.add(icono);
+		
+		//Etiqueta titulo de la ventana
+		JLabel titulo = new JLabel("  ACTUALIZAR USUARIO");
+		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+		titulo.setForeground(Color.WHITE);
+		titulo.setBounds(61, 30, 211, 32);
+		ventana.add(titulo);
+		
+		// -- Fondos azul y gris -- //
+		JLabel fondoAzul = new JLabel("");
+		fondoAzul.setBounds(1, 1, 398, 90);
+		fondoAzul.setOpaque(true);
+		fondoAzul.setBackground(new Color(45, 118, 232));
+		ventana.add(fondoAzul);
+		JLabel fondoGris = new JLabel("");
+		fondoGris.setBounds(1, 89, 398, 520);
+		fondoGris.setOpaque(true);
+		fondoGris.setBackground(new Color(227,227,227));
+		ventana.add(fondoGris);
+		
+		//Configuraciones adicionales de la ventana principal
+		this.setSize(400,610);
+		this.setVisible(true);
+		this.setLocationRelativeTo(null);
+		this.setResizable(false);
 	}
 
 
@@ -256,6 +319,7 @@ public class GUIActualizarUser extends JFrame {
         return val;
     }
 
+    
     private String validar2(){
 		String mensaje = "";
 
@@ -306,10 +370,9 @@ public class GUIActualizarUser extends JFrame {
 		}
 
 		return mensaje;
-
     }
 
-
+    //Clase para manejar los eventos sobre los botones
     private class ManejadorDeBotones implements ActionListener{
 
         @Override
@@ -324,7 +387,7 @@ public class GUIActualizarUser extends JFrame {
 			identifier=identifier.substring(0,identifier.indexOf("-"));
 
 			if(e.getSource()==buscar){
-
+dispose();
                 initGUI2(identifier);
 
             }else if(e.getSource()==actualizar){
@@ -360,4 +423,21 @@ public class GUIActualizarUser extends JFrame {
             }
         }
     }
+    
+    // Manejador del desplazamiento de la ventana causado por el arrastre del mouse
+ 	private void manejadorDesplazamientoVentana(JFrame frame) {
+ 		frame.addMouseListener(new MouseAdapter() {
+ 			@Override
+ 			public void mousePressed(MouseEvent me) {
+ 				pX = me.getX();
+ 				pY = me.getY();
+ 			}
+ 		});
+ 		frame.addMouseMotionListener(new MouseAdapter() {
+ 			@Override
+ 			public void mouseDragged(MouseEvent me) {
+ 				setLocation(getLocation().x + me.getX() - pX, getLocation().y + me.getY() - pY);
+ 			}
+ 		});
+ 	}
 }
