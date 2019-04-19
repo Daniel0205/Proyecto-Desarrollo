@@ -2,97 +2,201 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 
+@SuppressWarnings("serial")
 public class GUIMenuVendedor extends JFrame {
 
-    private final BaseDeDatos bd;
-    private final String id;
-    private Container contenedor;
-    private JSeparator separator_1,separator_2;
-    private Font font;
-    private JButton consultaProducto,venta,cotizacion,salir;
-    private JLabel icon;
-   
-    public GUIMenuVendedor(BaseDeDatos bd,String id) {
-        super("MENU VENDEDOR");
+	private final BaseDeDatos bd;
+	private final String id;
+	private Container contenedor;
+	private JSeparator separator_1;
+	private Font font;
+	private JButton consultaProducto, venta, cotizacion, salir;
+	private JLabel lblSalir, lblProductos;
+	private ManejadorDeBotones listener;
+	private int pX, pY;
 
-        this.id = id;
-        this.bd = bd;
-        initGUI();
-    }
+	public GUIMenuVendedor(BaseDeDatos bd, String id) {
+		super("MENU VENDEDOR");
+		this.id = id;
+		this.bd = bd;
+		initGUI();
+	}
 
-    private void initGUI() {
+	// Funcion para inicializar todos los elementos graficos
+	private void initGUI() {
 
-        contenedor = getContentPane();
-        contenedor.removeAll();
-        getContentPane().setLayout(null);
+		// Configuraciones de la ventana principal
+		contenedor = getContentPane();
+		contenedor.removeAll();
+		getContentPane().setLayout(null);
+		this.setUndecorated(true);
+		listener = new ManejadorDeBotones();
+		manejadorDesplazamientoVentana(this);
 
-        ManejadorDeBotones listener = new ManejadorDeBotones();
+		// Logo del sofa
+		JLabel imagenSofa = new JLabel("");
+		imagenSofa.setIcon(new ImageIcon(GUIMenuAdmin.class.getResource("/images/sofa.png")));
+		imagenSofa.setBounds(199, 15, 120, 80);
+		getContentPane().add(imagenSofa);
 
-        font = new Font("Tahoma", Font.PLAIN, 14);
+		// Etiqueta para el nombre al lado del logo
+		JLabel lblMueblesYMuebles = new JLabel("   Muebles y Muebles");
+		lblMueblesYMuebles.setFont(font);
+		lblMueblesYMuebles.setForeground(Color.WHITE);
+		lblMueblesYMuebles.setBounds(390, 77, 152, 32);
+		getContentPane().add(lblMueblesYMuebles);
 
-        consultaProducto = new JButton("Ver Productos");
+		// Etiqueta para el logo XYZ
+		JLabel imagenLogo = new JLabel("");
+		imagenLogo.setIcon(new ImageIcon(GUIMenuAdmin.class.getResource("/images/logo_blanco.png")));
+		imagenLogo.setBounds(288, 23, 213, 82);
+		getContentPane().add(imagenLogo);
+
+		//Boton para consultar la disponibilidad de un producto
+		consultaProducto = new JButton("CONSULTAR");
+		consultaProducto.setForeground(SystemColor.textHighlight);
+		consultaProducto.setVerticalTextPosition(SwingConstants.BOTTOM);
+		consultaProducto.setHorizontalTextPosition(SwingConstants.CENTER);
+		consultaProducto.setIcon(new ImageIcon(GUIMenuAdmin.class.getResource("/images/producto_buscar.png")));
+		consultaProducto.setFocusPainted(false);
+		consultaProducto.setBorderPainted(false);
+		consultaProducto.setOpaque(true);
+		consultaProducto.setBackground(new Color(227, 227, 227));
         consultaProducto.setFont(font);
-        consultaProducto.setBounds(100, 101, 162, 32);
-        consultaProducto.addActionListener(listener);
-        getContentPane().add(consultaProducto);
+        consultaProducto.setBounds(117, 219, 140, 120);
+		consultaProducto.addActionListener(listener);
+		getContentPane().add(consultaProducto);
 
-        venta = new JButton("Realizar venta");
-        venta.setFont(font);
-        venta.setBounds(100, 160, 162, 32);
-        venta.addActionListener(listener);
-        getContentPane().add(venta);
+		//Boton para concretar una venta cotizada
+		venta = new JButton("VENDER");
+		venta.setForeground(SystemColor.textHighlight);
+		venta.setVerticalTextPosition(SwingConstants.BOTTOM);
+		venta.setHorizontalTextPosition(SwingConstants.CENTER);
+		venta.setIcon(new ImageIcon(GUIMenuAdmin.class.getResource("/images/producto_vender.png")));
+		venta.setFocusPainted(false);
+		venta.setBorderPainted(false);
+		venta.setOpaque(true);
+		venta.setBackground(new Color(227, 227, 227));
+		venta.setFont(font);
+		venta.setBounds(267, 219, 140, 120);
+		venta.addActionListener(listener);
+		getContentPane().add(venta);
 
-        cotizacion = new JButton("Realizar cotizacion");
-        cotizacion.setFont(font);
-        cotizacion.setBounds(100, 216, 162, 32);
-        cotizacion.addActionListener(listener);
-        getContentPane().add(cotizacion);
+		//Boton empezar un proceso de cotizacion
+		cotizacion = new JButton("ACTUALIZAR");
+		cotizacion.setForeground(SystemColor.textHighlight);
+		cotizacion.setVerticalTextPosition(SwingConstants.BOTTOM);
+		cotizacion.setHorizontalTextPosition(SwingConstants.CENTER);
+		cotizacion.setIcon(new ImageIcon(GUIMenuAdmin.class.getResource("/images/orden_buscar.png")));
+		cotizacion.setFocusPainted(false);
+		cotizacion.setBorderPainted(false);
+		cotizacion.setOpaque(true);
+		cotizacion.setBackground(new Color(227, 227, 227));
+		cotizacion.setFont(font);
+		cotizacion.setBounds(417, 219, 140, 120);
+		cotizacion.addActionListener(listener);
+		getContentPane().add(cotizacion);
 
-        salir = new JButton("Cerrar Sesion");
-        salir.addActionListener(listener);
-        salir.setFont(font);
-        salir.setBounds(193, 293, 136, 32);
-        getContentPane().add(salir);
+		// Boton salir
+		salir = new JButton("");
+		salir.setIcon(new ImageIcon(GUIMenuAdmin.class.getResource("/images/salir.png")));
+		salir.setBorderPainted(false);
+		salir.setBorder(null);
+		salir.setMargin(new Insets(0, 0, 0, 0));
+		salir.setContentAreaFilled(false);
+		salir.addActionListener(listener);
+		salir.setBounds(588, 411, 81, 59);
+		getContentPane().add(salir);
 
-        icon = new JLabel("");
-        URL filePath = this.getClass().getResource("/images/home.png");
-        icon.setIcon(new ImageIcon(filePath));
-        icon.setBounds(31, 11, 66, 66);
-        getContentPane().add(icon);
+		// -- Eriqueta --//
+		lblProductos = new JLabel("PRODUCTOS");
+		lblProductos.setForeground(SystemColor.textHighlight);
+		lblProductos.setFont(font);
+		lblProductos.setBounds(117, 192, 123, 14);
+		getContentPane().add(lblProductos);
 
-        separator_1 = new JSeparator();
-        separator_1.setBounds(22, 88, 307, 2);
-        getContentPane().add(separator_1);
+		// -- Separadores --//
+		separator_1 = new JSeparator();
+		separator_1.setForeground(SystemColor.textHighlight);
+		separator_1.setBackground(new Color(255, 255, 255));
+		separator_1.setBounds(205, 199, 352, 9);
+		getContentPane().add(separator_1);
 
-        separator_2 = new JSeparator();
-        separator_2.setBounds(22, 280, 307, 2);
-        getContentPane().add(separator_2);
+		// Etiqueta salir
+		lblSalir = new JLabel("SALIR");
+		lblSalir.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSalir.setForeground(SystemColor.textHighlight);
+		lblSalir.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblSalir.setBounds(597, 391, 49, 14);
+		getContentPane().add(lblSalir);
+		// Etiqueta superior azul
+		JLabel fondoAzul = new JLabel("");
+		fondoAzul.setOpaque(true);
+		fondoAzul.setBackground(new Color(45, 118, 232));// azul #2D76E8
+		fondoAzul.setBounds(0, 0, 679, 120);
+		getContentPane().add(fondoAzul);
 
-        setSize(359,363);
-        setResizable(false);
-        setVisible(true);
-        setLocationRelativeTo(null);
-    }
+		// Titulo para tipo de usuario
+		JLabel titulo = new JLabel("VENDEDOR");
+		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+		titulo.setForeground(SystemColor.textHighlight);
+		titulo.setBounds(452, 146, 105, 21);
+		getContentPane().add(titulo);
 
-    private class ManejadorDeBotones implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
-            if(actionEvent.getSource() == cotizacion){
-                GUICotizacion cot = new GUICotizacion(bd,id);
-                cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		// Etiqueta principal blanca
+		JLabel fondoBlanco = new JLabel("");
+		fondoBlanco.setOpaque(true);
+		fondoBlanco.setBackground(new Color(255, 255, 255));
+		fondoBlanco.setBounds(0, 120, 679, 377);
+		getContentPane().add(fondoBlanco);
+
+		// Configuraciones adicionales de la ventana principal
+		setSize(679, 497);
+		setResizable(false);
+		setVisible(true);
+		setLocationRelativeTo(null);
+		setShape(new java.awt.geom.RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 5, 5));
+	}
+
+	// Clase para manejar los eventos sobre los botones
+	private class ManejadorDeBotones implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent actionEvent) {
+			if (actionEvent.getSource() == cotizacion) {
+				GUICotizacion cot = new GUICotizacion(bd, id);
+				cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             } else if(actionEvent.getSource() == consultaProducto){
-               GUIProductos prod = new GUIProductos(bd,id);
-               prod.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            }else if(actionEvent.getSource() == salir){
-                GUILogin login = new GUILogin();
-                login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                dispose();
-            }else if(actionEvent.getSource() == venta){
-                GUIVenta ven = new GUIVenta(bd,id);
-                ven.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            }
-        }
-    }
+                GUIProductos prod = new GUIProductos(bd,id);
+                prod.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			} else if (actionEvent.getSource() == salir) {
+				GUILogin login = new GUILogin();
+				login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				dispose();
+			} else if (actionEvent.getSource() == venta) {
+				GUIVenta ven = new GUIVenta(bd, id);
+				ven.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			}
+		}
+	}
+
+	// Manejador del desplazamiento de la ventana causado por el arrastre del mouse
+	private void manejadorDesplazamientoVentana(JFrame frame) {
+		frame.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent me) {
+				pX = me.getX();
+				pY = me.getY();
+			}
+		});
+		frame.addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent me) {
+				setLocation(getLocation().x + me.getX() - pX, getLocation().y + me.getY() - pY);
+			}
+		});
+	}
 }
