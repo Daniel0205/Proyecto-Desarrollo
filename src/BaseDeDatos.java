@@ -760,25 +760,6 @@ public class BaseDeDatos {
 
 	}
 
-	public String obtenerCampoVeCo(String identifier, String campo){
-
-		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-
-			String sql ="SELECT "+campo+" FROM venta_cotizaciones WHERE fecha_cotizacion = '"+identifier+"';";
-			PreparedStatement psSql = connection.prepareStatement(sql);
-			ResultSet rs = psSql.executeQuery();
-
-			rs.next();
-			String resultado = rs.getString(1);
-			if (resultado!=null)resultado=resultado.trim();
-			return resultado;
-		}
-		catch (SQLException e) {
-			System.out.println("Connection failure");
-			e.printStackTrace();
-			return "";
-		}
-	}
 
 	public boolean agregarProCot(String id_pro, String cantidad, String id_cot){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
@@ -799,11 +780,15 @@ public class BaseDeDatos {
         }
     }
 
-    public String consultarProducto(String identifier, String campo) {
+    public String consultarProducto(String identifier, String campo, String criterio) {
 
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
-            String sql ="SELECT "+campo+" FROM producto WHERE id_producto = "+identifier;
+            String sql ="SELECT "+campo+" FROM public.producto ";
+
+            if(criterio=="Id") sql += "WHERE id_producto = "+identifier;
+            if(criterio=="Nombre") sql += "WHERE nombre = "+identifier;
+
             PreparedStatement psSql = connection.prepareStatement(sql);
             ResultSet rs = psSql.executeQuery();
 
@@ -820,5 +805,66 @@ public class BaseDeDatos {
         }
     }
 
+    public String consultarDatoUsuario(String criterio, String busqueda,String campos){
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+            String sql = "SELECT "+campos+" FROM public.empleados";
+
+            if(criterio=="Id") sql += " WHERE cedula = " + busqueda;
+
+            PreparedStatement psSql = connection.prepareStatement(sql);
+            ResultSet rs = psSql.executeQuery();
+
+            System.out.print(sql);
+
+            rs.next();
+            String resultado = rs.getString(1);
+            return resultado.trim();
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String[][] listarProductos(String criterio, String busqueda,String campos,String sede) {
+        String sql = "SELECT "+campos+" FROM public.producto NATURAL JOIN public.inventario";
+
+        if(criterio=="Id") sql += " WHERE id_producto = " + busqueda;
+        if(criterio=="Nombre") sql += " WHERE nombre = '" + busqueda + "'";
+
+        sql += " AND id_sede = " + sede;
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            resultSet.last();
+            int rows = resultSet.getRow(); //# de filas resulado de la consulta
+            resultSet.beforeFirst();
+
+            Array arraySQL = null;
+            int columns = contarCampos(campos); //# de columnas a mostrar (predeterminado)
+            String[][] resultadoConsulta = new String[rows][columns];
+
+            int j = 0;
+            while (resultSet.next()) {
+                for (int i = 0; i < columns; i++) {
+                    arraySQL = resultSet.getArray(i+1);
+                    resultadoConsulta[j][i] = arraySQL.toString().trim();
+                } j++;
+            }
+
+            return resultadoConsulta;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

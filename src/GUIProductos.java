@@ -14,12 +14,15 @@ public class GUIProductos extends JFrame {
     private JButton consultar,salir;
     private JTable tabla;
     private JScrollPane scroll;
+    private String[] datos;
 
 
     public GUIProductos(BaseDeDatos bd,String id) {
         super("Productos");
         this.bd = bd;
         this.id = id;
+
+        creaTabla();
 
         initGUI();
     }
@@ -82,11 +85,29 @@ public class GUIProductos extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    private void mostrar(){
+
+        String sede = bd.consultarDatoUsuario("Id",id,"sede");
+
+        String[][] result = bd.listarProductos((String)criterio.getSelectedItem(),	(String)busqueda.getText(), "id_producto,nombre,descripcion,precio,cantidad_disponible",sede);
+
+        datos = new String[]{result[0][0],result[0][1],result[0][2],result[0][3],result[0][4]};
+
+        modelo.setRowCount(0);
+        modelo.addRow(datos);
+
+    }
+
     private class ManejadorDeBotones implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
 
+            if(e.getSource() == consultar){
+                mostrar();
+            }else if(e.getSource()==salir){
+                dispose();
+            }
         }
     }
 }

@@ -133,8 +133,8 @@ public class GUICotizacion extends JFrame{
 
     private void agregarProducto(String id_pro,String cant){
 
-        String precio_U = bd.consultarProducto(id_pro,"precio");
-        datos = new String[]{id_pro, bd.consultarProducto(id_pro, "nombre"), cant, precio_U, String.valueOf(Integer.parseInt(precio_U) * Integer.parseInt(cant))};
+        String precio_U = bd.consultarProducto(id_pro,"precio","Id");
+        datos = new String[]{id_pro, bd.consultarProducto(id_pro, "nombre","Id"), cant, precio_U, String.valueOf(Integer.parseInt(precio_U) * Integer.parseInt(cant))};
 
         modelo.addRow(datos);
 
