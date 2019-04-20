@@ -60,7 +60,7 @@ public class GUIConsultarSede extends JFrame {
         busqueda.setColumns(10);
 
         separador = new JSeparator();
-        separador.setBounds(41, 188, 492, 4);
+        separador.setBounds(41, 190, 480, 2);
         getContentPane().add(separador);
 
         salir = new JButton("Salir");

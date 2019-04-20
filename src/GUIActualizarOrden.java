@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,8 +24,6 @@ public class GUIActualizarOrden extends JFrame {
 
 	
 	public GUIActualizarOrden(BaseDeDatos bdIn, String idJefe) {
-		super("ACTUALIZAR ORDEN DE TRABAJO");
-
 		getContentPane().setBackground(Color.BLACK);
 		font = new Font("Tahoma", Font.PLAIN, 14);
 		this.idJefe = idJefe;
@@ -135,9 +132,11 @@ public class GUIActualizarOrden extends JFrame {
 		ventana.add(idProducto);
 
 		idProductoIn = new JComboBox<>(
-        		bd.cambiarDimension(bd.consultarProductos("id_producto, nombre")));
+        		bd.cambiarDimension(bd.consultarProductos("id_producto, nombre"))
+				);
 		idProductoIn.setSelectedItem(bd.cambiarDimension(
-                bd.consultarOrden("Id",identifier,"id_producto,nombre"))[0]);
+                bd.consultarOrden("Id",identifier,"id_producto,nombre"))[0]
+                		);
 		idProductoIn.setFont(font);
 		idProductoIn.setBounds(161, 176, 224, 32);
 		ventana.add(idProductoIn);
@@ -179,7 +178,7 @@ public class GUIActualizarOrden extends JFrame {
 		salir2.setFont(font);
 		salir2.setBounds(272, 521, 113, 32);
 		salir2.addActionListener(listener);
-		ventana.add(salir);
+		ventana.add(salir2);
 
 		actualizarOrden = new JButton("Actualizar");
 		actualizarOrden.setOpaque(true);

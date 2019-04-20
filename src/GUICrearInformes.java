@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
+@SuppressWarnings("serial")
 public class GUICrearInformes  extends JFrame {
 
     private final BaseDeDatos bd;
@@ -11,7 +12,6 @@ public class GUICrearInformes  extends JFrame {
     private JButton infUsuario,infInventario,infSedes;
     private JButton infVentas,infCotizaciones,infOrdenes;
     private Font font;
-    private JLabel icon;
     private JButton salir;
     private JSeparator separator_1,separator_2;
 
@@ -72,12 +72,6 @@ public class GUICrearInformes  extends JFrame {
         salir.setBounds(193, 293, 136, 32);
         getContentPane().add(salir);
 
-        icon = new JLabel("");
-        URL filePath = this.getClass().getResource("/images/home.png");
-        icon.setIcon(new ImageIcon(filePath));
-        icon.setBounds(31, 11, 66, 66);
-        getContentPane().add(icon);
-
         separator_1 = new JSeparator();
         separator_1.setBounds(22, 88, 307, 2);
         getContentPane().add(separator_1);
@@ -90,13 +84,12 @@ public class GUICrearInformes  extends JFrame {
         setResizable(false);
         setVisible(true);
         setLocationRelativeTo(null);
-
     }
+
 
     private class BotonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-
 
             if (actionEvent.getSource()==salir){
                 System.exit(0);

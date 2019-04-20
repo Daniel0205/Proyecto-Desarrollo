@@ -56,7 +56,7 @@ public class GUIMenuVendedor extends JFrame {
 		imagenLogo.setBounds(288, 23, 213, 82);
 		getContentPane().add(imagenLogo);
 
-		//Boton para consultar la disponibilidad de un producto
+		// Boton para consultar la disponibilidad de un producto
 		consultaProducto = new JButton("CONSULTAR");
 		consultaProducto.setForeground(SystemColor.textHighlight);
 		consultaProducto.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -66,12 +66,12 @@ public class GUIMenuVendedor extends JFrame {
 		consultaProducto.setBorderPainted(false);
 		consultaProducto.setOpaque(true);
 		consultaProducto.setBackground(new Color(227, 227, 227));
-        consultaProducto.setFont(font);
-        consultaProducto.setBounds(117, 219, 140, 120);
+		consultaProducto.setFont(font);
+		consultaProducto.setBounds(117, 219, 140, 120);
 		consultaProducto.addActionListener(listener);
 		getContentPane().add(consultaProducto);
 
-		//Boton para concretar una venta cotizada
+		// Boton para concretar una venta cotizada
 		venta = new JButton("VENDER");
 		venta.setForeground(SystemColor.textHighlight);
 		venta.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -86,7 +86,7 @@ public class GUIMenuVendedor extends JFrame {
 		venta.addActionListener(listener);
 		getContentPane().add(venta);
 
-		//Boton empezar un proceso de cotizacion
+		// Boton empezar un proceso de cotizacion
 		cotizacion = new JButton("ACTUALIZAR");
 		cotizacion.setForeground(SystemColor.textHighlight);
 		cotizacion.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -133,6 +133,7 @@ public class GUIMenuVendedor extends JFrame {
 		lblSalir.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblSalir.setBounds(597, 391, 49, 14);
 		getContentPane().add(lblSalir);
+
 		// Etiqueta superior azul
 		JLabel fondoAzul = new JLabel("");
 		fondoAzul.setOpaque(true);
@@ -140,19 +141,19 @@ public class GUIMenuVendedor extends JFrame {
 		fondoAzul.setBounds(0, 0, 679, 120);
 		getContentPane().add(fondoAzul);
 
-		// Titulo para tipo de usuario
-		JLabel titulo = new JLabel("VENDEDOR");
-		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
-		titulo.setForeground(SystemColor.textHighlight);
-		titulo.setBounds(452, 146, 105, 21);
-		getContentPane().add(titulo);
-
 		// Etiqueta principal blanca
 		JLabel fondoBlanco = new JLabel("");
 		fondoBlanco.setOpaque(true);
 		fondoBlanco.setBackground(new Color(255, 255, 255));
 		fondoBlanco.setBounds(0, 120, 679, 377);
 		getContentPane().add(fondoBlanco);
+
+		// Titulo para tipo de usuario
+		JLabel titulo = new JLabel("VENDEDOR");
+		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+		titulo.setForeground(SystemColor.textHighlight);
+		titulo.setBounds(452, 146, 105, 21);
+		getContentPane().add(titulo);
 
 		// Configuraciones adicionales de la ventana principal
 		setSize(679, 497);
@@ -168,40 +169,41 @@ public class GUIMenuVendedor extends JFrame {
 		public void actionPerformed(ActionEvent actionEvent) {
 			if (actionEvent.getSource() == cotizacion) {
 
-				String nombre_cliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente que solicita la transaccion: ");
+				String nombre_cliente = JOptionPane
+						.showInputDialog("Ingrese el nombre del cliente que solicita la transaccion: ");
 
-				if( nombre_cliente==null){
+				if (nombre_cliente == null) {
 
-				}else {
-                    if(nombre_cliente.equals("")){
-                        JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
-                    }else{
-                        GUICotizacion cot = new GUICotizacion(bd, id,nombre_cliente,"C");
-                        cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-                    }
-                }
+				} else {
+					if (nombre_cliente.equals("")) {
+						JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
+					} else {
+						GUICotizacion cot = new GUICotizacion(bd, id, nombre_cliente, "C");
+						cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+					}
+				}
 
-			} else if(actionEvent.getSource() == consultaProducto){
-                GUIProductos prod = new GUIProductos(bd,id);
-                prod.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			} else if (actionEvent.getSource() == consultaProducto) {
+				GUIProductos prod = new GUIProductos(bd, id);
+				prod.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			} else if (actionEvent.getSource() == salir) {
 				GUILogin login = new GUILogin();
 				login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				dispose();
 			} else if (actionEvent.getSource() == venta) {
+				String nombre_cliente = JOptionPane
+						.showInputDialog("Ingrese el nombre del cliente que solicita la transaccion: ");
 
-                String nombre_cliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente que solicita la transaccion: ");
+				if (nombre_cliente == null) {
 
-                if( nombre_cliente==null){
-
-                }else {
-                    if(nombre_cliente.equals("")){
-                        JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
-                    }else{
-                        GUICotizacion cot = new GUICotizacion(bd, id,nombre_cliente,"V");
-                        cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-                    }
-                }
+				} else {
+					if (nombre_cliente.equals("")) {
+						JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
+					} else {
+						GUICotizacion cot = new GUICotizacion(bd, id, nombre_cliente, "V");
+						cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+					}
+				}
 			}
 		}
 	}
