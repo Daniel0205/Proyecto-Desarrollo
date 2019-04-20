@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,22 +13,27 @@ public class GUICrearOrden extends JFrame {
 
 	private Container contenedor;
 	private JLabel  fechaEntrega, cantidad, idEncargado, idProducto;
+	private JLabel icono, titulo, fondoAzul, fondoGris;
 	private JTextField  fechaEntregaIn, cantidadIn, asignadoAIn,idEncargadoIn;
 	private JButton crearOrden, salir;
-	private JSeparator separator_1, separator_2;
+	private JSeparator separador;
 	private Font font;
 	private BaseDeDatos bd;
 	private ActionListener listener;
 	private JComboBox idProductoIn;
 	private String idenfier;
+	private int pX,pY;
+	/**
+	 * @wbp.nonvisual location=481,659
+	 */
+	private final JLabel label = new JLabel("New label");
 
 
 	public GUICrearOrden(BaseDeDatos bdIn,String idenfier) {
 		super("REGISTRAR SEDE");
 		setTitle("CREAR ORDEN DE TRABAJO");
-
+		this.setUndecorated(true);
 		font = new Font("Tahoma", Font.PLAIN, 14);
-
 		this.idenfier = idenfier;
 		this.bd = bdIn;
 		crearComponentes();
@@ -35,31 +42,27 @@ public class GUICrearOrden extends JFrame {
 	// Funcion que crea la interfaz y sus componentes
 	private void crearComponentes() {
 
+		//Configuraciones de la ventana principal
 		contenedor = getContentPane();
 		contenedor.removeAll();
 		getContentPane().setLayout(null);
-
+		ActionListener listener = new ManejadorDeBotones();
+		manejadorDesplazamientoVentana(this);
 		JPanel panelUsuario = new JPanel();
-		panelUsuario.setBounds(0, 0, 415, 475);
+		panelUsuario.setBackground(Color.BLACK);
+		panelUsuario.setBounds(0, 0, 423, 456);
 		contenedor.add(panelUsuario);
 		panelUsuario.setLayout(null);
-/*
-		idOrden = new JLabel("Id Orden:");
-		idOrden.setFont(font);
-		idOrden.setBounds(21, 101, 105, 32);
-		panelUsuario.add(idOrden);
+		listener = new ManejadorDeBotones();
 
-		idOrdenIn = new JTextField();
-		idOrdenIn.setFont(font);
-		idOrdenIn.setBounds(159, 101, 234, 32);
-		panelUsuario.add(idOrdenIn);
-*/
 		idProducto = new JLabel("Id-Producto:");
 		idProducto.setFont(font);
 		idProducto.setBounds(21, 143, 105, 32);
 		panelUsuario.add(idProducto);
 
-		idProductoIn = new JComboBox<>(bd.cambiarDimension(bd.consultarProductos("id_producto, nombre")));
+		idProductoIn = new JComboBox<>(
+//				bd.cambiarDimension(bd.consultarProductos("id_producto, nombre"))
+				);
 		idProductoIn.setFont(font);
 		idProductoIn.setBounds(159, 144, 234, 32);
 		panelUsuario.add(idProductoIn);
@@ -95,33 +98,25 @@ public class GUICrearOrden extends JFrame {
 		idEncargadoIn.setFont(font);
 		panelUsuario.add(idEncargadoIn);
 
-		listener = new ManejadorDeBotones();
-
 		salir = new JButton("Salir");
+		salir.setOpaque(true);
+		salir.setBackground(new Color(227, 227, 227));
 		salir.setFont(font);
-		salir.setBounds(143, 436, 113, 28);
+		salir.setBounds(143, 404, 113, 28);
 		salir.addActionListener(listener);
 		panelUsuario.add(salir);
 
 		crearOrden = new JButton("Crear Orden");
+		crearOrden.setOpaque(true);
+		crearOrden.setBackground(new Color(227, 227, 227));
 		crearOrden.setFont(font);
-		crearOrden.setBounds(266, 436, 127, 28);
+		crearOrden.setBounds(266, 404, 127, 28);
 		crearOrden.addActionListener(listener);
 		panelUsuario.add(crearOrden);
 
-		separator_2 = new JSeparator();
-		separator_2.setBounds(44, 423, 349, 2);
-		panelUsuario.add(separator_2);
-
-		separator_1 = new JSeparator();
-		separator_1.setBounds(44, 88, 349, 2);
-		panelUsuario.add(separator_1);
-
-		JLabel lblNewLabel = new JLabel("");
-		URL filePath = this.getClass().getResource("/images/home.png");
-		lblNewLabel.setIcon(new ImageIcon(filePath));
-		lblNewLabel.setBounds(21, 11, 66, 66);
-		panelUsuario.add(lblNewLabel);
+		separador = new JSeparator();
+		separador.setBounds(44, 391, 349, 2);
+		panelUsuario.add(separador);
 
 		JLabel asignadoA = new JLabel("Asignado a:");
 		asignadoA.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -133,8 +128,34 @@ public class GUICrearOrden extends JFrame {
 		asignadoAIn.setBounds(159, 316, 234, 32);
 		panelUsuario.add(asignadoAIn);
 
+		//Icono a la izquierda del titulo
+		icono = new JLabel("");
+		icono.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/titulo_flecha.png")));
+		icono.setBounds(11, 1, 48, 90);
+		panelUsuario.add(icono);
+		
+		//Etiqueta titulo de la ventana
+		titulo = new JLabel("CREAR ORDEN DE TRABAJO");
+		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+		titulo.setForeground(Color.WHITE);
+		titulo.setBounds(61, 30, 295, 32);
+		panelUsuario.add(titulo);
+		
+		// -- Fondos azul y gris -- //
+		fondoAzul = new JLabel("");
+		fondoAzul.setBounds(1, 1, 421, 90);
+		fondoAzul.setOpaque(true);
+		fondoAzul.setBackground(new Color(45, 118, 232));
+		panelUsuario.add(fondoAzul);
+		fondoGris = new JLabel("");
+		fondoGris.setBounds(1, 89, 421, 366);
+		fondoGris.setOpaque(true);
+		fondoGris.setBackground(new Color(227,227,227));
+		panelUsuario.add(fondoGris);
+		
+		//Configuraciones adicionales de la ventana principal(0, 0, 422, 602);
 		setResizable(false);
-		setSize(423, 502);
+		setSize(423, 456);
 		setVisible(true);
 		setLocationRelativeTo(null);
 	}
@@ -142,7 +163,7 @@ public class GUICrearOrden extends JFrame {
 	// Funcion que valida si algun campo a registrar esta vacio
 	private boolean validar1() {
 		boolean val = true;
-		val = ( fechaEntregaIn.getText().compareTo("") == 0|| cantidadIn.getText().compareTo("") == 0
+		val = ( fechaEntregaIn.getText().compareTo("") == 0 || cantidadIn.getText().compareTo("") == 0
                 || asignadoAIn.getText().compareTo("") == 0)
 				? false : true;
 
@@ -217,5 +238,23 @@ public class GUICrearOrden extends JFrame {
 					JOptionPane.showMessageDialog(null, "Digite todos los campos");
 			}
 		}
+	}
+	
+
+	 // Manejador del desplazamiento de la ventana causado por el arrastre del mouse
+	private void manejadorDesplazamientoVentana(JFrame frame) {
+		frame.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent me) {
+				pX = me.getX();
+				pY = me.getY();
+			}
+		});
+		frame.addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent me) {
+				setLocation(getLocation().x + me.getX() - pX, getLocation().y + me.getY() - pY);
+			}
+		});
 	}
 }
