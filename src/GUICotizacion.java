@@ -273,7 +273,7 @@ public class GUICotizacion extends JFrame {
 			agregar.addActionListener(listener);
 			getContentPane().add(agregar);
 
-			cancelar = new JButton("Cancelar");
+			cancelar = new JButton("Finalizar");
 	        cancelar.setOpaque(true);
 			cancelar.setBackground(new Color(227, 227, 227));
 			cancelar.setFont(font);

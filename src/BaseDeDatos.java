@@ -442,12 +442,12 @@ public class BaseDeDatos {
     }
 
 	//
-    public boolean registrarProducto( String nombre, String precio,String descripcion){
+    public boolean registrarProducto( String nombre, String costo, String precio,String descripcion){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             @SuppressWarnings("unused")
             Statement statement = connection.createStatement();
-            String sql ="INSERT INTO public.producto(nombre, precio, descripcion) "+
-                    " VALUES ('"+ nombre+ "',"+ precio +",'"+descripcion+"');";
+            String sql ="INSERT INTO public.producto(nombre, costo,precio, descripcion) "+
+                    " VALUES ('"+ nombre+ "',"+costo+ ","+ precio +",'"+descripcion+"');";
             System.out.print(sql);
             PreparedStatement psSql = connection.prepareStatement(sql);
             psSql.execute();

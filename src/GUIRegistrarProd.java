@@ -13,8 +13,8 @@ public class GUIRegistrarProd extends JFrame {
     private final BaseDeDatos bd;
     private JSeparator separador;
     private Container contenedor;
-    private JLabel  precio, descripcion,nombre, icono, titulo, fondoAzul, fondoGris;
-    private JTextField  precioIn, descripcionIn,nombreIn;
+    private JLabel  precio, descripcion,nombre, icono, titulo, fondoAzul, fondoGris,costo;
+    private JTextField  precioIn, descripcionIn,nombreIn,costoIn;
     private JButton cancelar, crear;
     private int pX, pY;
 
@@ -55,24 +55,34 @@ public class GUIRegistrarProd extends JFrame {
         nombreIn.setBounds(136, 141, 234, 32);
         panelUsuario.add(nombreIn);
 
+        costo = new JLabel("Costo: ");
+        costo.setFont(font);
+        costo.setBounds(21, 183, 105, 32);
+        panelUsuario.add(costo);
+
+        costoIn = new JTextField();
+        costoIn.setFont(font);
+        costoIn.setBounds(136, 184, 234, 32);
+        panelUsuario.add(costoIn);
+
         precio = new JLabel("Precio:");
         precio.setFont(font);
-        precio.setBounds(21, 183, 105, 32);
+        precio.setBounds(21, 226, 105, 32);
         panelUsuario.add(precio);
 
         precioIn = new JTextField();
         precioIn.setFont(font);
-        precioIn.setBounds(136, 184, 234, 32);
+        precioIn.setBounds(136, 227, 234, 32);
         panelUsuario.add(precioIn);
 
         descripcion = new JLabel("Descripcion:");
         descripcion.setFont(font);
-        descripcion.setBounds(21, 226, 105, 32);
+        descripcion.setBounds(21, 266, 105, 32);
         panelUsuario.add(descripcion);
 
         descripcionIn = new JTextField();
         descripcionIn.setFont(font);
-        descripcionIn.setBounds(136, 227, 234, 32);
+        descripcionIn.setBounds(136, 266, 234, 32);
         panelUsuario.add(descripcionIn);
 
         cancelar = new JButton("Cancelar");
@@ -100,14 +110,14 @@ public class GUIRegistrarProd extends JFrame {
 		icono.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/titulo_flecha.png")));
 		icono.setBounds(11, 1, 48, 90);
 		panelUsuario.add(icono);
-		
+
 		//Etiqueta titulo de la ventana
 		titulo = new JLabel("REGISTRAR PRODUCTO");
 		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
 		titulo.setForeground(Color.WHITE);
 		titulo.setBounds(61, 30, 211, 32);
 		panelUsuario.add(titulo);
-		
+
 		// -- Fondos azul y gris -- //
 		fondoAzul = new JLabel("");
 		fondoAzul.setBounds(1, 1, 398, 90);
@@ -119,7 +129,7 @@ public class GUIRegistrarProd extends JFrame {
 		fondoGris.setOpaque(true);
 		fondoGris.setBackground(new Color(227,227,227));
 		panelUsuario.add(fondoGris);
-		
+
 		//Configuraciones adicionales de la ventana principal
         setResizable(false);
         setSize(400, 406);
@@ -138,7 +148,7 @@ public class GUIRegistrarProd extends JFrame {
                 String descrip = null;
                 if (descripcionIn.getText().compareTo("")!=0)descrip=descripcionIn.getText();
 
-                var= bd.registrarProducto(nombreIn.getText(),precioIn.getText(),descrip);
+                var= bd.registrarProducto(nombreIn.getText(),costoIn.getText() ,precioIn.getText(),descrip);
                 if (var) {
                     JOptionPane.showMessageDialog(null, "Producto creado exitosamente");
                     dispose();
@@ -149,7 +159,7 @@ public class GUIRegistrarProd extends JFrame {
                 dispose();
         }
     }
-    
+
 
 	 // Manejador del desplazamiento de la ventana causado por el arrastre del mouse
 	private void manejadorDesplazamientoVentana(JFrame frame) {
