@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import javax.swing.GroupLayout.Alignment;
 
@@ -9,29 +11,39 @@ public class GUIRegistrarProd extends JFrame {
 
     private final Font font;
     private final BaseDeDatos bd;
-    private JSeparator separator_2, separator_1;
+    private JSeparator separador;
     private Container contenedor;
-    private JLabel  precio, descripcion,nombre;
+    private JLabel  precio, descripcion,nombre, icono, titulo, fondoAzul, fondoGris;
     private JTextField  precioIn, descripcionIn,nombreIn;
     private JButton cancelar, crear;
+    private int pX, pY;
 
 
     public GUIRegistrarProd(BaseDeDatos bdIn) {
         super("CREAR PRODUCTO"); 
-//        this.getContentPane().setSize(400,400);
-
+        this.setUndecorated(true);
         font = new Font("Tahoma", Font.PLAIN, 14); 
         bd = bdIn;
-        InitGUI();
-    }
+		crearComponentes();
+	}
 
-    private void InitGUI() {
-        contenedor = getContentPane();
-        contenedor.removeAll();
 
-        JPanel panelUsuario = new JPanel();
-        panelUsuario.setBounds(0, 0, 394, 379);
-        panelUsuario.setLayout(null);
+	//Funcion que crea la interfaz y sus componentes
+	private void crearComponentes() {
+
+		//Configuraciones de la ventana principal
+		contenedor = getContentPane();
+		contenedor.removeAll();
+		getContentPane().setLayout(null);
+		ActionListener listener = new ManejadorDeBotones();
+		manejadorDesplazamientoVentana(this);
+		JPanel panelUsuario = new JPanel();
+		panelUsuario.setBackground(Color.BLACK);
+		panelUsuario.setBounds(0, 0, 400, 406);
+		contenedor.add(panelUsuario);
+		panelUsuario.setLayout(null);
+		listener = new ManejadorDeBotones();
+
 
         nombre = new JLabel("Nombre: ");
         nombre.setFont(font);
@@ -63,36 +75,52 @@ public class GUIRegistrarProd extends JFrame {
         descripcionIn.setBounds(136, 227, 234, 32);
         panelUsuario.add(descripcionIn);
 
-        ActionListener listener = new ManejadorDeBotones();
-
         cancelar = new JButton("Cancelar");
+		cancelar.setOpaque(true);
+		cancelar.setBackground(new Color(227, 227, 227));
         cancelar.setFont(font);
         cancelar.setBounds(92, 322, 120, 28);
         cancelar.addActionListener(listener);
         panelUsuario.add(cancelar);
 
         crear = new JButton("Crear Producto");
+		crear.setOpaque(true);
+		crear.setBackground(new Color(227, 227, 227));
         crear.setFont(font);
         crear.setBounds(222, 322, 148, 28);
         crear.addActionListener(listener);
         panelUsuario.add(crear);
 
-        separator_2 = new JSeparator();
-        separator_2.setBounds(21, 309, 349, 2);
-        panelUsuario.add(separator_2);
+        separador = new JSeparator();
+        separador.setBounds(21, 309, 349, 2);
+        panelUsuario.add(separador);
 
-        separator_1 = new JSeparator();
-        separator_1.setBounds(21, 88, 349, 2);
-        panelUsuario.add(separator_1);
-
-        JLabel lblNewLabel = new JLabel("");
-        URL filePath = this.getClass().getResource("/images/create.png");
-        getContentPane().setLayout(null);
-        lblNewLabel.setIcon(new ImageIcon(filePath));
-        lblNewLabel.setBounds(21, 11, 66, 66);
-        panelUsuario.add(lblNewLabel);
-        getContentPane().add(panelUsuario);
-
+      //Icono a la izquierda del titulo
+		icono = new JLabel("");
+		icono.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/titulo_flecha.png")));
+		icono.setBounds(11, 1, 48, 90);
+		panelUsuario.add(icono);
+		
+		//Etiqueta titulo de la ventana
+		titulo = new JLabel("REGISTRAR PRODUCTO");
+		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+		titulo.setForeground(Color.WHITE);
+		titulo.setBounds(61, 30, 211, 32);
+		panelUsuario.add(titulo);
+		
+		// -- Fondos azul y gris -- //
+		fondoAzul = new JLabel("");
+		fondoAzul.setBounds(1, 1, 398, 90);
+		fondoAzul.setOpaque(true);
+		fondoAzul.setBackground(new Color(45, 118, 232));
+		panelUsuario.add(fondoAzul);
+		fondoGris = new JLabel("");
+		fondoGris.setBounds(1, 89, 398, 316);
+		fondoGris.setOpaque(true);
+		fondoGris.setBackground(new Color(227,227,227));
+		panelUsuario.add(fondoGris);
+		
+		//Configuraciones adicionales de la ventana principal
         setResizable(false);
         setSize(400, 406);
         setVisible(true);
@@ -121,4 +149,22 @@ public class GUIRegistrarProd extends JFrame {
                 dispose();
         }
     }
+    
+
+	 // Manejador del desplazamiento de la ventana causado por el arrastre del mouse
+	private void manejadorDesplazamientoVentana(JFrame frame) {
+		frame.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent me) {
+				pX = me.getX();
+				pY = me.getY();
+			}
+		});
+		frame.addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent me) {
+				setLocation(getLocation().x + me.getX() - pX, getLocation().y + me.getY() - pY);
+			}
+		});
+	}
 }

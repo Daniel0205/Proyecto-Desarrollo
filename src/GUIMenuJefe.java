@@ -91,7 +91,7 @@ public class GUIMenuJefe extends JFrame {
         getContentPane().add(modificarOrden);
 
 		//Boton para inicial la actualizacion de los usuarios
-		consultarOrden = new JButton("ACTUALIZAR");
+		consultarOrden = new JButton("CONSULTAR");
 		consultarOrden.setForeground(SystemColor.textHighlight);
 		consultarOrden.setVerticalTextPosition(SwingConstants.BOTTOM);
 		consultarOrden.setHorizontalTextPosition(SwingConstants.CENTER);

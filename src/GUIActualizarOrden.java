@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,288 +11,365 @@ import java.util.regex.Pattern;
 @SuppressWarnings("serial")
 public class GUIActualizarOrden extends JFrame {
 
-    private Container contenedor;
-    private JLabel icon,instruccion, fechaEntrega, idOrden, cantidad, idEncargado, idProducto;
-    private JTextField fechaEntregaIn, cantidadIn, asignadoAIn ,idIn,idEncargadoIn;
-    private JComboBox<String> idProductoIn,idOrdenIn ;
-    private JButton actualizarOrden,salir,buscar,cancelar,finalizar;
-    private JSeparator separator_1, separator_2;
-    private Font font;
-    private BaseDeDatos bd;
-    private ActionListener listener;
-    private String idJefe;
+	private Container contenedor;
+	private JLabel instruccion, fechaEntrega, idOrden, cantidad, idEncargado, idProducto;
+	private JTextField fechaEntregaIn, cantidadIn, asignadoAIn, idIn, idEncargadoIn;
+	private JComboBox<String> idProductoIn, idOrdenIn;
+	private JButton actualizarOrden, salir, salir2, buscar, cancelar, finalizar;
+	private JSeparator separadorInferior;
+	private Font font;
+	private BaseDeDatos bd;
+	private ActionListener listener;
+	private String idJefe;
+	private int pX, pY;
 
+	
+	public GUIActualizarOrden(BaseDeDatos bdIn, String idJefe) {
+		super("ACTUALIZAR ORDEN DE TRABAJO");
 
-    public GUIActualizarOrden(BaseDeDatos bdIn,String idJefe) {
-        super("ACTUALIZAR ORDEN DE TRABAJO");
+		getContentPane().setBackground(Color.BLACK);
+		font = new Font("Tahoma", Font.PLAIN, 14);
+		this.idJefe = idJefe;
+		this.bd = bdIn;
+		initGUI();
+	}
 
-        font = new Font("Tahoma", Font.PLAIN, 14);
-        this.idJefe=idJefe;
-        this.bd = bdIn;
-        initGUI();
-    }
+	// FUnciona para inicializar los elementos graficos
+	private void initGUI() {
 
-    // Funcion que crea la interfaz y sus componentes
-    private void initGUI() {
+		// Configuraciones generales de la primer ventana
+		this.setUndecorated(true);
+		contenedor = getContentPane();
+		contenedor.removeAll();
+		getContentPane().setLayout(null);
+		listener = new ManejadorDeBotones();
 
-        contenedor = getContentPane();
-        contenedor.removeAll();
-        getContentPane().setLayout(null);
+		// Etiqueta que describe el funcionamiento
+		instruccion = new JLabel("ID orden a modificar");
+		instruccion.setFont(font);
+		instruccion.setBounds(22, 106, 138, 32);
+		getContentPane().add(instruccion);
 
-        listener = new ManejadorDeBotones();
+		idOrdenIn = new JComboBox<>(
+        		bd.cambiarDimension(bd.consultarOrden("User",idJefe,"id_ordenes,nombre"))
+		);
+		idOrdenIn.setFont(font);
+		idOrdenIn.setBounds(170, 106, 239, 32);
+		getContentPane().add(idOrdenIn);
 
-        instruccion = new JLabel("ID orden a modificar");
-        instruccion.setFont(font);
-        instruccion.setBounds(22, 101, 138, 32);
-        getContentPane().add(instruccion);
+		salir = new JButton("Salir");
+		salir.setOpaque(true);
+		salir.setBackground(new Color(227, 227, 227));
+		salir.setFont(font);
+		salir.setBounds(419, 189, 100, 32);
+		salir.addActionListener(listener);
+		getContentPane().add(salir);
 
-        idOrdenIn = new JComboBox<>(bd.cambiarDimension(
-                bd.consultarOrden("User",idJefe,"id_ordenes,nombre")));
-        idOrdenIn.setFont(font);
-        idOrdenIn.setBounds(159, 101, 99, 32);
-        getContentPane().add(idOrdenIn);
+		buscar = new JButton("Buscar");
+		buscar.setOpaque(true);
+		buscar.setBackground(new Color(227, 227, 227));
+		buscar.setBounds(419, 106, 100, 32);
+		buscar.setFont(font);
+		buscar.addActionListener(listener);
+		getContentPane().add(buscar);
 
-        salir = new JButton("Salir");
-        salir.setFont(font);
-        salir.setBounds(271, 184, 100, 32);
-        salir.addActionListener(listener);
-        getContentPane().add(salir);
+		JSeparator separator = new JSeparator();
+		separator.setBounds(22, 177, 497, 2);
+		getContentPane().add(separator);
 
-        buscar = new JButton("Buscar");
-        buscar.setBounds(271, 101, 100, 32);
-        buscar.setFont(font);
-        buscar.addActionListener(listener);
-        getContentPane().add(buscar);
+		// Icono a la izquierda del titulo
+		JLabel icono = new JLabel("");
+		icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/actualizar.png")));
+		icono.setBounds(11, 1, 48, 90);
+		getContentPane().add(icono);
 
-        icon = new JLabel("");
-        icon.setBounds(21, 11, 66, 66);
-        URL filePath = this.getClass().getResource("/images/update.png");
-        icon.setIcon(new ImageIcon(filePath));
-        getContentPane().add(icon);
+		// Etiqueta del titulo de la ventana
+		JLabel titulo = new JLabel("ACTUALIZAR ORDEN DE TRABAJO");
+		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+		titulo.setForeground(Color.WHITE);
+		titulo.setBounds(69, 28, 340, 32);
+		getContentPane().add(titulo);
 
-        separator_1 = new JSeparator();
-        separator_1.setBounds(21, 88, 349, 2);
-        getContentPane().add(separator_1);
+		// -- Fondos azul y gris -- //
+		JLabel fondoAzul = new JLabel("");
+		fondoAzul.setBounds(1, 1, 560, 90);
+		fondoAzul.setOpaque(true);
+		fondoAzul.setBackground(new Color(45, 118, 232));
+		getContentPane().add(fondoAzul);
+		JLabel fondoGris = new JLabel("");
+		fondoGris.setBounds(1, 89, 560, 166);
+		fondoGris.setOpaque(true);
+		fondoGris.setBackground(new Color(227, 227, 227));
+		getContentPane().add(fondoGris);
 
-        JSeparator separator = new JSeparator();
-        separator.setBounds(22, 172, 349, 2);
-        getContentPane().add(separator);
+		setResizable(false);
+		setSize(562, 256);
+		setVisible(true);
+		setLocationRelativeTo(null);
+	}
 
-        setResizable(false);
-        setSize(400,256);
-        setVisible(true);
-        setLocationRelativeTo(null);
-    }
-    private void crearComponentes(String identifier) {
+	// Funcion para inicializar la interfaz grafica para
+	// realizar la actualizacion de una orden de trabajo
+	private void crearComponentes(String identifier) {
 
-        contenedor = getContentPane();
-        contenedor.removeAll();
-        getContentPane().setLayout(null);
+		Container ventana = getContentPane();
+		ventana.setLayout(null);
+		manejadorDesplazamientoVentana(this);
+		ventana.removeAll();
+		this.setUndecorated(true);
 
-        JPanel panelUsuario = new JPanel();
-        panelUsuario.setBounds(0, 0, 415, 475);
-        contenedor.add(panelUsuario);
-        panelUsuario.setLayout(null);
+		idOrden = new JLabel("Id Orden:");
+		idOrden.setFont(font);
+		idOrden.setBounds(27, 133, 105, 32);
+		ventana.add(idOrden);
 
-        idOrden = new JLabel("Id Orden:");
-        idOrden.setFont(font);
-        idOrden.setBounds(21, 101, 105, 32);
-        panelUsuario.add(idOrden);
+		idIn = new JTextField(identifier);
+		idIn.setFont(font);
+		idIn.setEditable(false);
+		idIn.setBounds(161, 133, 224, 32);
+		ventana.add(idIn);
 
-        idIn = new JTextField(identifier);
-        idIn.setFont(font);
-        idIn.setEditable(false);
-        idIn.setBounds(159, 101, 234, 32);
-        panelUsuario.add(idIn);
+		idProducto = new JLabel("Id-Producto:");
+		idProducto.setFont(font);
+		idProducto.setBounds(27, 175, 105, 32);
+		ventana.add(idProducto);
 
-        idProducto = new JLabel("Id-Producto:");
-        idProducto.setFont(font);
-        idProducto.setBounds(21, 143, 105, 32);
-        panelUsuario.add(idProducto);
-
-        idProductoIn = new JComboBox<>(bd.cambiarDimension(bd.consultarProductos("id_producto, nombre")));
-        idProductoIn.setSelectedItem(bd.cambiarDimension(
+		idProductoIn = new JComboBox<>(
+        		bd.cambiarDimension(bd.consultarProductos("id_producto, nombre")));
+		idProductoIn.setSelectedItem(bd.cambiarDimension(
                 bd.consultarOrden("Id",identifier,"id_producto,nombre"))[0]);
-        idProductoIn.setFont(font);
-        idProductoIn.setBounds(159, 144, 201, 32);
-        panelUsuario.add(idProductoIn);
+		idProductoIn.setFont(font);
+		idProductoIn.setBounds(161, 176, 224, 32);
+		ventana.add(idProductoIn);
 
-        fechaEntrega = new JLabel("Fecha de Entrega:");
-        fechaEntrega.setFont(font);
-        fechaEntrega.setBounds(21, 186, 127, 32);
-        panelUsuario.add(fechaEntrega);
+		fechaEntrega = new JLabel("Fecha de Entrega:");
+		fechaEntrega.setFont(font);
+		fechaEntrega.setBounds(27, 218, 127, 32);
+		ventana.add(fechaEntrega);
 
-        fechaEntregaIn = new JTextField(bd.consultarOrden("Id",identifier,"fecha_entrega")[0][0]);
-        fechaEntregaIn.setFont(font);
-        fechaEntregaIn.setBounds(159, 186, 234, 32);
-        panelUsuario.add(fechaEntregaIn);
+		fechaEntregaIn = new JTextField(bd.consultarOrden("Id", identifier, "fecha_entrega")[0][0]);
+		fechaEntregaIn.setFont(font);
+		fechaEntregaIn.setBounds(161, 218, 224, 32);
+		ventana.add(fechaEntregaIn);
 
-        cantidad = new JLabel("Cantidad:");
-        cantidad.setFont(font);
-        cantidad.setBounds(21, 229, 105, 32);
-        panelUsuario.add(cantidad);
+		cantidad = new JLabel("Cantidad:");
+		cantidad.setFont(font);
+		cantidad.setBounds(27, 261, 105, 32);
+		ventana.add(cantidad);
 
-        cantidadIn = new JTextField(bd.consultarOrden("Id",identifier,"cantidad")[0][0]);
-        cantidadIn.setFont(font);
-        cantidadIn.setBounds(159, 230, 234, 32);
-        panelUsuario.add(cantidadIn);
+		cantidadIn = new JTextField(bd.consultarOrden("Id", identifier, "cantidad")[0][0]);
+		cantidadIn.setFont(font);
+		cantidadIn.setBounds(161, 262, 224, 32);
+		ventana.add(cantidadIn);
 
-        idEncargado = new JLabel("Id Encargado:");
-        idEncargado.setFont(font);
-        idEncargado.setBounds(21, 272, 105, 32);
-        panelUsuario.add(idEncargado);
+		idEncargado = new JLabel("Id Encargado:");
+		idEncargado.setFont(font);
+		idEncargado.setBounds(27, 304, 105, 32);
+		ventana.add(idEncargado);
 
-        idEncargadoIn = new JTextField(identifier);
-        idEncargadoIn.setEditable(false);
-        idEncargadoIn.setBounds(159, 274, 234, 32);
-        idEncargadoIn.setFont(font);
-        panelUsuario.add(idEncargadoIn);
+		idEncargadoIn = new JTextField(identifier);
+		idEncargadoIn.setEditable(false);
+		idEncargadoIn.setBounds(161, 306, 224, 32);
+		idEncargadoIn.setFont(font);
+		ventana.add(idEncargadoIn);
 
-        salir.setBounds(143, 436, 113, 28);
-        salir.addActionListener(listener);
-        panelUsuario.add(salir);
+		salir2 = new JButton("Salir");
+		salir2.setOpaque(true);
+		salir2.setBackground(new Color(227, 227, 227));
+		salir2.setFont(font);
+		salir2.setBounds(272, 521, 113, 32);
+		salir2.addActionListener(listener);
+		ventana.add(salir);
 
-        actualizarOrden = new JButton("Actualizar Orden");
-        actualizarOrden.setFont(font);
-        actualizarOrden.setBounds(266, 436, 127, 28);
-        actualizarOrden.addActionListener(listener);
-        panelUsuario.add(actualizarOrden);
+		actualizarOrden = new JButton("Actualizar");
+		actualizarOrden.setOpaque(true);
+		actualizarOrden.setBackground(new Color(227, 227, 227));
+		actualizarOrden.setFont(font);
+		actualizarOrden.setBounds(150, 447, 113, 32);
+		actualizarOrden.addActionListener(listener);
+		ventana.add(actualizarOrden);
+		
+		JSeparator separatorSuperior = new JSeparator();
+		separatorSuperior.setBounds(231, 426, 154, 2);
+		getContentPane().add(separatorSuperior);
 
-        separator_2 = new JSeparator();
-        separator_2.setBounds(44, 423, 349, 2);
-        panelUsuario.add(separator_2);
+		separadorInferior = new JSeparator();
+		separadorInferior.setBounds(29, 508, 356, 2);
+		ventana.add(separadorInferior);
 
-        separator_1 = new JSeparator();
-        separator_1.setBounds(44, 88, 349, 2);
-        panelUsuario.add(separator_1);
+		JLabel asignadoA = new JLabel("Asignado a:");
+		asignadoA.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		asignadoA.setBounds(27, 347, 105, 32);
+		ventana.add(asignadoA);
 
-        JLabel lblNewLabel = new JLabel("");
-        URL filePath = this.getClass().getResource("/images/home.png");
-        lblNewLabel.setIcon(new ImageIcon(filePath));
-        lblNewLabel.setBounds(21, 11, 66, 66);
-        panelUsuario.add(lblNewLabel);
+		asignadoAIn = new JTextField(bd.consultarOrden("Id", identifier, "asignada_a")[0][0]);
+		asignadoAIn.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		asignadoAIn.setBounds(161, 348, 224, 32);
+		ventana.add(asignadoAIn);
 
-        JLabel asignadoA = new JLabel("Asignado a:");
-        asignadoA.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        asignadoA.setBounds(21, 315, 105, 32);
-        panelUsuario.add(asignadoA);
+		finalizar = new JButton("Finalizar");
+		finalizar.setOpaque(true);
+		finalizar.setBackground(new Color(227, 227, 227));
+		finalizar.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		finalizar.setBounds(272, 447, 113, 32);
+		finalizar.addActionListener(listener);
+		ventana.add(finalizar);
 
-        asignadoAIn = new JTextField(bd.consultarOrden("Id",identifier,"asignada_a")[0][0]);
-        asignadoAIn.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        asignadoAIn.setBounds(159, 316, 234, 32);
-        panelUsuario.add(asignadoAIn);
+		cancelar = new JButton("Cancelar");
+		cancelar.setOpaque(true);
+		cancelar.setBackground(new Color(227, 227, 227));
+		cancelar.setBounds(27, 447, 113, 32);
+		cancelar.setFont(font);
+		cancelar.addActionListener(listener);
+		ventana.add(cancelar);
+		
+		JLabel accionSobreLaOrden = new JLabel("Accion sobre la orden de trabajo");
+		accionSobreLaOrden.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		accionSobreLaOrden.setBounds(27, 409, 207, 32);
+		getContentPane().add(accionSobreLaOrden);
 
-        finalizar = new JButton("Finalizar orden");
-        finalizar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        finalizar.setBounds(212, 359, 181, 32);
-        finalizar.addActionListener(listener);
-        panelUsuario.add(finalizar);
+		// Icono a la izquierda del titulo
+		JLabel icono = new JLabel("");
+		icono.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/actualizar.png")));
+		icono.setBounds(11, 1, 48, 90);
+		ventana.add(icono);
 
-        cancelar = new JButton("Cancelar Orden");
-        cancelar.setBounds(21, 358, 181, 32);
-        cancelar.setFont(font);
-        cancelar.addActionListener(listener);
-        panelUsuario.add(cancelar);
+		// Etiqueta titulo de la ventana
+		JLabel titulo = new JLabel("  MODIFICAR ORDEN DE TRABAJO");
+		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+		titulo.setForeground(Color.WHITE);
+		titulo.setBounds(61, 30, 299, 32);
+		ventana.add(titulo);
 
-        setResizable(false);
-        setSize(423, 502);
-        setVisible(true);
-        setLocationRelativeTo(null);
-    }
+		// -- Fondos azul y gris -- //
+		JLabel fondoAzul = new JLabel("");
+		fondoAzul.setBounds(1, 1, 421, 90);
+		fondoAzul.setOpaque(true);
+		fondoAzul.setBackground(new Color(45, 118, 232));
+		ventana.add(fondoAzul);
+		JLabel fondoGris = new JLabel("");
+		fondoGris.setBounds(1, 89, 421, 487);
+		fondoGris.setOpaque(true);
+		fondoGris.setBackground(new Color(227, 227, 227));
+		ventana.add(fondoGris);
 
-    // Funcion para validar el dominio de los datos ingresados
-    private String validar2() {
-        String mensaje = "";
+		// Configuraciones adicionales de la ventana principal
+		setResizable(false);
+		setSize(423, 577);
+		setVisible(true);
+		setLocationRelativeTo(null);
+	}
 
-        if (!validarDatoEnteroPositivo(cantidadIn))
-            mensaje = mensaje + " La cantidad debe ser un numero entero \n";
+	// Funcion para validar el dominio de los datos ingresados
+	private String validar2() {
+		String mensaje = "";
 
-        Pattern patron = Pattern.compile("[^A-Za-z ]");
-        Matcher nombre = patron.matcher(asignadoAIn.getText());
-        if (nombre.find() || asignadoAIn.getText().length() > 40)
-            mensaje = mensaje + " Digite un nombre valido \n";
+		if (!validarDatoEnteroPositivo(cantidadIn))
+			mensaje = mensaje + " La cantidad debe ser un numero entero \n";
 
-        Pattern patron_fecha = Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}");
-        Matcher fecha = patron_fecha.matcher(fechaEntregaIn.getText());
-        if (!fecha.find())
-            mensaje = mensaje + " Digite una fecha valida (AAAA-MM-DD) \n";
+		Pattern patron = Pattern.compile("[^A-Za-z ]");
+		Matcher nombre = patron.matcher(asignadoAIn.getText());
+		if (nombre.find() || asignadoAIn.getText().length() > 40)
+			mensaje = mensaje + " Digite un nombre valido \n";
 
-        if (mensaje.compareTo("") == 0)
-            mensaje = "true";
+		Pattern patron_fecha = Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}");
+		Matcher fecha = patron_fecha.matcher(fechaEntregaIn.getText());
+		if (!fecha.find())
+			mensaje = mensaje + " Digite una fecha valida (AAAA-MM-DD) \n";
 
-        return mensaje;
-    }
+		if (mensaje.compareTo("") == 0)
+			mensaje = "true";
 
-    // Funcion que valida sí un dato ingresado a traves de un JTextField es entero
-    // positivo
-    private boolean validarDatoEnteroPositivo(JTextField dato) {
-        boolean val = true;
-        try {
-            Integer.parseInt(dato.getText());
+		return mensaje;
+	}
 
-        } catch (NumberFormatException excepcion) {
-            val = false;
-        }
-        val = (Integer.parseInt(dato.getText()) >= 0) ? true : false;
-        return val;
-    }
+	// Funcion que valida si un dato ingresado a traves de un JTextField es entero
+	// positivo
+	private boolean validarDatoEnteroPositivo(JTextField dato) {
+		boolean val = true;
+		try {
+			Integer.parseInt(dato.getText());
 
-    // Manejador de eventos para los botones del apartado Crear-Orden-de-Trabajo
-    // Si se presiona <salir>, la interfaz del menu se cierra
-    // Si se presiona <crear orden>, se valida que:
-    // no hayan campos vacios, los datos esten dentro del dominio y
-    // las id ingresadas esten disponibles
-    private class ManejadorDeBotones implements ActionListener {
+		} catch (NumberFormatException excepcion) {
+			val = false;
+		}
+		val = (Integer.parseInt(dato.getText()) >= 0) ? true : false;
+		return val;
+	}
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if(e.getSource()==salir ){
-                dispose();
-                return;
-            }
+	// Manejador de eventos para los botones del apartado Crear-Orden-de-Trabajo
+	// Si se presiona <salir>, la interfaz del menu se cierra
+	// Si se presiona <crear orden>, se valida que:
+	// no hayan campos vacios, los datos esten dentro del dominio y
+	// las id ingresadas esten disponibles
+	private class ManejadorDeBotones implements ActionListener {
 
-            String identifier = idOrdenIn.getSelectedItem().toString();
-            identifier=identifier.substring(0,identifier.indexOf("-"));
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == salir || e.getSource() == salir2) {
+				dispose();
+				return;
+			}
 
-            if(e.getSource()==buscar) {
-                crearComponentes(identifier);
-            }
+			String identifier = idOrdenIn.getSelectedItem().toString();
+			identifier = identifier.substring(0, identifier.indexOf("-"));
 
-            String idProducto = idProductoIn.getSelectedItem().toString();
-            idProducto = idProducto.substring(0, idProducto.indexOf("-"));
+			if (e.getSource() == buscar) {
+				dispose();
+				crearComponentes(identifier);
+			}
 
-            if (e.getSource() == actualizarOrden) {
-                if (validar2().compareTo("true") == 0) {
+			String idProducto = idProductoIn.getSelectedItem().toString();
+			idProducto = idProducto.substring(0, idProducto.indexOf("-"));
 
-                    if ( bd.actualizarOrden(identifier, fechaEntregaIn.getText(),
-                            cantidadIn.getText(), idProducto, identifier, asignadoAIn.getText(),
-                            "false")) {
-                        JOptionPane.showMessageDialog(null, "Orden de trabajo actualizada exitosamente");
-                    }else
-                        JOptionPane.showMessageDialog(null, "Error al actualizar orden de trabajo.");
-                    dispose();
-                } else
-                    JOptionPane.showMessageDialog(null, validar2());
-            }
+			if (e.getSource() == actualizarOrden) {
+				if (validar2().compareTo("true") == 0) {
 
-            if (e.getSource()== finalizar){
-                if(bd.finalizarOrden(identifier,idProducto, bd.obtenerS(idJefe,"sede"),
-                        Integer.parseInt(cantidadIn.getText().trim()))){
+					if (bd.actualizarOrden(identifier, fechaEntregaIn.getText(), cantidadIn.getText(), idProducto,
+							identifier, asignadoAIn.getText(), "false")) {
+						JOptionPane.showMessageDialog(null, "Orden de trabajo actualizada exitosamente");
+					} else
+						JOptionPane.showMessageDialog(null, "Error al actualizar orden de trabajo.");
+					dispose();
+				} else
+					JOptionPane.showMessageDialog(null, validar2());
+			}
 
-                    JOptionPane.showMessageDialog(null, "Orden de trabajo finalizada exitosamente");
-                }else
-                    JOptionPane.showMessageDialog(null, "Error al finalizar orden de trabajo.");
-                dispose();
-            }
+			if (e.getSource() == finalizar) {
+				if (bd.finalizarOrden(identifier, idProducto, bd.obtenerS(idJefe, "sede"),
+						Integer.parseInt(cantidadIn.getText().trim()))) {
 
-            if(e.getSource()== cancelar){
-                if(bd.cancelarOrden(identifier)){
+					JOptionPane.showMessageDialog(null, "Orden de trabajo finalizada exitosamente");
+				} else
+					JOptionPane.showMessageDialog(null, "Error al finalizar orden de trabajo.");
+				dispose();
+			}
 
-                    JOptionPane.showMessageDialog(null, "Orden de trabajo cancelada exitosamente");
-                }else
-                    JOptionPane.showMessageDialog(null, "Error al cancelar orden de trabajo.");
-                dispose();
-            }
-        }
-    }
+			if (e.getSource() == cancelar) {
+				if (bd.cancelarOrden(identifier)) {
+
+					JOptionPane.showMessageDialog(null, "Orden de trabajo cancelada");
+				} else
+					JOptionPane.showMessageDialog(null, "Error al cancelar orden de trabajo.");
+				dispose();
+			}
+		}
+	}
+
+	// Manejador del desplazamiento de la ventana causado por el arrastre del mouse
+	private void manejadorDesplazamientoVentana(JFrame frame) {
+		frame.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent me) {
+				pX = me.getX();
+				pY = me.getY();
+			}
+		});
+		frame.addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent me) {
+				setLocation(getLocation().x + me.getX() - pX, getLocation().y + me.getY() - pY);
+			}
+		});
+	}
 }

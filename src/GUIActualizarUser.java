@@ -49,10 +49,8 @@ public class GUIActualizarUser extends JFrame {
 		instruccion.setBounds(22, 101, 138, 32);
 		getContentPane().add(instruccion);
 
-		idIn = new JComboBox<>(
-				bd.cambiarDimension(
-                bd.consultarUsuarios(null,null,"cedula,nombres"))
-				);
+		idIn = new JComboBox<>(bd.cambiarDimension(
+                bd.consultarUsuarios(null,null,"cedula,nombres")));
 		idIn.setFont(font);
 		idIn.setBounds(170, 101, 243, 32);
 		getContentPane().add(idIn);
@@ -84,7 +82,7 @@ public class GUIActualizarUser extends JFrame {
 		getContentPane().add(icono);
 		
 		//Etiqueta del titulo de la ventana
-		JLabel titulo = new JLabel("BUSCAR USUARIO");
+		JLabel titulo = new JLabel("ACTUALIZAR USUARIO");
 		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
 		titulo.setForeground(Color.WHITE);
 		titulo.setBounds(69, 28, 175, 32);
