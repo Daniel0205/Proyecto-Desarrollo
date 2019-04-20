@@ -586,7 +586,7 @@ public class BaseDeDatos {
 
     }
 
-    private int cantidadDisponible(String idProducto,String idSede) {
+    public int cantidadDisponible(String idProducto,String idSede) {
         String sql = "SELECT cantidad_disponible FROM public.inventario"+
                      " WHERE id_sede = " + idSede +" AND id_producto = " + idProducto + ";";
 

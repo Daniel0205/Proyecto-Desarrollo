@@ -9,7 +9,7 @@ public class GUICotizacion extends JFrame{
     private final BaseDeDatos bd;
     private final String id, nombre_cliente, fnt;
     private final String id_cotizacion, fecha_f;
-    private String nombre;
+    private String nombre,sede;
     private Container contenedor;
     private JLabel fecha1,fecha2,coti1,coti2,vendedor1,vendedor2,total1,total2,cliente1,cliente2;
     private DefaultTableModel modelo;
@@ -27,6 +27,7 @@ public class GUICotizacion extends JFrame{
 
         id_cotizacion = bd.insertarCot(id,nombre_cliente,fnt);
         fecha_f = bd.getFechacot(id_cotizacion);
+        sede = bd.obtenerS(id,"sede");
 
         nombre = bd.obtenerS(id,"nombres")+" "+bd.obtenerS(id,"apellidos");
         creaTabla();
@@ -298,13 +299,33 @@ public class GUICotizacion extends JFrame{
                     cant = cantidad2.getText();
 
                     if(isNumeric(cant)==true){
-                        if(bd.agregarProCot(id_p,cant,id_cot)){
-                            JOptionPane.showMessageDialog(null, "Producto agregado a la cotizacion.");
-                            agregarProducto(id_p,cant);
 
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Error al añadir el producto");
+                        if(fnt == "V"){
+
+                            if(Integer.parseInt(cant) < bd.cantidadDisponible(id_p,sede)){
+
+                                if(bd.agregarProCot(id_p,cant,id_cot)){
+                                    JOptionPane.showMessageDialog(null, "Producto agregado a la cotizacion.");
+                                    agregarProducto(id_p,cant);
+
+                                }else{
+                                    JOptionPane.showMessageDialog(null, "Error al añadir el producto");
+                                }
+                            }else{
+                                JOptionPane.showMessageDialog(null, "No hay esa cantidad disponible del producto");
+                            }
+
+                        }else if(fnt == "C"){
+
+                            if(bd.agregarProCot(id_p,cant,id_cot)){
+                                JOptionPane.showMessageDialog(null, "Producto agregado a la cotizacion.");
+                                agregarProducto(id_p,cant);
+
+                            }else{
+                                JOptionPane.showMessageDialog(null, "Error al añadir el producto");
+                            }
                         }
+
                     }else{
                         JOptionPane.showMessageDialog(null, "Inserte un valor numerico en la cantidad");
                     }
