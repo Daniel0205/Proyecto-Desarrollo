@@ -54,13 +54,13 @@ public class GUIProductos extends JFrame {
 
         busqueda = new JTextField();
         busqueda.setFont(font);
-        busqueda.setBounds(137, 32, 290, 32);
+        busqueda.setBounds(127, 32, 290, 32);
         getContentPane().add(busqueda);
         busqueda.setColumns(10);
 
         consultar = new JButton("Consultar");
         consultar.setFont(font);
-        consultar.setBounds(442, 32, 80, 32);
+        consultar.setBounds(422, 32, 100, 32);
         consultar.addActionListener(listener);
         getContentPane().add(consultar);
 
@@ -91,10 +91,15 @@ public class GUIProductos extends JFrame {
 
         String[][] result = bd.listarProductos((String)criterio.getSelectedItem(),	(String)busqueda.getText(), "id_producto,nombre,descripcion,precio,cantidad_disponible",sede);
 
-        datos = new String[]{result[0][0],result[0][1],result[0][2],result[0][3],result[0][4]};
+        if(result == null || result.length==0){
+            JOptionPane.showMessageDialog(null, "La busqueda no produjo resultados.");
+        }else{
+            datos = new String[]{result[0][0],result[0][1],result[0][2],result[0][3],result[0][4]};
+            modelo.setRowCount(0);
+            modelo.addRow(datos);
+        }
 
-        modelo.setRowCount(0);
-        modelo.addRow(datos);
+
 
     }
 

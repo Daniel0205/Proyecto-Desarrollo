@@ -7,26 +7,25 @@ import java.awt.event.ActionListener;
 public class GUICotizacion extends JFrame{
 
     private final BaseDeDatos bd;
-    private final String id;
-    private final String id_cotizacion;
+    private final String id, nombre_cliente, fnt;
+    private final String id_cotizacion, fecha_f;
     private String nombre;
     private Container contenedor;
     private JLabel fecha1,fecha2,coti1,coti2,vendedor1,vendedor2,total1,total2,cliente1,cliente2;
     private DefaultTableModel modelo;
     private JTable productos;
-    private JButton anadirProducto,finalizarCot;
+    private JButton anadirProducto,finalizarCot,registarCot,registarVen;
     private JScrollPane scroll;
     private String[] datos;
-    private final String fecha_f,nombre_cliente;
 
-    public GUICotizacion(BaseDeDatos bd,String id){
+    public GUICotizacion(BaseDeDatos bd,String id, String nombre_cliente, String fnt){
         super("Cotizacion");
         this.bd = bd;
         this.id = id;
+        this.nombre_cliente = nombre_cliente;
+        this.fnt = fnt;
 
-        nombre_cliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente que solicita la transaccion: ");
-
-        id_cotizacion = bd.insertarCot(id,nombre_cliente);
+        id_cotizacion = bd.insertarCot(id,nombre_cliente,fnt);
         fecha_f = bd.getFechacot(id_cotizacion);
 
         nombre = bd.obtenerS(id,"nombres")+" "+bd.obtenerS(id,"apellidos");
@@ -119,7 +118,25 @@ public class GUICotizacion extends JFrame{
         anadirProducto.addActionListener(listener);
         getContentPane().add(anadirProducto);
 
-        finalizarCot = new JButton("Finalizar");
+        if(fnt=="C"){
+
+            registarCot = new JButton("Hacer Cotizacion");
+            registarCot.setFont(font);
+            registarCot.setBounds(272, 355, 145, 32);
+            registarCot.addActionListener(listener);
+            getContentPane().add(registarCot);
+
+        }else if(fnt=="V"){
+
+            registarVen = new JButton("Hacer Venta");
+            registarVen.setFont(font);
+            registarVen.setBounds(272, 355, 145, 32);
+            registarVen.addActionListener(listener);
+            getContentPane().add(registarVen);
+
+        }
+
+        finalizarCot = new JButton("Cancelar");
         finalizarCot.setFont(font);
         finalizarCot.setBounds(562, 355, 89, 32);
         finalizarCot.addActionListener(listener);
@@ -157,16 +174,34 @@ public class GUICotizacion extends JFrame{
 
         public void actionPerformed(ActionEvent actionEvent){
             if(actionEvent.getSource()==anadirProducto){
+
                 GUIProductocot newProduct= new GUIProductocot(bd,id_cotizacion);
                 newProduct.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
             }else if(actionEvent.getSource()==finalizarCot){
-                dispose();
+
+                if( bd.cancelarCoti(id_cotizacion)){
+                    JOptionPane.showMessageDialog(null, "Factura cancelada");
+                    dispose();
+                }
+
+            }else if(actionEvent.getSource()==registarCot){
+
+                if( bd.actualizarCoti(id_cotizacion,total2.getText())){
+                    JOptionPane.showMessageDialog(null, "Factura cotizada");
+                    dispose();
+                }
+
+            }else if(actionEvent.getSource()==registarVen){
+
+                if( bd.actualizarCoti(id_cotizacion,total2.getText())){
+                    JOptionPane.showMessageDialog(null, "Factura vendida");
+                    dispose();
+                }
+
             }
         }
     }
-
-
-
 
     //Clase privada para el manejo de añadir un nuevo producto
     private class  GUIProductocot extends JFrame{
@@ -238,6 +273,20 @@ public class GUICotizacion extends JFrame{
             setLocationRelativeTo(null);
         }
 
+        private boolean isNumeric(String cadena) {
+
+            boolean resultado;
+
+            try {
+                Integer.parseInt(cadena);
+                resultado = true;
+            } catch (NumberFormatException excepcion) {
+                resultado = false;
+            }
+
+            return resultado;
+        }
+
         private class ManejadorDeBotones2 implements ActionListener{
 
             @Override
@@ -248,12 +297,16 @@ public class GUICotizacion extends JFrame{
                     id_p = id_p.substring(0, id_p.indexOf("-"));
                     cant = cantidad2.getText();
 
-                    if(bd.agregarProCot(id_p,cant,id_cot)){
-                        JOptionPane.showMessageDialog(null, "Producto agregado a la cotizacion.");
-                        agregarProducto(id_p,cant);
+                    if(isNumeric(cant)==true){
+                        if(bd.agregarProCot(id_p,cant,id_cot)){
+                            JOptionPane.showMessageDialog(null, "Producto agregado a la cotizacion.");
+                            agregarProducto(id_p,cant);
 
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Error al añadir el producto");
+                        }
                     }else{
-                        JOptionPane.showMessageDialog(null, "Error al añadir el producto");
+                        JOptionPane.showMessageDialog(null, "Inserte un valor numerico en la cantidad");
                     }
 
                     limpiarGUI();

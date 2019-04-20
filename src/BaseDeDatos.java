@@ -630,13 +630,13 @@ public class BaseDeDatos {
         }
     }
 
-    public String insertarCot(String id_emp,String nombre_cot){
+    public String insertarCot(String id_emp,String nombre_cot,String tipo){
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			@SuppressWarnings("unused")
 			Statement statement = connection.createStatement();
 			String sql ="INSERT INTO public.venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante," +
-					"precio_final) VALUES ("+id_emp+",'NOW()','"+nombre_cot+"',0) RETURNING id_cotizacion";
+					"precio_final,tipo) VALUES ("+id_emp+",'NOW()','"+nombre_cot+"',0, '"+tipo+"') RETURNING id_cotizacion";
 			PreparedStatement psSql = connection.prepareStatement(sql);
 			ResultSet rs = psSql.executeQuery();
 
@@ -650,6 +650,40 @@ public class BaseDeDatos {
 			System.out.println("Connection failure");
 			e.printStackTrace();
 			return "";
+		}
+	}
+
+	public boolean cancelarCoti(String identifier){
+		String sql = "DELETE FROM venta_cotizaciones WHERE id_cotizacion="+identifier;
+
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			psSql.executeUpdate();
+
+			return true;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean actualizarCoti(String identifier,String total){
+		String sql = "UPDATE venta_cotizaciones SET precio_final = "+total+" WHERE id_cotizacion="+identifier;
+
+		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+
+			PreparedStatement psSql = connection.prepareStatement(sql);
+			psSql.executeUpdate();
+
+			return true;
+		}
+		catch (SQLException e) {
+			System.out.println("Connection failure");
+			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -673,92 +707,6 @@ public class BaseDeDatos {
         }
     }
 
-
-	public String insertarVentaInfo(String id_emp, String fecha_v, String nombre_c,String precio){
-
-		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-			@SuppressWarnings("unused")
-			Statement statement = connection.createStatement();
-			String sql ="INSERT INTO venta_info(id_empleado,fecha_venta,nombre_cliente," +
-					"precio_venta) VALUES ("+id_emp+",'"+fecha_v+"','"+nombre_c+"',"+precio+") RETURNING id_venta;";
-			PreparedStatement psSql = connection.prepareStatement(sql);
-			ResultSet rs = psSql.executeQuery();
-
-			System.out.print(sql);
-
-			rs.next();
-			String resultado = rs.getString(1);
-			return resultado.trim();
-		}
-		catch (SQLException e) {
-			System.out.println("Connection failure");
-			e.printStackTrace();
-			return "";
-		}
-	}
-
-
-	public boolean verificarVenta(String id_sede,String id_producto,int cant){
-		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-			@SuppressWarnings("unused")
-			Statement statement = connection.createStatement();
-			if(cant>cantidadDisponible(id_producto,id_sede)){
-				return false;
-			}else{
-				return true;
-			}
-		}
-		catch (SQLException e) {
-			System.out.println("Connection failure");
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	public boolean insertarVenta(String id_producto,String id_sede,int cantidad,String id_venta){
-		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-			@SuppressWarnings("unused")
-			Statement statement = connection.createStatement();
-			String cant= Integer.toString(cantidad);
-			String sql ="INSERT INTO venta(id_sede,id_producto,cantidad,id_venta) VALUES ("
-					+id_sede+","+id_producto+","+cant+","+id_venta+");";
-			System.out.print(sql);
-			PreparedStatement psSql = connection.prepareStatement(sql);
-			psSql.execute();
-
-			return true;
-		}
-		catch (SQLException e) {
-			System.out.println("Connection failure");
-			e.printStackTrace();
-			return false;
-		}
-	}
-	public String obtenerIdVenta(){
-		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
-
-			String sql ="SELECT MAX(id_venta) FROM venta_info";
-			PreparedStatement psSql = connection.prepareStatement(sql);
-			ResultSet rs = psSql.executeQuery();
-			int suma=1;
-
-			rs.next();
-			String resultado = rs.getString(1);
-			if (resultado!=null){
-				resultado=resultado.trim();
-				suma= Integer.parseInt(resultado) + 1;
-			}else{
-				suma=1;
-			}
-			return Integer.toString(suma);
-		}
-		catch (SQLException e) {
-			System.out.println("Connection failure");
-			e.printStackTrace();
-			return "";
-		}
-
-	}
 
 
 	public boolean agregarProCot(String id_pro, String cantidad, String id_cot){
