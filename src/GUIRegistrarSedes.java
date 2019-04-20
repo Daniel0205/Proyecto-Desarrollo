@@ -2,7 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,17 +23,19 @@ public class GUIRegistrarSedes extends JFrame{
 
 	private Container contenedor;
 	private JLabel direccion, telefono, encargado, nombre;
+	private JLabel icono, titulo, fondoAzul, fondoGris;
 	private JTextField direccionIn, telefonoIn, nombreIn;
 	private JComboBox encargadoIn;
 	private JButton registrar, cancelar;
-	private JSeparator separator_1, separator_2;
+	private JSeparator separador;
 	private Font font;
 	private BaseDeDatos bd;
 	private ActionListener listener;
-
+	private int pX,pY;
+	
 	public GUIRegistrarSedes(BaseDeDatos bdIn){
 	    super("REGISTRAR SEDE");
-
+		this.setUndecorated(true);
 		font = new Font("Tahoma", Font.PLAIN, 14);
         bd = bdIn;
 		crearComponentes();
@@ -42,14 +45,18 @@ public class GUIRegistrarSedes extends JFrame{
 	//Funcion que crea la interfaz y sus componentes
 	private void crearComponentes() {
 
+		//Configuraciones de la ventana principal
 		contenedor = getContentPane();
 		contenedor.removeAll();
 		getContentPane().setLayout(null);
-
+		ActionListener listener = new ManejadorDeBotones();
+		manejadorDesplazamientoVentana(this);
 		JPanel panelUsuario = new JPanel();
-		panelUsuario.setBounds(0, 0, 394, 475);
+		panelUsuario.setBackground(Color.BLACK);
+		panelUsuario.setBounds(0, 0, 400, 602);
 		contenedor.add(panelUsuario);
 		panelUsuario.setLayout(null);
+		listener = new ManejadorDeBotones();
 
 		nombre = new JLabel("Nombre:");
 		nombre.setFont(font);
@@ -93,33 +100,55 @@ public class GUIRegistrarSedes extends JFrame{
 		encargadoIn.setBounds(136, 274, 234, 32);
 		panelUsuario.add(encargadoIn);
 
-		listener = new ManejadorDeBotones();
-
+		//Boton para cancelar el registro de un sede
 		cancelar = new JButton("Cancelar");
+		cancelar.setOpaque(true);
+		cancelar.setBackground(new Color(227, 227, 227));
 		cancelar.setFont(font);
 		cancelar.setBounds(120, 351, 113, 28);
 		cancelar.addActionListener(listener);
 		panelUsuario.add(cancelar);
 
+		//Boton para iniciar el registro de un sede
 		registrar = new JButton("Registrar Sede");
+		registrar.setOpaque(true);
+		registrar.setBackground(new Color(227, 227, 227));
 		registrar.setFont(font);
 		registrar.setBounds(243, 351, 127, 28);
 		registrar.addActionListener(listener);
 		panelUsuario.add(registrar);
+		
+		//Separador inferior
+		separador = new JSeparator();
+		separador.setBounds(21, 338, 349, 2);
+		panelUsuario.add(separador);
 
-		separator_2 = new JSeparator();
-		separator_2.setBounds(21, 338, 349, 2);
-		panelUsuario.add(separator_2);
-
-		separator_1 = new JSeparator();
-		separator_1.setBounds(21, 88, 349, 2);
-		panelUsuario.add(separator_1);
-
-		JLabel lblNewLabel = new JLabel("");
-		URL filePath = this.getClass().getResource("/images/sede.png");
-		lblNewLabel.setIcon(new ImageIcon(filePath));
-		lblNewLabel.setBounds(21, 11, 66, 66);
-		panelUsuario.add(lblNewLabel);
+		//Icono a la izquierda del titulo
+		icono = new JLabel("");
+		icono.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/titulo_flecha.png")));
+		icono.setBounds(11, 1, 48, 90);
+		panelUsuario.add(icono);
+		
+		//Etiqueta titulo de la ventana
+		titulo = new JLabel("REGISTRAR SEDE");
+		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+		titulo.setForeground(Color.WHITE);
+		titulo.setBounds(61, 30, 211, 32);
+		panelUsuario.add(titulo);
+		
+		// -- Fondos azul y gris -- //
+		fondoAzul = new JLabel("");
+		fondoAzul.setBounds(1, 1, 398, 90);
+		fondoAzul.setOpaque(true);
+		fondoAzul.setBackground(new Color(45, 118, 232));
+		panelUsuario.add(fondoAzul);
+		fondoGris = new JLabel("");
+		fondoGris.setBounds(1, 89, 398, 336);
+		fondoGris.setOpaque(true);
+		fondoGris.setBackground(new Color(227,227,227));
+		panelUsuario.add(fondoGris);
+		
+		//Configuraciones adicionales de la ventana principal
 		setResizable(false);
 		setSize(400,426);
 		setVisible(true);
@@ -200,6 +229,25 @@ public class GUIRegistrarSedes extends JFrame{
 
 		}
 	}
+	
+	
+	 // Manejador del desplazamiento de la ventana causado por el arrastre del mouse
+ 	private void manejadorDesplazamientoVentana(JFrame frame) {
+ 		frame.addMouseListener(new MouseAdapter() {
+ 			@Override
+ 			public void mousePressed(MouseEvent me) {
+ 				pX = me.getX();
+ 				pY = me.getY();
+ 			}
+ 		});
+ 		frame.addMouseMotionListener(new MouseAdapter() {
+ 			@Override
+ 			public void mouseDragged(MouseEvent me) {
+ 				setLocation(getLocation().x + me.getX() - pX, getLocation().y + me.getY() - pY);
+ 			}
+ 		});
+ 	}
+
 }
 
 

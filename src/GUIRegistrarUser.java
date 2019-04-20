@@ -22,7 +22,7 @@ public class GUIRegistrarUser extends JFrame {
 	private JSeparator separator;
 	private Font font;
 	private BaseDeDatos bd;
-	private JLabel fondoAzul, fondoGris, flechaBlanca, titulo;
+	private JLabel fondoAzul, fondoGris, icono, titulo;
 	private int pX,pY;
 
 	public GUIRegistrarUser(BaseDeDatos bdIn){
@@ -36,23 +36,18 @@ public class GUIRegistrarUser extends JFrame {
 
     private void crearComponentes() {
 
+		//Configuraciones de la ventana principal
 		contenedor = getContentPane();
 		contenedor.removeAll();
 		getContentPane().setLayout(null);
 		ActionListener listener = new ManejadorDeBotones();
 		manejadorDesplazamientoVentana(this);
-		
 		JPanel panelUsuario = new JPanel();
 		panelUsuario.setBackground(Color.BLACK);
 		panelUsuario.setBounds(0, 0, 400, 602);
 		contenedor.add(panelUsuario);
 		panelUsuario.setLayout(null);
-		
-		flechaBlanca = new JLabel("");
-		flechaBlanca.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/titulo_flecha.png")));
-		flechaBlanca.setBounds(11, 1, 48, 90);
-		panelUsuario.add(flechaBlanca);
-
+    
 		nombre = new JLabel("Nombre:");
 		nombre.setFont(font);
 		nombre.setBounds(22, 138, 105, 32);
@@ -162,29 +157,37 @@ public class GUIRegistrarUser extends JFrame {
 		crear.addActionListener(listener);
 		panelUsuario.add(crear);
 
+		//Separador inferior
 		separator = new JSeparator();
 		separator.setBounds(22, 550, 349, 2);
 		panelUsuario.add(separator);
+
+		//Icono a la izquierda del titulo
+		icono = new JLabel("");
+		icono.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/titulo_flecha.png")));
+		icono.setBounds(11, 1, 48, 90);
+		panelUsuario.add(icono);
 		
-		titulo = new JLabel("CREAR USUARIO");
+		//Etiqueta titulo de la ventana
+		titulo = new JLabel("REGISTRAR USUARIO");
 		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
 		titulo.setForeground(Color.WHITE);
-		titulo.setBounds(69, 28, 175, 32);
+		titulo.setBounds(61, 30, 211, 32);
 		panelUsuario.add(titulo);
 		
+		// -- Fondos azul y gris -- //
 		fondoAzul = new JLabel("");
 		fondoAzul.setBounds(1, 1, 398, 90);
 		fondoAzul.setOpaque(true);
 		fondoAzul.setBackground(new Color(45, 118, 232));
-
 		panelUsuario.add(fondoAzul);
-		
 		fondoGris = new JLabel("");
 		fondoGris.setBounds(1, 89, 398, 512);
 		fondoGris.setOpaque(true);
 		fondoGris.setBackground(new Color(227,227,227));//Gris
-
 		panelUsuario.add(fondoGris);
+		
+		//Configuraciones adicionales de la ventana principal
 		setSize(400,602);
 		setVisible(true);
 		setResizable(false);

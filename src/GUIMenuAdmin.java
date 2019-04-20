@@ -20,7 +20,6 @@ public class GUIMenuAdmin extends JFrame {
     /**
      * @wbp.nonvisual location=711,689
      */
-    private final JLabel label = new JLabel("New label");
 	
     public GUIMenuAdmin(BaseDeDatos bdIn){
 		super("MENU GERENTE");
@@ -287,8 +286,7 @@ public class GUIMenuAdmin extends JFrame {
 		}
 
 	}
-	
-	
+		
 	// Manejador del desplazamiento de la ventana causado por el arrastre del mouse
 	private void manejadorDesplazamientoVentana(JFrame frame) {
 		frame.addMouseListener(new MouseAdapter() {
