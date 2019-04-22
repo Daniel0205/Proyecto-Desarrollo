@@ -44,7 +44,7 @@ public class GUIActualizarUser extends JFrame {
 		this.setUndecorated(true);
 
 		//Etiqueta que describe el funcionamiento
-		instruccion = new JLabel("ID usuario a modificar");
+		instruccion = new JLabel("Usuario a modificar");
 		instruccion.setFont(font);
 		instruccion.setBounds(22, 101, 138, 32);
 		getContentPane().add(instruccion);

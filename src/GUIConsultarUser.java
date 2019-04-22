@@ -19,9 +19,8 @@ import java.awt.event.ActionEvent;
 public class GUIConsultarUser extends JFrame {
 
 	private BaseDeDatos bd;
-	private JLabel titulo, fondoAzul, fondoGris, icono;
-	private JTextField busqueda;
-	private JComboBox<String> criterio;
+	private JLabel titulo, fondoAzul, fondoGris, icono,criterio;
+	private JComboBox busqueda;
 	private JButton salir, consultar;
 	private JSeparator separador;
 	private Font font;
@@ -36,7 +35,7 @@ public class GUIConsultarUser extends JFrame {
 		super("Consultar Usuario");
 		getContentPane().setForeground(Color.BLACK);
 		bd = bdIn;
-		
+
 		font = new Font("Tahoma", Font.PLAIN, 14);
 		getContentPane().setLayout(null);
 		this.setUndecorated(true);
@@ -51,19 +50,16 @@ public class GUIConsultarUser extends JFrame {
 		consultar.addActionListener(listener);
 		getContentPane().add(consultar);
 
-		busqueda = new JTextField();
+		busqueda = new JComboBox<>(bd.cambiarDimension(
+				bd.consultarUsuarios(null,null,"cedula,nombres")));
 		busqueda.setFont(font);
 		busqueda.setBounds(132, 113, 295, 32);
 		getContentPane().add(busqueda);
-		busqueda.setColumns(10);
 
-		criterio = new JComboBox<>();
-		criterio.setFont(font);
-		String[] lista = new String[] {"Id", "Nombres", "Apellidos"};
-		criterio.setModel(new DefaultComboBoxModel<String>(lista));
+		criterio = new JLabel("Usuario a consultar");
 		criterio.setBounds(31, 113, 91, 32);
 		getContentPane().add(criterio);
-		
+
 		separador = new JSeparator();
 		separador.setBounds(21, 181, 513, 4);
 		getContentPane().add(separador);
@@ -75,20 +71,20 @@ public class GUIConsultarUser extends JFrame {
 		salir.setBounds(445, 192, 89, 32);
 		salir.addActionListener(listener);
 		getContentPane().add(salir);
-		
+
 		//Icono a la izquierda del titulo
 		icono = new JLabel("");
 		icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/buscar.png")));
 		icono.setBounds(11, 1, 48, 90);
 		getContentPane().add(icono);
-		
+
 		//Etiqueta del titulo de la ventana
 		titulo = new JLabel("BUSCAR USUARIO");
 		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
 		titulo.setForeground(Color.WHITE);
 		titulo.setBounds(69, 28, 175, 32);
 		getContentPane().add(titulo);
-		
+
 		// -- Fondos azul y gris -- //
 		fondoAzul = new JLabel("");
 		fondoAzul.setBounds(1, 1, 559, 90);
@@ -112,6 +108,8 @@ public class GUIConsultarUser extends JFrame {
 		setVisible(true);
 		setLocationRelativeTo(null);
 		setResizable(false);
+
+
 	}
 
 
@@ -119,9 +117,12 @@ public class GUIConsultarUser extends JFrame {
 	private class ManejadorDeBotones implements ActionListener{
 
 		public void actionPerformed(ActionEvent actionEvent){
+			String str = busqueda.getSelectedItem().toString();
+			str = str.substring(0,str.indexOf("-"));
+
 			if (actionEvent.getSource() == consultar){
 				String[][] resultado = bd.consultarUsuarios( 
-						(String)criterio.getSelectedItem(),	(String)busqueda.getText(),
+						"Id",	str,
 						"cedula, nombres, apellidos, direccion, numero, email, tipo_usuario,  sede, activo");
 				resultadosConsultaGUI(resultado);
 			}

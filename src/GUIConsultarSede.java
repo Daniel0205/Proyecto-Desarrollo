@@ -19,7 +19,7 @@ public class GUIConsultarSede extends JFrame {
 
     private BaseDeDatos bd;
     private JLabel fondoAzul, fondoNegro, fondoGris, titulo, icono,idl;
-    private JTextField busqueda;
+    private JComboBox busqueda;
     private JButton salir, consultar;
     private JSeparator separador;
     private Font font;
@@ -40,7 +40,7 @@ public class GUIConsultarSede extends JFrame {
   		listener = new ManejadorDeBotones();
   		manejadorDesplazamientoVentana(this);
 
-        idl = new JLabel("Id");
+        idl = new JLabel("Sede a consultar");
         idl.setFont(new Font("Tahoma", Font.PLAIN, 14));
         idl.setBounds(62, 119, 25, 32);
         getContentPane().add(idl);
@@ -53,11 +53,10 @@ public class GUIConsultarSede extends JFrame {
         consultar.addActionListener(listener);
         getContentPane().add(consultar);
 
-        busqueda = new JTextField();
+        busqueda = new JComboBox<>(bd.cambiarDimension(bd.consultarSede(null, "id_Sede,nombre")));
         busqueda.setFont(font);
         busqueda.setBounds(95, 120, 305, 32);
         getContentPane().add(busqueda);
-        busqueda.setColumns(10);
 
         separador = new JSeparator();
         separador.setBounds(41, 190, 480, 2);
@@ -115,9 +114,11 @@ public class GUIConsultarSede extends JFrame {
     private class ManejadorDeBotones implements ActionListener{
 
         public void actionPerformed(ActionEvent actionEvent){
+            String str = busqueda.getSelectedItem().toString();
+            str = str.substring(0, str.indexOf("-"));
             if (actionEvent.getSource() == consultar){
                 String campos = "id_sede, direccion, nombre,telefono,empleado_a_cargo";
-                String[][] resultado = bd.consultarSede((String)busqueda.getText().trim(),campos);
+                String[][] resultado = bd.consultarSede(str,campos);
                 resultadosConsultaGUI(resultado);
             }
             else if (actionEvent.getSource() == salir)
