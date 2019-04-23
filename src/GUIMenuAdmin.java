@@ -18,9 +18,7 @@ public class GUIMenuAdmin extends JFrame {
 	private JLabel fondoAzul,lblSalir, label_1, label_2, label_3;
 	private JSeparator separator_1, separator_2, separator_3;
     private int pX, pY;
-    /**
-     * @wbp.nonvisual location=711,689
-     */
+
 	
     public GUIMenuAdmin(BaseDeDatos bdIn){
 		super("MENU GERENTE");
@@ -169,7 +167,7 @@ public class GUIMenuAdmin extends JFrame {
         informe.setForeground(SystemColor.textHighlight);
         informe.setVerticalTextPosition(SwingConstants.BOTTOM);
         informe.setHorizontalTextPosition(SwingConstants.CENTER);
-        informe.setIcon(new ImageIcon(GUIMenuAdmin.class.getResource("/images/producto_agregar.png")));
+        informe.setIcon(new ImageIcon(GUIMenuAdmin.class.getResource("/images/informes.png")));
         informe.setFocusPainted(false);
         informe.setBorderPainted(false);
         informe.setOpaque(true);
@@ -211,7 +209,7 @@ public class GUIMenuAdmin extends JFrame {
 		separator_3 = new JSeparator();
 		separator_3.setForeground(SystemColor.textHighlight);
 		separator_3.setBackground(Color.WHITE);
-		separator_3.setBounds(206, 507, 52, 9);
+		separator_3.setBounds(206, 507, 202, 9);
 		getContentPane().add(separator_3);
 
 		//Boton salir
