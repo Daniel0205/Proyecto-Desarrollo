@@ -10,7 +10,7 @@ public class GUIMenuAdmin extends JFrame {
 
 	private Container contenedor;
 	private JButton registrarUsuario, actualizarUsuario, mostrarUsuarios;
-	private JButton registrarSede, actualizarSede, mostrarSedes, salir,registrarProducto;
+	private JButton registrarSede, actualizarSede, mostrarSedes, salir,registrarProducto,informe;
 	private Font font;
 	private ActionListener listener;
 	private BaseDeDatos bd;
@@ -162,7 +162,23 @@ public class GUIMenuAdmin extends JFrame {
 		registrarProducto.setBounds(118, 527, 140, 120);
 		registrarProducto.addActionListener(listener);
 		getContentPane().add(registrarProducto);
-		
+
+		//Boton para registrar un productp
+		informe = new JButton("INFORMES");
+        informe.setForeground(SystemColor.textHighlight);
+        informe.setVerticalTextPosition(SwingConstants.BOTTOM);
+        informe.setHorizontalTextPosition(SwingConstants.CENTER);
+        informe.setIcon(new ImageIcon(GUIMenuAdmin.class.getResource("/images/producto_agregar.png")));
+        informe.setFocusPainted(false);
+        informe.setBorderPainted(false);
+        informe.setOpaque(true);
+        informe.setBackground(new Color(227, 227, 227));
+        informe.setFont(font);
+        informe.setBounds(268, 527, 140, 120);
+        informe.addActionListener(listener);
+		getContentPane().add(informe);
+
+
 		//-- Eriquetas --//
 		label_1 = new JLabel("USUARIOS");
 		label_1.setForeground(SystemColor.textHighlight);

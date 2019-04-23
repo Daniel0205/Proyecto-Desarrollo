@@ -46,7 +46,7 @@ public class GUIMenuJefe extends JFrame {
 		imagenSofa.setBounds(199, 15, 120, 80);
 		getContentPane().add(imagenSofa);
 
-		// Etiqueta para el nombre al lado del logo
+		// Etiqueta para el nombre al ladpo del logo
 		JLabel lblMueblesYMuebles = new JLabel("   Muebles y Muebles");
 		lblMueblesYMuebles.setFont(font);
 		lblMueblesYMuebles.setForeground(Color.WHITE);
@@ -103,7 +103,7 @@ public class GUIMenuJefe extends JFrame {
 		consultarOrden.setFont(font);
 		consultarOrden.setBounds(417, 219, 140, 120);
         consultarOrden.addActionListener(listener);
-        getContentPane().add(consultarOrden);   
+        getContentPane().add(consultarOrden);
 
         //Boton salir
 		salir = new JButton("");
