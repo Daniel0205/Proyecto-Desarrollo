@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("serial")
 public class GUIActualizarUser extends JFrame {
 
+    //Variables y componentes de la GUI
 	private BaseDeDatos bd;
 	private Container contenedor;
 	private JLabel instruccion, usuario, nombre, apellidos, direccion;
@@ -25,6 +26,8 @@ public class GUIActualizarUser extends JFrame {
 	private ActionListener listener = new ManejadorDeBotones();
 	private int pX, pY;
 
+
+	//Constructor
 	public GUIActualizarUser(BaseDeDatos bdIn){
 		super("ACTUALIZAR EMPLEADO");
 		getContentPane().setBackground(Color.BLACK);
@@ -37,81 +40,88 @@ public class GUIActualizarUser extends JFrame {
 	//FUnciona para inicializar los elemens graficos
 	private void initGUI() {
 
-		//Configuraciones generales de la primer ventana
-		contenedor = getContentPane();
-		contenedor.removeAll();
-		getContentPane().setLayout(null);
-		this.setUndecorated(true);
+		String[] users = bd.cambiarDimension(bd.consultarUsuarios(null,null,"cedula,nombres"));
 
-		//Etiqueta que describe el funcionamiento
-		instruccion = new JLabel("Usuario a modificar");
-		instruccion.setFont(font);
-		instruccion.setBounds(22, 101, 138, 32);
-		getContentPane().add(instruccion);
+		if(users.length!=0) {
 
-		idIn = new JComboBox<>(bd.cambiarDimension(
-                bd.consultarUsuarios(null,null,"cedula,nombres")));
-		idIn.setFont(font);
-		idIn.setBounds(170, 101, 243, 32);
-		getContentPane().add(idIn);
+			//Configuraciones generales de la primer ventana
+			contenedor = getContentPane();
+			contenedor.removeAll();
+			getContentPane().setLayout(null);
+			this.setUndecorated(true);
 
-		salir1 = new JButton("Salir");
-		salir1.setOpaque(true);
-		salir1.setBackground(new Color(227, 227, 227));
-		salir1.setFont(font);
-		salir1.setBounds(433, 184, 100, 32);
-		salir1.addActionListener(listener);
-		getContentPane().add(salir1);
+			//Etiqueta que describe el funcionamiento
+			instruccion = new JLabel("Usuario a modificar");
+			instruccion.setFont(font);
+			instruccion.setBounds(22, 101, 138, 32);
+			getContentPane().add(instruccion);
 
-		buscar = new JButton("Buscar");
-		buscar.setOpaque(true);
-		buscar.setBackground(new Color(227, 227, 227));
-		buscar.setBounds(433, 101, 100, 32);
-		buscar.setFont(font);
-		buscar.addActionListener(listener);
-		getContentPane().add(buscar);
-		
-		JSeparator separador = new JSeparator();
-		separador.setBounds(22, 172, 511, 2);
-		getContentPane().add(separador);
+			idIn = new JComboBox<>(users);
+			idIn.setFont(font);
+			idIn.setBounds(170, 101, 243, 32);
+			getContentPane().add(idIn);
 
-		//Icono a la izquierda del titulo
-		JLabel icono = new JLabel("");
-		icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/actualizar.png")));
-		icono.setBounds(11, 1, 48, 90);
-		getContentPane().add(icono);
-		
-		//Etiqueta del titulo de la ventana
-		JLabel titulo = new JLabel("ACTUALIZAR USUARIO");
-		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
-		titulo.setForeground(Color.WHITE);
-		titulo.setBounds(69, 28, 175, 32);
-		getContentPane().add(titulo);
-		
-		// -- Fondos azul y gris -- //
-		JLabel fondoAzul = new JLabel("");
-		fondoAzul.setBounds(1, 1, 560, 90);
-		fondoAzul.setOpaque(true);
-		fondoAzul.setBackground(new Color(45, 118, 232));
-		getContentPane().add(fondoAzul);
-		JLabel fondoGris = new JLabel("");
-		fondoGris.setBounds(1, 89, 560, 166);
-		fondoGris.setOpaque(true);
-		fondoGris.setBackground(new Color(227,227,227));//Gris
-		getContentPane().add(fondoGris);
+			salir1 = new JButton("Salir");
+			salir1.setOpaque(true);
+			salir1.setBackground(new Color(227, 227, 227));
+			salir1.setFont(font);
+			salir1.setBounds(433, 184, 100, 32);
+			salir1.addActionListener(listener);
+			getContentPane().add(salir1);
 
-		// Fondo negro para las margenes
-		JLabel fondoNegro = new JLabel("");
-		fondoNegro.setBackground(Color.BLACK);
-		fondoNegro.setForeground(Color.RED);
-		fondoNegro.setOpaque(true);
-		fondoNegro.setBounds(0, 0, 562, 264);
-		getContentPane().add(fondoNegro);
-		
-		setResizable(false);
-		setSize(562,256); 
-		setVisible(true);
-		setLocationRelativeTo(null);
+			buscar = new JButton("Buscar");
+			buscar.setOpaque(true);
+			buscar.setBackground(new Color(227, 227, 227));
+			buscar.setBounds(433, 101, 100, 32);
+			buscar.setFont(font);
+			buscar.addActionListener(listener);
+			getContentPane().add(buscar);
+
+			JSeparator separador = new JSeparator();
+			separador.setBounds(22, 172, 511, 2);
+			getContentPane().add(separador);
+
+			//Icono a la izquierda del titulo
+			JLabel icono = new JLabel("");
+			icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/actualizar.png")));
+			icono.setBounds(11, 1, 48, 90);
+			getContentPane().add(icono);
+
+			//Etiqueta del titulo de la ventana
+			JLabel titulo = new JLabel("ACTUALIZAR USUARIO");
+			titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+			titulo.setForeground(Color.WHITE);
+			titulo.setBounds(69, 28, 175, 32);
+			getContentPane().add(titulo);
+
+			// -- Fondos azul y gris -- //
+			JLabel fondoAzul = new JLabel("");
+			fondoAzul.setBounds(1, 1, 560, 90);
+			fondoAzul.setOpaque(true);
+			fondoAzul.setBackground(new Color(45, 118, 232));
+			getContentPane().add(fondoAzul);
+			JLabel fondoGris = new JLabel("");
+			fondoGris.setBounds(1, 89, 560, 166);
+			fondoGris.setOpaque(true);
+			fondoGris.setBackground(new Color(227, 227, 227));//Gris
+			getContentPane().add(fondoGris);
+
+			// Fondo negro para las margenes
+			JLabel fondoNegro = new JLabel("");
+			fondoNegro.setBackground(Color.BLACK);
+			fondoNegro.setForeground(Color.RED);
+			fondoNegro.setOpaque(true);
+			fondoNegro.setBounds(0, 0, 562, 264);
+			getContentPane().add(fondoNegro);
+
+			setResizable(false);
+			setSize(562, 256);
+			setVisible(true);
+			setLocationRelativeTo(null);
+		}
+        else{
+            JOptionPane.showMessageDialog(null, "Actualmente no hay usuarios creados");
+        }
 	}
 	
 	//Funcion para inicializar la interfaz grafica para
@@ -203,7 +213,7 @@ public class GUIActualizarUser extends JFrame {
 
         sedeIn = new JComboBox<>(bd.cambiarDimension(bd.consultarSede(null,"id_Sede,nombre")));
         sedeIn.setSelectedItem(bd.cambiarDimension(bd.consultarSede(
-                bd.obtenerS(identifier, "sede"),"id_sede,nombre")));
+                bd.obtenerS(identifier, "sede"),"id_sede,nombre"))[0]);
         sedeIn.setBounds(173, 426, 201, 32);
         sedeIn.setSelectedItem(bd.obtenerS(identifier,"sede"));
         sedeIn.setEditable(false);
@@ -292,7 +302,7 @@ public class GUIActualizarUser extends JFrame {
 		this.setResizable(false);
 	}
 
-
+    //Funcion que valida si algun campo a registrar esta vacio
     private boolean validar(){
         boolean val=true;
         if(nombreIn.getText().compareTo("")==0){
@@ -317,7 +327,7 @@ public class GUIActualizarUser extends JFrame {
         return val;
     }
 
-    
+    //Funcion para validar el dominio de los datos ingresados
     private String validar2(){
 		String mensaje = "";
 
@@ -385,10 +395,12 @@ public class GUIActualizarUser extends JFrame {
 			identifier=identifier.substring(0,identifier.indexOf("-"));
 
 			if(e.getSource()==buscar){
-dispose();
+			    dispose();
                 initGUI2(identifier);
 
-            }else if(e.getSource()==actualizar){
+            }
+
+            if(e.getSource()==actualizar){
                 if(validar()){
                     if(validar2().compareTo("true")==0){
 

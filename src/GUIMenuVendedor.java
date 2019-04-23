@@ -9,6 +9,7 @@ import java.net.URL;
 @SuppressWarnings("serial")
 public class GUIMenuVendedor extends JFrame {
 
+    //Variables y componentes de la GUI
 	private final BaseDeDatos bd;
 	private final String id;
 	private Container contenedor;
@@ -57,7 +58,7 @@ public class GUIMenuVendedor extends JFrame {
 		getContentPane().add(imagenLogo);
 
 		// Boton para consultar la disponibilidad de un producto
-		consultaProducto = new JButton("CONSULTAR");
+		consultaProducto = new JButton("CONSULTAR PRODUCTOS");
 		consultaProducto.setForeground(SystemColor.textHighlight);
 		consultaProducto.setVerticalTextPosition(SwingConstants.BOTTOM);
 		consultaProducto.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -72,7 +73,7 @@ public class GUIMenuVendedor extends JFrame {
 		getContentPane().add(consultaProducto);
 
 		// Boton para concretar una venta cotizada
-		venta = new JButton("VENDER");
+		venta = new JButton("VENTA");
 		venta.setForeground(SystemColor.textHighlight);
 		venta.setVerticalTextPosition(SwingConstants.BOTTOM);
 		venta.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -87,7 +88,7 @@ public class GUIMenuVendedor extends JFrame {
 		getContentPane().add(venta);
 
 		// Boton empezar un proceso de cotizacion
-		cotizacion = new JButton("ACTUALIZAR");
+		cotizacion = new JButton("COTIZACION");
 		cotizacion.setForeground(SystemColor.textHighlight);
 		cotizacion.setVerticalTextPosition(SwingConstants.BOTTOM);
 		cotizacion.setHorizontalTextPosition(SwingConstants.CENTER);

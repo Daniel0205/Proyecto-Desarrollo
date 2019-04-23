@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 @SuppressWarnings("serial")
 public class GUICotizacion extends JFrame {
 
+	//Variables y componentes de la GUI
 	private final BaseDeDatos bd;
 	private Container contenedor;
 	private final String id, nombre_cliente, fnt, id_cotizacion, fecha_f, nombre, sede;
@@ -17,6 +18,7 @@ public class GUICotizacion extends JFrame {
 	private JScrollPane scroll;
 	private String[] datos;
 
+	//Constructor
 	public GUICotizacion(BaseDeDatos bd, String id, String nombre_cliente, String fnt) {
 		super("Cotizacion");
 		this.bd = bd;
@@ -34,16 +36,7 @@ public class GUICotizacion extends JFrame {
 		initGUI();
 	}
 
-	private void creaTabla() {
-		modelo = new DefaultTableModel();
-
-		modelo.addColumn("Referencia");
-		modelo.addColumn("Producto");
-		modelo.addColumn("Cantidad");
-		modelo.addColumn("Precio Unitartio");
-		modelo.addColumn("Precio");
-	}
-
+	//Inicializa los componentes de la GUI
 	private void initGUI() {
 
 		contenedor = getContentPane();
@@ -157,6 +150,18 @@ public class GUICotizacion extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
+    //Crea una tabla con los campos que se mostraran de cada producto en la cotizacion
+    private void creaTabla() {
+        modelo = new DefaultTableModel();
+
+        modelo.addColumn("Referencia");
+        modelo.addColumn("Producto");
+        modelo.addColumn("Cantidad");
+        modelo.addColumn("Precio Unitartio");
+        modelo.addColumn("Precio");
+    }
+
+    //Agrega un producto a la cotizacion y lo muestra en la tabla que lista los prodcutos
 	private void agregarProducto(String id_pro, String cant) {
 
 		String precio_U = bd.consultarProducto(id_pro, "precio", "Id");
@@ -168,6 +173,7 @@ public class GUICotizacion extends JFrame {
 		actualizarTotal();
 	}
 
+	//ACtualiza el precio total deacuerdo a los productos y cantidades que hay en la tabla
 	private void actualizarTotal() {
 		int filas = productos.getRowCount();
 		int aux = 0;
@@ -180,6 +186,8 @@ public class GUICotizacion extends JFrame {
 		// total2.repaint();
 	}
 
+
+	//Manejador de eventos
 	private class ManejadorDeBotones implements ActionListener {
 
 		public void actionPerformed(ActionEvent actionEvent) {
@@ -215,6 +223,8 @@ public class GUICotizacion extends JFrame {
 
 	// Clase privada para el manejo de añadir un nuevo producto
 	private class GUIProductocot extends JFrame {
+
+        //Variables y componentes de la GUI
 		private final BaseDeDatos bd;
 		private final String id_cot;
 		private Container contenedor;
@@ -223,6 +233,7 @@ public class GUICotizacion extends JFrame {
 		private JTextField cantidad2;
 		private JComboBox producto2;
 
+		//Constructor
 		public GUIProductocot(BaseDeDatos bd, String id_cot) {
 			super("Nuevo producto");
 			this.bd = bd;
@@ -231,11 +242,13 @@ public class GUICotizacion extends JFrame {
 			initGUI2();
 		}
 
+		//Vuelve la GUI al estado inicial
 		private void limpiarGUI() {
 			cantidad2.setText("");
 			producto2.setSelectedItem(0);
 		}
 
+		//Inicializa la GUI
 		private void initGUI2() {
 
 			contenedor = getContentPane();
@@ -287,6 +300,7 @@ public class GUICotizacion extends JFrame {
 			setLocationRelativeTo(null);
 		}
 
+		//Verifica que la cantidad ingresada sea numerica
 		private boolean isNumeric(String cadena) {
 
 			boolean resultado;
@@ -301,6 +315,7 @@ public class GUICotizacion extends JFrame {
 			return resultado;
 		}
 
+		//Manejador de eventos de la GUI
 		private class ManejadorDeBotones2 implements ActionListener {
 
 			@Override

@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 @SuppressWarnings("serial")
 public class GUIMenuAdmin extends JFrame {
 
+    //Variables y componentes de la GUI
 	private Container contenedor;
 	private JButton registrarUsuario, actualizarUsuario, mostrarUsuarios;
 	private JButton registrarSede, actualizarSede, mostrarSedes, salir,registrarProducto,informe;

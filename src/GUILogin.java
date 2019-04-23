@@ -8,13 +8,14 @@ import java.net.URL;
 @SuppressWarnings("serial")
 public class GUILogin extends JFrame {
 
+	//Variables y componentes de la GUI
 	private JTextField id;
 	private JPasswordField password;
 	private JLabel lblPassword,lblUser, icon;
 	private JButton btnLogin, btnCancel;
 	private BaseDeDatos bd;
 
-
+    //COnstructor
 	public GUILogin(){
 		super("Loggin");
 		setTitle("Iniciar Sesion");
@@ -73,6 +74,7 @@ public class GUILogin extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
+    // Funcion que valida si algun campo a registrar esta vacio
     private boolean validar(){
         boolean val=true;
         if(id.getText().compareTo("")==0){
@@ -86,6 +88,7 @@ public class GUILogin extends JFrame {
         return val;
     }
 
+    //Manejador de eventos
     private class ManejadorDeBotones implements ActionListener {
 
 

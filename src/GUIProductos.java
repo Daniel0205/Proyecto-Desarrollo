@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
 public class GUIProductos extends JFrame {
+
+	//Variables y componentes de la GUI
 	private final BaseDeDatos bd;
 	private final String id;
 	private DefaultTableModel modelo;
@@ -18,6 +20,7 @@ public class GUIProductos extends JFrame {
 	private JScrollPane scroll;
 	private String[] datos;
 
+	//Constructor
 	public GUIProductos(BaseDeDatos bd, String id) {
 		super("Productos");
 		this.bd = bd;
@@ -26,16 +29,7 @@ public class GUIProductos extends JFrame {
 		initGUI();
 	}
 
-	private void creaTabla() {
-
-		modelo = new DefaultTableModel();
-		modelo.addColumn("Referencia");
-		modelo.addColumn("Producto");
-		modelo.addColumn("Descripcion");
-		modelo.addColumn("Precio");
-		modelo.addColumn("Cantidad");
-	}
-
+	//Inicializa los componentes de la GUI
 	private void initGUI() {
 		contenedor = getContentPane();
 		contenedor.removeAll();
@@ -88,6 +82,19 @@ public class GUIProductos extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
+
+    //Define unos campos para mostrar los campos de los productos
+    private void creaTabla() {
+
+        modelo = new DefaultTableModel();
+        modelo.addColumn("Referencia");
+        modelo.addColumn("Producto");
+        modelo.addColumn("Descripcion");
+        modelo.addColumn("Precio");
+        modelo.addColumn("Cantidad");
+    }
+
+    //Muestra los datos de un producto que ha sido buscado
 	private void mostrar() {
 
 		String sede = bd.consultarDatoUsuario("Id", id, "sede");
@@ -104,6 +111,7 @@ public class GUIProductos extends JFrame {
 		}
 	}
 
+	//Manejador de eventos
 	private class ManejadorDeBotones implements ActionListener {
 
 		@Override

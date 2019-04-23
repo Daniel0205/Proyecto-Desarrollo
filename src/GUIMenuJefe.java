@@ -8,6 +8,7 @@ import java.net.URL;
 
 public class GUIMenuJefe extends JFrame {
 
+	//Variables y componentes de la GUI
     private final BaseDeDatos bd;
     private Container contenedor;
     private Font font;

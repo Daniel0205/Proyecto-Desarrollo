@@ -9,6 +9,7 @@ import javax.swing.GroupLayout.Alignment;
 
 public class GUIRegistrarProd extends JFrame {
 
+    //Variables y componentes de la GUI
     private final Font font;
     private final BaseDeDatos bd;
     private JSeparator separador;
@@ -18,7 +19,7 @@ public class GUIRegistrarProd extends JFrame {
     private JButton cancelar, crear;
     private int pX, pY;
 
-
+    //Constructor
     public GUIRegistrarProd(BaseDeDatos bdIn) {
         super("CREAR PRODUCTO"); 
         this.setUndecorated(true);
@@ -137,7 +138,7 @@ public class GUIRegistrarProd extends JFrame {
         setLocationRelativeTo(null);
     }
 
-
+    //Manejador de eventos
     private class ManejadorDeBotones implements ActionListener {
 
 

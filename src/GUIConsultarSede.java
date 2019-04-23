@@ -17,6 +17,8 @@ import java.awt.event.ActionEvent;
 @SuppressWarnings("serial")
 public class GUIConsultarSede extends JFrame {
 
+
+    //Variables y componentes de la GUI
     private BaseDeDatos bd;
     private JLabel fondoAzul, fondoNegro, fondoGris, titulo, icono,idl;
     private JComboBox busqueda;
@@ -26,87 +28,94 @@ public class GUIConsultarSede extends JFrame {
     private int pX, pY;
     private ActionListener listener;
 
-
     //Creacion y despliegue de la interfaz de consulta
     public GUIConsultarSede(BaseDeDatos bdIn) {
-        
-      //Configuraciones de la ventana principal
-    	super("Consultar Sede");
-  		getContentPane().setForeground(Color.BLACK);
-  		bd = bdIn;
-  		font = new Font("Tahoma", Font.PLAIN, 14);
-  		getContentPane().setLayout(null);
-		this.setUndecorated(true);
-  		listener = new ManejadorDeBotones();
-  		manejadorDesplazamientoVentana(this);
+        super("Consultar Sede");
 
-        idl = new JLabel("Sede a consultar");
-        idl.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        idl.setBounds(62, 119, 25, 32);
-        getContentPane().add(idl);
+        String[] sedes = bdIn.cambiarDimension(bdIn.consultarSede(null, "id_Sede,nombre"));
 
-        consultar = new JButton("Consultar");
-        consultar.setOpaque(true);
-		consultar.setBackground(new Color(227, 227, 227));
-        consultar.setFont(font);
-        consultar.setBounds(420, 119, 101, 32);
-        consultar.addActionListener(listener);
-        getContentPane().add(consultar);
+        if(sedes.length!=0) {
 
-        busqueda = new JComboBox<>(bd.cambiarDimension(bd.consultarSede(null, "id_Sede,nombre")));
-        busqueda.setFont(font);
-        busqueda.setBounds(95, 120, 305, 32);
-        getContentPane().add(busqueda);
+            //Configuraciones de la ventana principal
+            getContentPane().setForeground(Color.BLACK);
+            bd = bdIn;
+            font = new Font("Tahoma", Font.PLAIN, 14);
+            getContentPane().setLayout(null);
+            this.setUndecorated(true);
+            listener = new ManejadorDeBotones();
+            manejadorDesplazamientoVentana(this);
 
-        separador = new JSeparator();
-        separador.setBounds(41, 190, 480, 2);
-        getContentPane().add(separador);
+            idl = new JLabel("Sede a consultar");
+            idl.setFont(new Font("Tahoma", Font.PLAIN, 14));
+            idl.setBounds(62, 119, 25, 32);
+            getContentPane().add(idl);
 
-        salir = new JButton("Salir");
-        salir.setOpaque(true);
-		salir.setBackground(new Color(227, 227, 227));
-        salir.setFont(font);
-        salir.setBounds(432, 199, 89, 32);
-        salir.addActionListener(listener);
-        getContentPane().add(salir);
+            consultar = new JButton("Consultar");
+            consultar.setOpaque(true);
+            consultar.setBackground(new Color(227, 227, 227));
+            consultar.setFont(font);
+            consultar.setBounds(420, 119, 101, 32);
+            consultar.addActionListener(listener);
+            getContentPane().add(consultar);
 
-        //Icono a la izquierda del titulo
-		icono = new JLabel("");
-		icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/buscar.png")));
-		icono.setBounds(11, 1, 48, 90);
-		getContentPane().add(icono);
-		
-		//Etiqueta del titulo de la ventana
-		titulo = new JLabel("BUSCAR SEDE");
-		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
-		titulo.setForeground(Color.WHITE);
-		titulo.setBounds(69, 28, 175, 32);
-		getContentPane().add(titulo);
-		
-		// -- Fondos azul y gris -- //
-		fondoAzul = new JLabel("");
-		fondoAzul.setBounds(1, 1, 559, 90);
-		fondoAzul.setOpaque(true);
-		fondoAzul.setBackground(new Color(45, 118, 232));
-		getContentPane().add(fondoAzul);
-		fondoGris = new JLabel("");
-		fondoGris.setBounds(1, 89, 559, 174);
-		fondoGris.setOpaque(true);
-		fondoGris.setBackground(new Color(227,227,227));
-		getContentPane().add(fondoGris);
-	
-		// Fondo negro para las margenes
-		fondoNegro = new JLabel("");
-		fondoNegro.setBackground(Color.BLACK);
-		fondoNegro.setOpaque(true);
-		fondoNegro.setBounds(0, 0, 561, 264);
-		getContentPane().add(fondoNegro);
+            busqueda = new JComboBox<>(sedes);
+            busqueda.setFont(font);
+            busqueda.setBounds(95, 120, 305, 32);
+            getContentPane().add(busqueda);
 
-      	//Configuraciones adicionales de la ventana        
-        setSize(561,264);
-        setVisible(true);
-        setLocationRelativeTo(null);
-        setResizable(false);
+            separador = new JSeparator();
+            separador.setBounds(41, 190, 480, 2);
+            getContentPane().add(separador);
+
+            salir = new JButton("Salir");
+            salir.setOpaque(true);
+            salir.setBackground(new Color(227, 227, 227));
+            salir.setFont(font);
+            salir.setBounds(432, 199, 89, 32);
+            salir.addActionListener(listener);
+            getContentPane().add(salir);
+
+            //Icono a la izquierda del titulo
+            icono = new JLabel("");
+            icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/buscar.png")));
+            icono.setBounds(11, 1, 48, 90);
+            getContentPane().add(icono);
+
+            //Etiqueta del titulo de la ventana
+            titulo = new JLabel("BUSCAR SEDE");
+            titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+            titulo.setForeground(Color.WHITE);
+            titulo.setBounds(69, 28, 175, 32);
+            getContentPane().add(titulo);
+
+            // -- Fondos azul y gris -- //
+            fondoAzul = new JLabel("");
+            fondoAzul.setBounds(1, 1, 559, 90);
+            fondoAzul.setOpaque(true);
+            fondoAzul.setBackground(new Color(45, 118, 232));
+            getContentPane().add(fondoAzul);
+            fondoGris = new JLabel("");
+            fondoGris.setBounds(1, 89, 559, 174);
+            fondoGris.setOpaque(true);
+            fondoGris.setBackground(new Color(227, 227, 227));
+            getContentPane().add(fondoGris);
+
+            // Fondo negro para las margenes
+            fondoNegro = new JLabel("");
+            fondoNegro.setBackground(Color.BLACK);
+            fondoNegro.setOpaque(true);
+            fondoNegro.setBounds(0, 0, 561, 264);
+            getContentPane().add(fondoNegro);
+
+            //Configuraciones adicionales de la ventana
+            setSize(561, 264);
+            setVisible(true);
+            setLocationRelativeTo(null);
+            setResizable(false);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Actualmente no hay sedes creadas");
+        }
     }
 
 
