@@ -28,6 +28,7 @@ public class GUICrearInformes  extends JFrame {
     public GUICrearInformes(BaseDeDatos bd){
         super("Informes");
         this.bd=bd;
+        modelo = new DefaultTableModel();
 
         initGUI();
     }
@@ -146,7 +147,7 @@ public class GUICrearInformes  extends JFrame {
 
             if(panel!=null)getContentPane().remove(panel);
             JFreeChart chart = ChartFactory.createBarChart("Inventario de productos","Productos","Disponibilidad",datainv, PlotOrientation.VERTICAL,true,true,false);
-            ChartPanel panel = new ChartPanel(chart);
+            panel = new ChartPanel(chart);
             panel.setBounds(25, 155, 629,314);
             panel.setVisible(true);
             getContentPane().remove(panel);
@@ -159,10 +160,51 @@ public class GUICrearInformes  extends JFrame {
 
         }else if(informe.getSelectedItem()=="Ventas"){
 
+            String idSede = sedes.getSelectedItem().toString();
+            idSede=idSede.substring(0,idSede.indexOf("-"));
+            int sed = Integer.parseInt(idSede);
 
+            String[][] rep =  bd.informeVentas(periodo.getSelectedItem().toString(),sed);
+
+            for(int i=0;i<rep.length;i++){
+                datainv.addValue(Integer.parseInt(rep[i][1]),rep[i][2],rep[i][0]);
+            }
+
+            if(panel!=null)getContentPane().remove(panel);
+            JFreeChart chart = ChartFactory.createBarChart("Ventas","Productos","Cantidad vendida",datainv, PlotOrientation.VERTICAL,true,true,false);
+            panel = new ChartPanel(chart);
+            panel.setBounds(25, 155, 629,314);
+            panel.setVisible(true);
+            getContentPane().remove(panel);
+            getContentPane().add(panel);
+
+            String[] columns = new String[]{"Nombre del producto","Cantidad vendida","Sede correspondiente"};
+
+            llenarTabla(columns,rep);
 
         }else if(informe.getSelectedItem()=="Cotizaciones"){
 
+            String idSede = sedes.getSelectedItem().toString();
+            idSede=idSede.substring(0,idSede.indexOf("-"));
+            int sed = Integer.parseInt(idSede);
+
+            String[][] rep =  bd.informeCotizaciones(periodo.getSelectedItem().toString(),sed);
+
+            for(int i=0;i<rep.length;i++){
+                datainv.addValue(Integer.parseInt(rep[i][1]),rep[i][2],rep[i][0]);
+            }
+
+            if(panel!=null)getContentPane().remove(panel);
+            JFreeChart chart = ChartFactory.createBarChart("Cotizaciones","Productos","Cantidad vendida",datainv, PlotOrientation.VERTICAL,true,true,false);
+            panel = new ChartPanel(chart);
+            panel.setBounds(25, 155, 629,314);
+            panel.setVisible(true);
+            getContentPane().remove(panel);
+            getContentPane().add(panel);
+
+            String[] columns = new String[]{"Nombre del producto","Cantidad cotizada","Sede correspondiente"};
+
+            llenarTabla(columns,rep);
 
         }else if(informe.getSelectedItem()=="Ordenes de trabajo"){
 
@@ -176,7 +218,8 @@ public class GUICrearInformes  extends JFrame {
 
     private void llenarTabla(String[] columns,String[][] datos){
 
-        modelo = new DefaultTableModel();
+        modelo.setRowCount(0);
+        modelo.setColumnCount(0);
 
         for(int i =0;i<columns.length;i++){
             modelo.addColumn(columns[i]);
