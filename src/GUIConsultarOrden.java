@@ -97,16 +97,14 @@ public class GUIConsultarOrden extends JFrame {
             getContentPane().add(fondoGris);
 
             // Configuraciones adicionales de la ventana
+            setResizable(false);
             setSize(561, 264);
             setVisible(true);
             setLocationRelativeTo(null);
-            setResizable(false);
         }
         else{
             JOptionPane.showMessageDialog(null, "Actualmente no hay ordenes disponibles");
-            GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
-            menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            dispose();
+
         }
 	}
 
@@ -122,8 +120,7 @@ public class GUIConsultarOrden extends JFrame {
 				String[][] resultado = bd.consultarOrden(idOrden, campos);
 				resultadosConsultaGUI(resultado);
 			} else if (actionEvent.getSource() == salir) {
-                GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
-                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 			    dispose();
 
 			}

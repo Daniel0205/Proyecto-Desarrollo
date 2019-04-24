@@ -107,10 +107,10 @@ public class GUIConsultarSede extends JFrame {
 			getContentPane().add(fondoNegro);
 
 			// Configuraciones adicionales de la ventana
+			setResizable(false);
 			setSize(561, 264);
 			setVisible(true);
 			setLocationRelativeTo(null);
-			setResizable(false);
 		} else {
 			JOptionPane.showMessageDialog(null, "Actualmente no hay sedes creadas");
 		}

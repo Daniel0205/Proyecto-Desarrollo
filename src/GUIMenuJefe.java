@@ -180,6 +180,7 @@ public class GUIMenuJefe extends JFrame {
         	else if(actionEvent.getSource() == salir){
                 GUILogin login = new GUILogin();
                 login.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                dispose();
 			}
         	else if(actionEvent.getSource() == modificarOrden){
                 GUIActualizarOrden actualizarOrden = new GUIActualizarOrden(bd,idJefe);
@@ -189,7 +190,7 @@ public class GUIMenuJefe extends JFrame {
                 GUIConsultarOrden consultarOrden = new GUIConsultarOrden(bd,idJefe);
                 consultarOrden.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
-            dispose();
+
         }
     }
     

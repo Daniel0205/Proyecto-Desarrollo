@@ -109,10 +109,10 @@ public class GUIConsultarUser extends JFrame {
 			fondoNegro.setBounds(0, 0, 561, 264);
 			getContentPane().add(fondoNegro);
 
+            setResizable(false);
 			setSize(561, 264);
 			setVisible(true);
 			setLocationRelativeTo(null);
-			setResizable(false);
 		} else {
 			JOptionPane.showMessageDialog(null, "Actualmente no hay usuarios creados");
 		}
@@ -129,8 +129,10 @@ public class GUIConsultarUser extends JFrame {
 				String[][] resultado = bd.consultarUsuarios("Id", str,
 						"cedula, nombres, apellidos, direccion, numero, email, tipo_usuario,  sede, activo");
 				resultadosConsultaGUI(resultado);
-			} else if (actionEvent.getSource() == salir)
-				dispose();
+			} else if (actionEvent.getSource() == salir) {
+
+                dispose();
+            }
 		}
 	}
 

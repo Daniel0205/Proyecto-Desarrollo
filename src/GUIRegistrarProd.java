@@ -198,9 +198,6 @@ public class GUIRegistrarProd extends JFrame {
                             JOptionPane.showMessageDialog(null, "Producto creado exitosamente");
 
                         } else JOptionPane.showMessageDialog(null, "Error al crear producto.");
-
-                        GUIMenuAdmin menu = new GUIMenuAdmin(bd);
-                        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         dispose();
                     }
                     else JOptionPane.showMessageDialog(null, validar2());
@@ -209,8 +206,6 @@ public class GUIRegistrarProd extends JFrame {
             }
 
             if (actionEvent.getSource() == cancelar){
-                GUIMenuAdmin menu = new GUIMenuAdmin(bd);
-                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 dispose();
             }
         }

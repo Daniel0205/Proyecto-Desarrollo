@@ -14,14 +14,15 @@ public class GUIConsultarProductos extends JFrame {
 	private final String id;
 	private DefaultTableModel modelo;
 	private Container contenedor;
-	private JComboBox<String> criterio;
-	private JTextField busqueda;
+    private JComboBox<String> criterio,busqueda;
 	private JButton consultar, salir;
 	private JTable tabla;
 	private JScrollPane scroll;
 	private String[] datos;
 	private int pX, pY;
 	private JLabel fondoAzul, fondoGris, titulo, icono;
+    private String[] productos;
+    private String criterioStr =  "Id_producto";
 
 	// Constructor
 	public GUIConsultarProductos(BaseDeDatos bd, String id) {
@@ -35,81 +36,90 @@ public class GUIConsultarProductos extends JFrame {
 
 	// Inicializa los componentes de la GUI
 	private void initGUI() {
-		// Configuraciones de la ventana principal
-		getContentPane().setForeground(Color.BLACK);
-		getContentPane().setLayout(null);
-		this.setUndecorated(true);
-		ManejadorDeBotones listener = new ManejadorDeBotones();
-		manejadorDesplazamientoVentana(this);
-		Font font = new Font("Tahoma", Font.PLAIN, 14);
 
-		criterio = new JComboBox<>();
-		criterio.setFont(font);
-		String[] lista = new String[] { "Id", "Nombre" };
-		criterio.setModel(new DefaultComboBoxModel<String>(lista));
-		criterio.setBounds(32, 118, 90, 32);
-		getContentPane().add(criterio);
+		productos = bd.cambiarDimension2(bd.consultarProductos(criterioStr));
 
-		busqueda = new JTextField();
-		busqueda.setFont(font);
-		busqueda.setBounds(127, 118, 290, 32);
-		getContentPane().add(busqueda);
-		busqueda.setColumns(10);
+		if(productos.length!=0) {
+            // Configuraciones de la ventana principal
+            getContentPane().setForeground(Color.BLACK);
+            getContentPane().setLayout(null);
+            this.setUndecorated(true);
+            ManejadorDeBotones listener = new ManejadorDeBotones();
+            manejadorDesplazamientoVentana(this);
+            Font font = new Font("Tahoma", Font.PLAIN, 14);
 
-		consultar = new JButton("Consultar");
-		consultar.setOpaque(true);
-		consultar.setBackground(new Color(227, 227, 227));
-		consultar.setFont(font);
-		consultar.setBounds(422, 118, 100, 32);
-		consultar.addActionListener(listener);
-		getContentPane().add(consultar);
+            busqueda = new JComboBox(productos);
+            busqueda.setFont(font);
+            busqueda.setBounds(127, 118, 290, 32);
+            getContentPane().add(busqueda);
 
-		tabla = new JTable(modelo);
-		tabla.setShowHorizontalLines(false);
-		tabla.setRowSelectionAllowed(true);
-		tabla.setColumnSelectionAllowed(true);
+            criterio = new JComboBox<>();
+            criterio.setFont(font);
+            String[] lista = new String[]{"Id_producto", "Nombre"};
+            criterio.setModel(new DefaultComboBoxModel<String>(lista));
+            criterio.addActionListener(listener);
+            criterio.setSelectedItem(criterioStr);
+            criterio.setBounds(32, 118, 90, 32);
+            getContentPane().add(criterio);
 
-		scroll = new JScrollPane(tabla);
-		scroll.setBounds(32, 182, 490, 211);
-		getContentPane().add(scroll);
+            consultar = new JButton("Consultar");
+            consultar.setOpaque(true);
+            consultar.setBackground(new Color(227, 227, 227));
+            consultar.setFont(font);
+            consultar.setBounds(422, 118, 100, 32);
+            consultar.addActionListener(listener);
+            getContentPane().add(consultar);
 
-		salir = new JButton("Salir");
-		salir.setOpaque(true);
-		salir.setBackground(new Color(227, 227, 227));
-		salir.setFont(font);
-		salir.setBounds(442, 417, 80, 32);
-		salir.addActionListener(listener);
-		getContentPane().add(salir);
+            tabla = new JTable(modelo);
+            tabla.setShowHorizontalLines(false);
+            tabla.setRowSelectionAllowed(true);
+            tabla.setColumnSelectionAllowed(true);
 
-		// Icono a la izquierda del titulo
-		icono = new JLabel("");
-		icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/buscar.png")));
-		icono.setBounds(11, 1, 48, 90);
-		getContentPane().add(icono);
+            scroll = new JScrollPane(tabla);
+            scroll.setBounds(32, 182, 490, 211);
+            getContentPane().add(scroll);
 
-		// Etiqueta del titulo de la ventana
-		titulo = new JLabel("CONSULTAR PRODUCTOS");
-		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
-		titulo.setForeground(Color.WHITE);
-		titulo.setBounds(69, 28, 262, 32);
-		getContentPane().add(titulo);
+            salir = new JButton("Salir");
+            salir.setOpaque(true);
+            salir.setBackground(new Color(227, 227, 227));
+            salir.setFont(font);
+            salir.setBounds(442, 417, 80, 32);
+            salir.addActionListener(listener);
+            getContentPane().add(salir);
 
-		// -- Fondos azul y gris -- //
-		fondoAzul = new JLabel("");
-		fondoAzul.setBounds(1, 1, 560, 90);
-		fondoAzul.setOpaque(true);
-		fondoAzul.setBackground(new Color(45, 118, 232));
-		getContentPane().add(fondoAzul);
-		fondoGris = new JLabel("");
-		fondoGris.setBounds(1, 89, 560, 382);
-		fondoGris.setOpaque(true);
-		fondoGris.setBackground(new Color(227, 227, 227));// Gris
-		getContentPane().add(fondoGris);
+            // Icono a la izquierda del titulo
+            icono = new JLabel("");
+            icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/buscar.png")));
+            icono.setBounds(11, 1, 48, 90);
+            getContentPane().add(icono);
 
-		setSize(562, 472);
-		setResizable(false);
-		setVisible(true);
-		setLocationRelativeTo(null);
+            // Etiqueta del titulo de la ventana
+            titulo = new JLabel("CONSULTAR PRODUCTOS");
+            titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+            titulo.setForeground(Color.WHITE);
+            titulo.setBounds(69, 28, 262, 32);
+            getContentPane().add(titulo);
+
+            // -- Fondos azul y gris -- //
+            fondoAzul = new JLabel("");
+            fondoAzul.setBounds(1, 1, 560, 90);
+            fondoAzul.setOpaque(true);
+            fondoAzul.setBackground(new Color(45, 118, 232));
+            getContentPane().add(fondoAzul);
+            fondoGris = new JLabel("");
+            fondoGris.setBounds(1, 89, 560, 382);
+            fondoGris.setOpaque(true);
+            fondoGris.setBackground(new Color(227, 227, 227));// Gris
+            getContentPane().add(fondoGris);
+
+            setResizable(false);
+            setSize(562, 472);
+            setVisible(true);
+            setLocationRelativeTo(null);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Actualmente no se han registrado productos");
+        }
 	}
 
 	// Define unos campos para mostrar los campos de los productos
@@ -128,8 +138,8 @@ public class GUIConsultarProductos extends JFrame {
 
 		String sede = bd.consultarDatoUsuario("Id", id, "sede");
 
-		String[][] result = bd.listarProductos((String) criterio.getSelectedItem(), (String) busqueda.getText(),
-				"id_producto,nombre,descripcion,precio,cantidad_disponible", sede);
+        String[][] result = bd.listarProductos((String) criterio.getSelectedItem(), busqueda.getSelectedItem().toString(),
+                "id_producto,nombre,descripcion,precio,cantidad_disponible", sede);
 
 		if (result == null || result.length == 0) {
 			JOptionPane.showMessageDialog(null, "La busqueda no produjo resultados.");
@@ -145,6 +155,16 @@ public class GUIConsultarProductos extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == criterio) {
+                if(criterio.getSelectedItem().toString().compareTo("Id_producto")==0){
+                    criterioStr =  "Id_producto";
+                }
+                else criterioStr =  "nombre";
+
+                productos = bd.cambiarDimension2(bd.consultarProductos(criterioStr));
+                busqueda.setModel(new DefaultComboBoxModel<String>(productos));
+
+            }
 
 			if (e.getSource() == consultar) {
 				mostrar();

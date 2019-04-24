@@ -306,8 +306,6 @@ public class GUIRegistrarUser extends JFrame {
 
                         } else JOptionPane.showMessageDialog(null, "Error al crear usuario.");
 
-                        GUIMenuAdmin menu = new GUIMenuAdmin(bd);
-                        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         dispose();
 
                     } else JOptionPane.showMessageDialog(null, validar2());
@@ -315,8 +313,6 @@ public class GUIRegistrarUser extends JFrame {
                 } else JOptionPane.showMessageDialog(null, "Debe llenar todas los campos");
             }
             if (actionEvent.getSource() == cancelar) {
-                GUIMenuAdmin menu = new GUIMenuAdmin(bd);
-                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 dispose();
             }
         }
