@@ -3,6 +3,7 @@ import java.sql.*;
 
 public class BaseDeDatos {
 
+	//Constantes para acceder a la base de datos
 	private final static String DB = "xyz";
 	private final static String USUARIO = "postgres";
 	private final static String PASSWORD = "1234";
@@ -161,7 +162,7 @@ public class BaseDeDatos {
 		}
 	}
 
-
+	//Metodo para actualizar como inactivo a un empleado en la base de datos
 	private void eliminarEncargado(String encargadoId){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             String sql ="UPDATE sedes SET empleado_a_cargo = "+null+
@@ -175,12 +176,10 @@ public class BaseDeDatos {
             e.printStackTrace();
         }
 
-
-
     }
 
 
-	//
+	//Metodo para actualizar datos de un empleado
 	public boolean actualizarUsuario(String identifier, String nombres, String apellidos,
  			String direccion, String celular, String email, String tipo, String sede, boolean activo,String password) {
 
@@ -206,7 +205,7 @@ public class BaseDeDatos {
 		}
 	}
 
-
+    //Metodo para actualizar datos de una sede con un identificador en especifico
 	public boolean actualizarSede(String identifier, String direccion, String telefono, String empleadoACargo) {
 
 	    try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
@@ -226,8 +225,9 @@ public class BaseDeDatos {
 		}
 	}
 
+    //Metodo para actualizar datos de una orden de trabajo con un identificador en especifico
 	public boolean actualizarOrden(String identifier,String fechaEntrega, String cantidad,String idProducto,
-                                   String idEncargado, String asignadoA, String finalizada){
+                                   String asignadoA, String finalizada){
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 			String sql ="UPDATE ordenes_de_trabajo SET asignada_a = '"+asignadoA+"', fecha_entrega = '"+fechaEntrega+
@@ -245,9 +245,6 @@ public class BaseDeDatos {
 			e.printStackTrace();
 			return false;
 		}
-
-
-
 	}
 
 
@@ -292,7 +289,7 @@ public class BaseDeDatos {
 		}
 	}
 
-
+    //Metodo para consultar unos campos en especifico de una sede dato un criterio de busqueda
 	public String[][] consultarSede(String busqueda,String campos) {
 		String sql = "SELECT "+ campos
 				+ " FROM public.sedes";
@@ -332,6 +329,7 @@ public class BaseDeDatos {
 		}
 	}
 
+    //Metodo para consultar unos campos en especifico de una orden de trabajo dato un criterio de busqueda
 	public String[][] consultarOrden(String busqueda,String campos) {
 		String sql = "SELECT "+ campos
 				+ " FROM public.ordenes_de_trabajo NATURAL JOIN producto";
@@ -370,7 +368,8 @@ public class BaseDeDatos {
 		}
 	}
 
-    //Funcion para contar la cantidad de campos a consultar
+    //Funcion para contar la cantidad de campos a consultar usando
+    //el caracter ',' como referencia
     private int contarCampos(String campos){
         int contador=0;
         for (int i=0;i< campos.length();i++){
@@ -380,11 +379,23 @@ public class BaseDeDatos {
     }
 
     //Funcion para transformar matrices bidimensionales a unidimensionales
+    //juntando dos atributos
     public String[] cambiarDimension(String[][] array){
         String[] aux = new String[array.length];
         for (int i=0;i < array.length;i++){
 
             aux[i]=array[i][0].trim()+"-"+array[i][1].trim();
+
+        }
+        return aux;
+    }
+
+    //Funcion para transformar matrices bidimensionales a unidimensionales
+    public String[] cambiarDimension2(String[][] array){
+        String[] aux = new String[array.length];
+        for (int i=0;i < array.length;i++){
+
+            aux[i]=array[i][0].trim();
 
         }
         return aux;
@@ -416,7 +427,8 @@ public class BaseDeDatos {
 
 
 
-    //
+    //Funcion que valida el login retornando el tipo de usuario en caso de ser un login valido
+    // o retornando un string vacion en otro caso
 	public String validarLogin( String user, String pass){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
@@ -441,7 +453,7 @@ public class BaseDeDatos {
 
     }
 
-	//
+	//Funcion para registrar un producto nuevo producto en el inventario de la empresa y de cada sede
     public boolean registrarProducto( String nombre, String costo, String precio,String descripcion){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             @SuppressWarnings("unused")
@@ -463,7 +475,7 @@ public class BaseDeDatos {
     }
 
 
-    //
+    //Funcion para crear una nueva orden de trabajo
     public boolean crearOrdendeTrabajo(String fechaEntrega, String cantidad,
     		String idProducto, String idEncargado, String asignadoA, String finalizada){
 
@@ -487,6 +499,7 @@ public class BaseDeDatos {
         }
     }
 
+    //Funcion para consultar ciertos campos de los productos
   	public String[][] consultarProductos(String campos) {
           String sql = "SELECT "+campos+" FROM public.producto";
 
@@ -520,6 +533,7 @@ public class BaseDeDatos {
   		}
   	}
 
+  	//Funcion para consultar campos de la orden de trabajo dado un criterio de busqueda
     public String[][] consultarOrden(String criterio, String busqueda,String campos) {
         String sql = "SELECT "+campos+" FROM public.ordenes_de_trabajo natural join public.producto" +
                      " WHERE finalizada=false";
@@ -559,6 +573,7 @@ public class BaseDeDatos {
 
     }
 
+    //Funcion para finalizar orden de trabajo almacenandola como finalizada en la base de datos
     public boolean finalizarOrden(String idOrden, String idProducto,String idSede,int cantidad) {
         String sql = "UPDATE ordenes_de_trabajo SET finalizada=true WHERE id_ordenes = " + idOrden;
 
@@ -586,6 +601,8 @@ public class BaseDeDatos {
 
     }
 
+
+    //Funcion para consultar la cantidad disponible de un producto en una sede en especifico
     public int cantidadDisponible(String idProducto,String idSede) {
         String sql = "SELECT cantidad_disponible FROM public.inventario"+
                      " WHERE id_sede = " + idSede +" AND id_producto = " + idProducto + ";";
@@ -612,7 +629,7 @@ public class BaseDeDatos {
 
     }
 
-
+    //Funcion para cancelar orden de trabajo y borrarla de la basse de datos
     public boolean cancelarOrden(String identifier) {
 	    String sql = "DELETE FROM ordenes_de_trabajo WHERE id_ordenes="+identifier;
 
@@ -630,6 +647,7 @@ public class BaseDeDatos {
         }
     }
 
+    //Funcion para insertar una cotizacion
     public String insertarCot(String id_emp,String nombre_cot,String tipo){
 
 		try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
@@ -653,6 +671,7 @@ public class BaseDeDatos {
 		}
 	}
 
+	//Funcion para cancelar una cotizacion y borrarla de la base de datos
 	public boolean cancelarCoti(String identifier){
 		String sql = "DELETE FROM venta_cotizaciones WHERE id_cotizacion="+identifier;
 
@@ -670,6 +689,7 @@ public class BaseDeDatos {
 		}
 	}
 
+	//Funcion para actualizar una cotizacion
 	public boolean actualizarCoti(String identifier,String total){
 		String sql = "UPDATE venta_cotizaciones SET precio_final = "+total+" WHERE id_cotizacion="+identifier;
 
@@ -687,6 +707,7 @@ public class BaseDeDatos {
 		}
 	}
 
+	//Funcion para obtener la fecha de una cotizacion
 	public String getFechacot(String id_cot){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
 
@@ -708,7 +729,7 @@ public class BaseDeDatos {
     }
 
 
-
+    //Funcion para agregar un nuevo prodcuto a la cotizacion con una cantidad a cotizar
 	public boolean agregarProCot(String id_pro, String cantidad, String id_cot){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             @SuppressWarnings("unused")
@@ -728,6 +749,7 @@ public class BaseDeDatos {
         }
     }
 
+    //Funcion para consultar campos en especifico de los productos
     public String consultarProducto(String identifier, String campo, String criterio) {
 
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
@@ -753,6 +775,7 @@ public class BaseDeDatos {
         }
     }
 
+    //Funcion para obtener ciertos campos de un usuario en especifico
     public String consultarDatoUsuario(String criterio, String busqueda,String campos){
 
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
@@ -763,8 +786,6 @@ public class BaseDeDatos {
 
             PreparedStatement psSql = connection.prepareStatement(sql);
             ResultSet rs = psSql.executeQuery();
-
-            System.out.print(sql);
 
             rs.next();
             String resultado = rs.getString(1);
@@ -777,13 +798,18 @@ public class BaseDeDatos {
         }
     }
 
+    //Funcion para obtener los productos de una sede dado un criterio de busqueda
     public String[][] listarProductos(String criterio, String busqueda,String campos,String sede) {
         String sql = "SELECT "+campos+" FROM public.producto NATURAL JOIN public.inventario";
 
-        if(criterio=="Id") sql += " WHERE id_producto = " + busqueda;
+
+
+        if(criterio=="Id_producto") sql += " WHERE id_producto = " + busqueda;
         if(criterio=="Nombre") sql += " WHERE nombre = '" + busqueda + "'";
 
         sql += " AND id_sede = " + sede;
+
+        System.out.print(sql);
 
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,

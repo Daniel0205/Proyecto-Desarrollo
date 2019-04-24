@@ -10,7 +10,7 @@ CREATE TABLE sedes(
 
 
 -- empleados --
-CREATE EXTENSION pgcrypto; --to enable pgcrypto
+CREATE EXTENSION IF NOT EXISTS pgcrypto; --to enable pgcrypto
 DROP TABLE IF EXISTS empleados CASCADE;
 CREATE TABLE empleados (
 	cedula		BIGINT NOT NULL PRIMARY KEY,
@@ -66,12 +66,12 @@ CREATE TABLE inventario (
    id_sede            BIGINT NOT NULL  REFERENCES sedes (id_sede),
    id_producto         BIGINT NOT NULL  REFERENCES producto (id_producto),
    cantidad_disponible INT NOT NULL
-   
+
 );
 alter table inventario
   add constraint no_negativos
   check (cantidad_disponible>=0);
-  
+
 --Tabla Ventas_Cotizaciones_Producto
 DROP TABLE IF EXISTS ventas_cotizaciones_producto CASCADE;
 CREATE TABLE ventas_cotizaciones_producto (
@@ -85,17 +85,17 @@ DROP TABLE IF EXISTS venta_info CASCADE;
 DROP FUNCTION IF EXISTS restar_inv();
 
 --Constraints
-ALTER TABLE ventas_cotizaciones_producto 
+ALTER TABLE ventas_cotizaciones_producto
 DROP CONSTRAINT ventas_cotizaciones_producto_id_cotizacion_fkey;
 
-ALTER TABLE  ventas_cotizaciones_producto 
-ADD CONSTRAINT ventas_cotizaciones_producto_id_cotizacion_fkey 
+ALTER TABLE  ventas_cotizaciones_producto
+ADD CONSTRAINT ventas_cotizaciones_producto_id_cotizacion_fkey
 	FOREIGN KEY (id_cotizacion) REFERENCES venta_cotizaciones ON DELETE CASCADE;
 
 --Crear disparadores y constraints
 
 CREATE OR REPLACE FUNCTION crearInventario() RETURNS TRIGGER AS $$
-DECLARE 
+DECLARE
 	   row producto%rowtype;
 BEGIN
 	FOR row IN (SELECT id_producto FROM producto) LOOP
@@ -122,7 +122,7 @@ CREATE TRIGGER nuevoProducto AFTER INSERT ON producto FOR EACH ROW EXECUTE PROCE
 
 -- Trigger que me actualiza el inventario en caso de que se efectue una compra
 CREATE OR REPLACE FUNCTION actualizarInventario() RETURNS TRIGGER AS $$
-DECLARE 
+DECLARE
 	   row ventas_cotizaciones_producto%rowtype;
 BEGIN
 IF(NEW.tipo = 'V') THEN
@@ -137,10 +137,10 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER reduInve AFTER UPDATE ON venta_cotizaciones FOR EACH ROW EXECUTE PROCEDURE actualizarInventario();
 
 --Insertar valores a la tabla
-	   
+
 INSERT INTO sedes(direccion,nombre,telefono,empleado_a_cargo) VALUES ('Cra 100 #86-03','Melendez',3890543,null);
 INSERT INTO sedes(direccion,nombre,telefono,empleado_a_cargo) VALUES ('Cll 15 #13-06','San Fernando',5359834,null);
-	   
+
 INSERT INTO empleados
 	VALUES (3743, crypt('1234', gen_salt('md5')), 'Pepito', 'Perez', 'Cra 100 #86-06', 31273954335, 'pepito.perez@xyz.com','Jefe de taller',1,true);
 INSERT INTO empleados
@@ -148,15 +148,15 @@ INSERT INTO empleados
 INSERT INTO empleados
 	VALUES (3653, crypt('1234', gen_salt('md5')),'Melissa', 'Fuentes' , 'Cra 102 #84-05', 3127399281,'melissa.fuentes@xyz.com','Vendedor',1,true);
 INSERT INTO empleados
-	VALUES (3414, crypt('1234', gen_salt('md5')), 'Valeria' , 'Rivera', 'Cra 103 #83-04', 3205465535,'valeria.rivera@xyz.com','Vendedor',1,true);
+	VALUES (3414, crypt('1234', gen_salt('md5')), 'Jempool' , 'Rivera', 'Cra 103 #83-04', 3205465535,'valeria.rivera@xyz.com','Vendedor',1,true);
 INSERT INTO empleados
-	VALUES (3369, crypt('1234', gen_salt('md5')), 'Felipin', 'Gil', 'Cra 104 #82-03', 3126249102,'felipin.gil@xyz.com','Vendedor',2,true);
+	VALUES (3369, crypt('1234', gen_salt('md5')), 'Felipe', 'Gil', 'Cra 104 #82-03', 3126249102,'felipin.gil@xyz.com','Vendedor',2,true);
 
 UPDATE sedes SET empleado_a_cargo = 3743 where id_sede = 1;
 UPDATE sedes SET empleado_a_cargo = 3225 where id_sede = 2;
-	   
-INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Nochero',50000,150000,'Mesa de noche de tama�o mediano');	   
-INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Camarote',150000,530000,'Cama de dos pisos :v');	   
+
+INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Nochero',50000,150000,'Mesa de noche de tama�o mediano');
+INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Camarote',150000,530000,'Cama de dos pisos :v');
 INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Silla',30000,50000,'Silla de 4 patas');
 
 UPDATE inventario SET cantidad_disponible=500 WHERE id_sede=1;

@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class GUIConsultarOrden extends JFrame {
+
+    //Variables y componentes de la GUI
 	private BaseDeDatos bd;
 	private JLabel idl, fondoAzul, fondoGris, icono, titulo;
 	@SuppressWarnings("rawtypes")
@@ -15,86 +17,95 @@ public class GUIConsultarOrden extends JFrame {
 	private JSeparator separador;
 	private Font font;
 	private ActionListener listener;
+	private String idJefe;
 	private int pX, pY;
 
 	// Creacion y despliegue de la interfaz de consulta
 	public GUIConsultarOrden(BaseDeDatos bdIn, String idJefe) {
+	    this.idJefe=idJefe;
+        bd = bdIn;
 
-		// Configuraciones de la ventana principal
-		getContentPane().setBackground(Color.BLACK);
-		bd = bdIn;
-		font = new Font("Tahoma", Font.PLAIN, 14);
-		getContentPane().setLayout(null);
-		this.setUndecorated(true);
-		listener = new ManejadorDeBotones();
-		manejadorDesplazamientoVentana(this);
+        String[] ordenes = (bd.cambiarDimension(bd.consultarOrden("User",idJefe,"id_ordenes,nombre")));
 
-		idl = new JLabel("Id");
-		idl.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		idl.setBounds(44, 130, 25, 32);
-		getContentPane().add(idl);
+        if(ordenes.length!=0) {
 
-		//Boton para iniciar el proceso de consulta
-		consultar = new JButton("Consultar");
-        consultar.setOpaque(true);
-		consultar.setBackground(new Color(227, 227, 227));
-		consultar.setFont(font);
-		consultar.setBounds(423, 130, 101, 32);
-		consultar.addActionListener(listener);
-		getContentPane().add(consultar);
+            // Configuraciones de la ventana principal
+            getContentPane().setBackground(Color.BLACK);
 
-		busqueda = new JComboBox<>(
-    		bd.cambiarDimension(
-            bd.consultarOrden("User",idJefe,"id_ordenes,nombre"))
-		);
-		busqueda.setFont(font);
-		busqueda.setBounds(84, 131, 329, 32);
-		getContentPane().add(busqueda);
+            font = new Font("Tahoma", Font.PLAIN, 14);
+            getContentPane().setLayout(null);
+            this.setUndecorated(true);
+            listener = new ManejadorDeBotones();
+            manejadorDesplazamientoVentana(this);
 
-		//Separador inferior
-		separador = new JSeparator();
-		separador.setBounds(44, 199, 492, 4);
-		getContentPane().add(separador);
+            idl = new JLabel("Id");
+            idl.setFont(new Font("Tahoma", Font.PLAIN, 14));
+            idl.setBounds(44, 130, 25, 32);
+            getContentPane().add(idl);
 
-		//Boton para salir del menu de consulta
-		salir = new JButton("Salir");
-        salir.setOpaque(true);
-		salir.setBackground(new Color(227, 227, 227));
-		salir.setFont(font);
-		salir.setBounds(435, 210, 89, 32);
-		salir.addActionListener(listener);
-		getContentPane().add(salir);
+            //Boton para iniciar el proceso de consulta
+            consultar = new JButton("Consultar");
+            consultar.setOpaque(true);
+            consultar.setBackground(new Color(227, 227, 227));
+            consultar.setFont(font);
+            consultar.setBounds(423, 130, 101, 32);
+            consultar.addActionListener(listener);
+            getContentPane().add(consultar);
 
-		// Icono a la izquierda del titulo
-		icono = new JLabel("");
-		icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/buscar.png")));
-		icono.setBounds(11, 1, 48, 90);
-		getContentPane().add(icono);
+            busqueda = new JComboBox<>(ordenes);
+            busqueda.setFont(font);
+            busqueda.setBounds(84, 131, 329, 32);
+            getContentPane().add(busqueda);
 
-		// Etiqueta del titulo de la ventana
-		titulo = new JLabel("BUSCAR ORDEN DE TRABAJO");
-		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
-		titulo.setForeground(Color.WHITE);
-		titulo.setBounds(69, 28, 282, 32);
-		getContentPane().add(titulo);
+            //Separador inferior
+            separador = new JSeparator();
+            separador.setBounds(44, 199, 492, 4);
+            getContentPane().add(separador);
 
-		// -- Fondos azul y gris -- //
-		fondoAzul = new JLabel("");
-		fondoAzul.setBounds(1, 1, 559, 90);
-		fondoAzul.setOpaque(true);
-		fondoAzul.setBackground(new Color(45, 118, 232));
-		getContentPane().add(fondoAzul);
-		fondoGris = new JLabel("");
-		fondoGris.setBounds(1, 89, 559, 174);
-		fondoGris.setOpaque(true);
-		fondoGris.setBackground(new Color(227, 227, 227));
-		getContentPane().add(fondoGris);
+            //Boton para salir del menu de consulta
+            salir = new JButton("Salir");
+            salir.setOpaque(true);
+            salir.setBackground(new Color(227, 227, 227));
+            salir.setFont(font);
+            salir.setBounds(435, 210, 89, 32);
+            salir.addActionListener(listener);
+            getContentPane().add(salir);
 
-		// Configuraciones adicionales de la ventana
-		setSize(561, 264);
-		setVisible(true);
-		setLocationRelativeTo(null);
-		setResizable(false);
+            // Icono a la izquierda del titulo
+            icono = new JLabel("");
+            icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/buscar.png")));
+            icono.setBounds(11, 1, 48, 90);
+            getContentPane().add(icono);
+
+            // Etiqueta del titulo de la ventana
+            titulo = new JLabel("BUSCAR ORDEN DE TRABAJO");
+            titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+            titulo.setForeground(Color.WHITE);
+            titulo.setBounds(69, 28, 282, 32);
+            getContentPane().add(titulo);
+
+            // -- Fondos azul y gris -- //
+            fondoAzul = new JLabel("");
+            fondoAzul.setBounds(1, 1, 559, 90);
+            fondoAzul.setOpaque(true);
+            fondoAzul.setBackground(new Color(45, 118, 232));
+            getContentPane().add(fondoAzul);
+            fondoGris = new JLabel("");
+            fondoGris.setBounds(1, 89, 559, 174);
+            fondoGris.setOpaque(true);
+            fondoGris.setBackground(new Color(227, 227, 227));
+            getContentPane().add(fondoGris);
+
+            // Configuraciones adicionales de la ventana
+            setResizable(false);
+            setSize(561, 264);
+            setVisible(true);
+            setLocationRelativeTo(null);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Actualmente no hay ordenes disponibles");
+
+        }
 	}
 
 	// Manejador de eventos sobre los botones del menu de consulta
@@ -109,11 +120,14 @@ public class GUIConsultarOrden extends JFrame {
 				String[][] resultado = bd.consultarOrden(idOrden, campos);
 				resultadosConsultaGUI(resultado);
 			} else if (actionEvent.getSource() == salir) {
-				dispose();
+
+			    dispose();
+
 			}
 		}
 	}
 
+	//Funcion que muestra los resultados de la consulta en una tabla
 	private void resultadosConsultaGUI(String[][] board) {
 
 		if (board == null || board.length == 0)

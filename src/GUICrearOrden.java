@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("serial")
 public class GUICrearOrden extends JFrame {
 
+    //Variables y componentes de la GUI
 	private Container contenedor;
 	private JLabel  fechaEntrega, cantidad, idEncargado, idProducto;
 	private JLabel icono, titulo, fondoAzul, fondoGris;
@@ -23,12 +24,8 @@ public class GUICrearOrden extends JFrame {
 	private JComboBox idProductoIn;
 	private String idenfier;
 	private int pX,pY;
-	/**
-	 * @wbp.nonvisual location=481,659
-	 */
-	private final JLabel label = new JLabel("New label");
 
-
+    //Constructor
 	public GUICrearOrden(BaseDeDatos bdIn,String idenfier) {
 		super("REGISTRAR SEDE");
 		setTitle("CREAR ORDEN DE TRABAJO");
@@ -42,122 +39,129 @@ public class GUICrearOrden extends JFrame {
 	// Funcion que crea la interfaz y sus componentes
 	private void crearComponentes() {
 
-		//Configuraciones de la ventana principal
-		contenedor = getContentPane();
-		contenedor.removeAll();
-		getContentPane().setLayout(null);
-		ActionListener listener = new ManejadorDeBotones();
-		manejadorDesplazamientoVentana(this);
-		JPanel panelUsuario = new JPanel();
-		panelUsuario.setBackground(Color.BLACK);
-		panelUsuario.setBounds(0, 0, 423, 456);
-		contenedor.add(panelUsuario);
-		panelUsuario.setLayout(null);
-		listener = new ManejadorDeBotones();
+	    String[] productos = bd.cambiarDimension(bd.consultarProductos("id_producto, nombre"));
 
-		idProducto = new JLabel("Id-Producto:");
-		idProducto.setFont(font);
-		idProducto.setBounds(21, 143, 105, 32);
-		panelUsuario.add(idProducto);
+	    //Valida que existan productos para crear una orden de trabajo
+	    if(productos.length!=0) {
 
-		idProductoIn = new JComboBox<>(
-//				bd.cambiarDimension(bd.consultarProductos("id_producto, nombre"))
-				);
-		idProductoIn.setFont(font);
-		idProductoIn.setBounds(159, 144, 234, 32);
-		panelUsuario.add(idProductoIn);
+            //Configuraciones de la ventana principal
+            contenedor = getContentPane();
+            contenedor.removeAll();
+            getContentPane().setLayout(null);
+            ActionListener listener = new ManejadorDeBotones();
+            manejadorDesplazamientoVentana(this);
+            JPanel panelUsuario = new JPanel();
+            panelUsuario.setBackground(Color.BLACK);
+            panelUsuario.setBounds(0, 0, 423, 456);
+            contenedor.add(panelUsuario);
+            panelUsuario.setLayout(null);
+            listener = new ManejadorDeBotones();
 
-		fechaEntrega = new JLabel("Fecha de Entrega:");
-		fechaEntrega.setFont(font);
-		fechaEntrega.setBounds(21, 186, 127, 32);
-		panelUsuario.add(fechaEntrega);
+            idProducto = new JLabel("Id-Producto:");
+            idProducto.setFont(font);
+            idProducto.setBounds(21, 143, 105, 32);
+            panelUsuario.add(idProducto);
 
-		fechaEntregaIn = new JTextField();
-		fechaEntregaIn.setFont(font);
-		fechaEntregaIn.setBounds(159, 186, 234, 32);
-		panelUsuario.add(fechaEntregaIn);
+            idProductoIn = new JComboBox<>(productos);
+            idProductoIn.setFont(font);
+            idProductoIn.setBounds(159, 144, 234, 32);
+            panelUsuario.add(idProductoIn);
 
-		cantidad = new JLabel("Cantidad:");
-		cantidad.setFont(font);
-		cantidad.setBounds(21, 229, 105, 32);
-		panelUsuario.add(cantidad);
+            fechaEntrega = new JLabel("Fecha de Entrega:");
+            fechaEntrega.setFont(font);
+            fechaEntrega.setBounds(21, 186, 127, 32);
+            panelUsuario.add(fechaEntrega);
 
-		cantidadIn = new JTextField();
-		cantidadIn.setFont(font);
-		cantidadIn.setBounds(159, 230, 234, 32);
-		panelUsuario.add(cantidadIn);
+            fechaEntregaIn = new JTextField();
+            fechaEntregaIn.setFont(font);
+            fechaEntregaIn.setBounds(159, 186, 234, 32);
+            panelUsuario.add(fechaEntregaIn);
 
-		idEncargado = new JLabel("Id Creador:");
-		idEncargado.setFont(font);
-		idEncargado.setBounds(21, 272, 105, 32);
-		panelUsuario.add(idEncargado);
+            cantidad = new JLabel("Cantidad:");
+            cantidad.setFont(font);
+            cantidad.setBounds(21, 229, 105, 32);
+            panelUsuario.add(cantidad);
 
-		idEncargadoIn = new JTextField(idenfier);
-		idEncargadoIn.setEditable(false);
-		idEncargadoIn.setBounds(159, 274, 234, 32);
-		idEncargadoIn.setFont(font);
-		panelUsuario.add(idEncargadoIn);
+            cantidadIn = new JTextField();
+            cantidadIn.setFont(font);
+            cantidadIn.setBounds(159, 230, 234, 32);
+            panelUsuario.add(cantidadIn);
 
-		salir = new JButton("Salir");
-		salir.setOpaque(true);
-		salir.setBackground(new Color(227, 227, 227));
-		salir.setFont(font);
-		salir.setBounds(143, 404, 113, 28);
-		salir.addActionListener(listener);
-		panelUsuario.add(salir);
+            idEncargado = new JLabel("Id Creador:");
+            idEncargado.setFont(font);
+            idEncargado.setBounds(21, 272, 105, 32);
+            panelUsuario.add(idEncargado);
 
-		crearOrden = new JButton("Crear Orden");
-		crearOrden.setOpaque(true);
-		crearOrden.setBackground(new Color(227, 227, 227));
-		crearOrden.setFont(font);
-		crearOrden.setBounds(266, 404, 127, 28);
-		crearOrden.addActionListener(listener);
-		panelUsuario.add(crearOrden);
+            idEncargadoIn = new JTextField(idenfier);
+            idEncargadoIn.setEditable(false);
+            idEncargadoIn.setBounds(159, 274, 234, 32);
+            idEncargadoIn.setFont(font);
+            panelUsuario.add(idEncargadoIn);
 
-		separador = new JSeparator();
-		separador.setBounds(44, 391, 349, 2);
-		panelUsuario.add(separador);
+            salir = new JButton("Salir");
+            salir.setOpaque(true);
+            salir.setBackground(new Color(227, 227, 227));
+            salir.setFont(font);
+            salir.setBounds(143, 404, 113, 28);
+            salir.addActionListener(listener);
+            panelUsuario.add(salir);
 
-		JLabel asignadoA = new JLabel("Asignado a:");
-		asignadoA.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		asignadoA.setBounds(21, 315, 105, 32);
-		panelUsuario.add(asignadoA);
+            crearOrden = new JButton("Crear Orden");
+            crearOrden.setOpaque(true);
+            crearOrden.setBackground(new Color(227, 227, 227));
+            crearOrden.setFont(font);
+            crearOrden.setBounds(266, 404, 127, 28);
+            crearOrden.addActionListener(listener);
+            panelUsuario.add(crearOrden);
 
-		asignadoAIn = new JTextField();
-		asignadoAIn.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		asignadoAIn.setBounds(159, 316, 234, 32);
-		panelUsuario.add(asignadoAIn);
+            separador = new JSeparator();
+            separador.setBounds(44, 391, 349, 2);
+            panelUsuario.add(separador);
 
-		//Icono a la izquierda del titulo
-		icono = new JLabel("");
-		icono.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/titulo_flecha.png")));
-		icono.setBounds(11, 1, 48, 90);
-		panelUsuario.add(icono);
-		
-		//Etiqueta titulo de la ventana
-		titulo = new JLabel("CREAR ORDEN DE TRABAJO");
-		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
-		titulo.setForeground(Color.WHITE);
-		titulo.setBounds(61, 30, 295, 32);
-		panelUsuario.add(titulo);
-		
-		// -- Fondos azul y gris -- //
-		fondoAzul = new JLabel("");
-		fondoAzul.setBounds(1, 1, 421, 90);
-		fondoAzul.setOpaque(true);
-		fondoAzul.setBackground(new Color(45, 118, 232));
-		panelUsuario.add(fondoAzul);
-		fondoGris = new JLabel("");
-		fondoGris.setBounds(1, 89, 421, 366);
-		fondoGris.setOpaque(true);
-		fondoGris.setBackground(new Color(227,227,227));
-		panelUsuario.add(fondoGris);
-		
-		//Configuraciones adicionales de la ventana principal(0, 0, 422, 602);
-		setResizable(false);
-		setSize(423, 456);
-		setVisible(true);
-		setLocationRelativeTo(null);
+            JLabel asignadoA = new JLabel("Asignado a:");
+            asignadoA.setFont(new Font("Tahoma", Font.PLAIN, 14));
+            asignadoA.setBounds(21, 315, 105, 32);
+            panelUsuario.add(asignadoA);
+
+            asignadoAIn = new JTextField();
+            asignadoAIn.setFont(new Font("Tahoma", Font.PLAIN, 14));
+            asignadoAIn.setBounds(159, 316, 234, 32);
+            panelUsuario.add(asignadoAIn);
+
+            //Icono a la izquierda del titulo
+            icono = new JLabel("");
+            icono.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/titulo_flecha.png")));
+            icono.setBounds(11, 1, 48, 90);
+            panelUsuario.add(icono);
+
+            //Etiqueta titulo de la ventana
+            titulo = new JLabel("CREAR ORDEN DE TRABAJO");
+            titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+            titulo.setForeground(Color.WHITE);
+            titulo.setBounds(61, 30, 295, 32);
+            panelUsuario.add(titulo);
+
+            // -- Fondos azul y gris -- //
+            fondoAzul = new JLabel("");
+            fondoAzul.setBounds(1, 1, 421, 90);
+            fondoAzul.setOpaque(true);
+            fondoAzul.setBackground(new Color(45, 118, 232));
+            panelUsuario.add(fondoAzul);
+            fondoGris = new JLabel("");
+            fondoGris.setBounds(1, 89, 421, 366);
+            fondoGris.setOpaque(true);
+            fondoGris.setBackground(new Color(227, 227, 227));
+            panelUsuario.add(fondoGris);
+
+            //Configuraciones adicionales de la ventana principal(0, 0, 422, 602);
+            setResizable(false);
+            setSize(423, 456);
+            setVisible(true);
+            setLocationRelativeTo(null);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Actualmente no hay productos para crear ordenes");
+        }
 	}
 
 	// Funcion que valida si algun campo a registrar esta vacio

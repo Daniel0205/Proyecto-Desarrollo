@@ -5,10 +5,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("serial")
 public class GUIMenuVendedor extends JFrame {
 
+	// Variables y componentes de la GUI
 	private final BaseDeDatos bd;
 	private final String id;
 	private Container contenedor;
@@ -20,7 +23,6 @@ public class GUIMenuVendedor extends JFrame {
 	private int pX, pY;
 
 	public GUIMenuVendedor(BaseDeDatos bd, String id) {
-		super("MENU VENDEDOR");
 		this.id = id;
 		this.bd = bd;
 		initGUI();
@@ -72,7 +74,7 @@ public class GUIMenuVendedor extends JFrame {
 		getContentPane().add(consultaProducto);
 
 		// Boton para concretar una venta cotizada
-		venta = new JButton("VENDER");
+		venta = new JButton("VENTA");
 		venta.setForeground(SystemColor.textHighlight);
 		venta.setVerticalTextPosition(SwingConstants.BOTTOM);
 		venta.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -87,7 +89,7 @@ public class GUIMenuVendedor extends JFrame {
 		getContentPane().add(venta);
 
 		// Boton empezar un proceso de cotizacion
-		cotizacion = new JButton("ACTUALIZAR");
+		cotizacion = new JButton("COTIZACION");
 		cotizacion.setForeground(SystemColor.textHighlight);
 		cotizacion.setVerticalTextPosition(SwingConstants.BOTTOM);
 		cotizacion.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -172,19 +174,23 @@ public class GUIMenuVendedor extends JFrame {
 				String nombre_cliente = JOptionPane
 						.showInputDialog("Ingrese el nombre del cliente que solicita la transaccion: ");
 
-				if (nombre_cliente == null) {
+				Pattern patron = Pattern.compile("[^A-Za-z ]");
+				Matcher nombre = patron.matcher(nombre_cliente);
 
+
+				if(nombre.find()){
+					JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
 				} else {
 					if (nombre_cliente.equals("")) {
 						JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
 					} else {
-						GUICotizacion cot = new GUICotizacion(bd, id, nombre_cliente, "C");
+						GUICotizacionVenta cot = new GUICotizacionVenta(bd, id, nombre_cliente, "C");
 						cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 					}
 				}
 
 			} else if (actionEvent.getSource() == consultaProducto) {
-				GUIProductos prod = new GUIProductos(bd, id);
+				GUIConsultarProductos prod = new GUIConsultarProductos(bd, id);
 				prod.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			} else if (actionEvent.getSource() == salir) {
 				GUILogin login = new GUILogin();
@@ -194,13 +200,16 @@ public class GUIMenuVendedor extends JFrame {
 				String nombre_cliente = JOptionPane
 						.showInputDialog("Ingrese el nombre del cliente que solicita la transaccion: ");
 
-				if (nombre_cliente == null) {
+				Pattern patron = Pattern.compile("[^A-Za-z ]");
+				Matcher nombre = patron.matcher(nombre_cliente);
 
+				if(nombre.find()){
+					JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
 				} else {
 					if (nombre_cliente.equals("")) {
 						JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
 					} else {
-						GUICotizacion cot = new GUICotizacion(bd, id, nombre_cliente, "V");
+						GUICotizacionVenta cot = new GUICotizacionVenta(bd, id, nombre_cliente, "V");
 						cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 					}
 				}
@@ -208,7 +217,8 @@ public class GUIMenuVendedor extends JFrame {
 		}
 	}
 
-	// Manejador del desplazamiento de la ventana causado por el arrastre del mouse
+	// Manejador del desplazamiento de la ventana causado por el arrastre del
+	// mouse
 	private void manejadorDesplazamientoVentana(JFrame frame) {
 		frame.addMouseListener(new MouseAdapter() {
 			@Override

@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("serial")
 public class GUIActualizarOrden extends JFrame {
 
+    //Variables y Componentes de la interfaz
 	private Container contenedor;
 	private JLabel instruccion, fechaEntrega, idOrden, cantidad, idEncargado, idProducto;
 	private JTextField fechaEntregaIn, cantidadIn, asignadoAIn, idIn, idEncargadoIn;
@@ -22,7 +23,7 @@ public class GUIActualizarOrden extends JFrame {
 	private String idJefe;
 	private int pX, pY;
 
-	
+	//Contructor
 	public GUIActualizarOrden(BaseDeDatos bdIn, String idJefe) {
 		getContentPane().setBackground(Color.BLACK);
 		font = new Font("Tahoma", Font.PLAIN, 14);
@@ -31,78 +32,86 @@ public class GUIActualizarOrden extends JFrame {
 		initGUI();
 	}
 
-	// FUnciona para inicializar los elementos graficos
+	// Funciona para inicializar los elementos graficos
 	private void initGUI() {
 
-		// Configuraciones generales de la primer ventana
-		this.setUndecorated(true);
-		contenedor = getContentPane();
-		contenedor.removeAll();
-		getContentPane().setLayout(null);
-		listener = new ManejadorDeBotones();
 
-		// Etiqueta que describe el funcionamiento
-		instruccion = new JLabel("ID orden a modificar");
-		instruccion.setFont(font);
-		instruccion.setBounds(22, 106, 138, 32);
-		getContentPane().add(instruccion);
+		String[] ordenes = (bd.cambiarDimension(bd.consultarOrden("User",idJefe,"id_ordenes,nombre")));
 
-		idOrdenIn = new JComboBox<>(
-        		bd.cambiarDimension(bd.consultarOrden("User",idJefe,"id_ordenes,nombre"))
-		);
-		idOrdenIn.setFont(font);
-		idOrdenIn.setBounds(170, 106, 239, 32);
-		getContentPane().add(idOrdenIn);
 
-		salir = new JButton("Salir");
-		salir.setOpaque(true);
-		salir.setBackground(new Color(227, 227, 227));
-		salir.setFont(font);
-		salir.setBounds(419, 189, 100, 32);
-		salir.addActionListener(listener);
-		getContentPane().add(salir);
+		if(ordenes.length!=0) {
 
-		buscar = new JButton("Buscar");
-		buscar.setOpaque(true);
-		buscar.setBackground(new Color(227, 227, 227));
-		buscar.setBounds(419, 106, 100, 32);
-		buscar.setFont(font);
-		buscar.addActionListener(listener);
-		getContentPane().add(buscar);
+			// Configuraciones generales de la primer ventana
+			this.setUndecorated(true);
+			contenedor = getContentPane();
+			contenedor.removeAll();
+			getContentPane().setLayout(null);
+			listener = new ManejadorDeBotones();
 
-		JSeparator separator = new JSeparator();
-		separator.setBounds(22, 177, 497, 2);
-		getContentPane().add(separator);
+			// Etiqueta que describe el funcionamiento
+			instruccion = new JLabel("ID orden a modificar");
+			instruccion.setFont(font);
+			instruccion.setBounds(22, 106, 138, 32);
+			getContentPane().add(instruccion);
 
-		// Icono a la izquierda del titulo
-		JLabel icono = new JLabel("");
-		icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/actualizar.png")));
-		icono.setBounds(11, 1, 48, 90);
-		getContentPane().add(icono);
+			idOrdenIn = new JComboBox<>(ordenes);
+			idOrdenIn.setFont(font);
+			idOrdenIn.setBounds(170, 106, 239, 32);
+			getContentPane().add(idOrdenIn);
 
-		// Etiqueta del titulo de la ventana
-		JLabel titulo = new JLabel("ACTUALIZAR ORDEN DE TRABAJO");
-		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
-		titulo.setForeground(Color.WHITE);
-		titulo.setBounds(69, 28, 340, 32);
-		getContentPane().add(titulo);
+			salir = new JButton("Salir");
+			salir.setOpaque(true);
+			salir.setBackground(new Color(227, 227, 227));
+			salir.setFont(font);
+			salir.setBounds(419, 189, 100, 32);
+			salir.addActionListener(listener);
+			getContentPane().add(salir);
 
-		// -- Fondos azul y gris -- //
-		JLabel fondoAzul = new JLabel("");
-		fondoAzul.setBounds(1, 1, 560, 90);
-		fondoAzul.setOpaque(true);
-		fondoAzul.setBackground(new Color(45, 118, 232));
-		getContentPane().add(fondoAzul);
-		JLabel fondoGris = new JLabel("");
-		fondoGris.setBounds(1, 89, 560, 166);
-		fondoGris.setOpaque(true);
-		fondoGris.setBackground(new Color(227, 227, 227));
-		getContentPane().add(fondoGris);
+			buscar = new JButton("Buscar");
+			buscar.setOpaque(true);
+			buscar.setBackground(new Color(227, 227, 227));
+			buscar.setBounds(419, 106, 100, 32);
+			buscar.setFont(font);
+			buscar.addActionListener(listener);
+			getContentPane().add(buscar);
 
-		setResizable(false);
-		setSize(562, 256);
-		setVisible(true);
-		setLocationRelativeTo(null);
+			JSeparator separator = new JSeparator();
+			separator.setBounds(22, 177, 497, 2);
+			getContentPane().add(separator);
+
+			// Icono a la izquierda del titulo
+			JLabel icono = new JLabel("");
+			icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/actualizar.png")));
+			icono.setBounds(11, 1, 48, 90);
+			getContentPane().add(icono);
+
+			// Etiqueta del titulo de la ventana
+			JLabel titulo = new JLabel("ACTUALIZAR ORDEN DE TRABAJO");
+			titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+			titulo.setForeground(Color.WHITE);
+			titulo.setBounds(69, 28, 340, 32);
+			getContentPane().add(titulo);
+
+			// -- Fondos azul y gris -- //
+			JLabel fondoAzul = new JLabel("");
+			fondoAzul.setBounds(1, 1, 560, 90);
+			fondoAzul.setOpaque(true);
+			fondoAzul.setBackground(new Color(45, 118, 232));
+			getContentPane().add(fondoAzul);
+			JLabel fondoGris = new JLabel("");
+			fondoGris.setBounds(1, 89, 560, 166);
+			fondoGris.setOpaque(true);
+			fondoGris.setBackground(new Color(227, 227, 227));
+			getContentPane().add(fondoGris);
+
+			setResizable(false);
+			setSize(562, 256);
+			setVisible(true);
+			setLocationRelativeTo(null);
+		}
+		else{
+            JOptionPane.showMessageDialog(null, "Actualmente no hay ordenes disponibles");
+        }
 	}
 
 	// Funcion para inicializar la interfaz grafica para
@@ -166,7 +175,7 @@ public class GUIActualizarOrden extends JFrame {
 		idEncargado.setBounds(27, 304, 105, 32);
 		ventana.add(idEncargado);
 
-		idEncargadoIn = new JTextField(identifier);
+		idEncargadoIn = new JTextField(bd.consultarOrden("Id", identifier, "id_usuario")[0][0]);
 		idEncargadoIn.setEditable(false);
 		idEncargadoIn.setBounds(161, 306, 224, 32);
 		idEncargadoIn.setFont(font);
@@ -259,6 +268,17 @@ public class GUIActualizarOrden extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
+
+    // Funcion que valida si algun campo a registrar esta vacio
+    private boolean validar1() {
+        boolean val = true;
+        val = ( fechaEntregaIn.getText().compareTo("") == 0 || cantidadIn.getText().compareTo("") == 0
+                || asignadoAIn.getText().compareTo("") == 0)
+                ? false : true;
+
+        return val;
+    }
+
 	// Funcion para validar el dominio de los datos ingresados
 	private String validar2() {
 		String mensaje = "";
@@ -305,13 +325,13 @@ public class GUIActualizarOrden extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == salir || e.getSource() == salir2) {
+
+		    if (e.getSource() == salir || e.getSource() == salir2) {
 				dispose();
-				return;
 			}
 
-			String identifier = idOrdenIn.getSelectedItem().toString();
-			identifier = identifier.substring(0, identifier.indexOf("-"));
+            String identifier = idOrdenIn.getSelectedItem().toString();
+            identifier = identifier.substring(0, identifier.indexOf("-"));
 
 			if (e.getSource() == buscar) {
 				dispose();
@@ -322,16 +342,19 @@ public class GUIActualizarOrden extends JFrame {
 			idProducto = idProducto.substring(0, idProducto.indexOf("-"));
 
 			if (e.getSource() == actualizarOrden) {
-				if (validar2().compareTo("true") == 0) {
+                if (validar1()) {
+                    if (validar2().compareTo("true") == 0) {
 
-					if (bd.actualizarOrden(identifier, fechaEntregaIn.getText(), cantidadIn.getText(), idProducto,
-							identifier, asignadoAIn.getText(), "false")) {
-						JOptionPane.showMessageDialog(null, "Orden de trabajo actualizada exitosamente");
-					} else
-						JOptionPane.showMessageDialog(null, "Error al actualizar orden de trabajo.");
-					dispose();
-				} else
-					JOptionPane.showMessageDialog(null, validar2());
+                        if (bd.actualizarOrden(identifier, fechaEntregaIn.getText(), cantidadIn.getText(), idProducto,
+                                asignadoAIn.getText(), "false")) {
+                            JOptionPane.showMessageDialog(null, "Orden de trabajo actualizada exitosamente");
+                        } else
+                            JOptionPane.showMessageDialog(null, "Error al actualizar orden de trabajo.");
+                        dispose();
+                    } else
+                        JOptionPane.showMessageDialog(null, validar2());
+                } else
+                    JOptionPane.showMessageDialog(null, "Digite todos los campos");
 			}
 
 			if (e.getSource() == finalizar) {

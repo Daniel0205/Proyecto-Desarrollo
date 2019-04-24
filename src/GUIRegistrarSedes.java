@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("serial")
 public class GUIRegistrarSedes extends JFrame{
 
+	//Variables y componentes de la GUI
 	private Container contenedor;
 	private JLabel direccion, telefono, encargado, nombre;
 	private JLabel icono, titulo, fondoAzul, fondoGris;
@@ -32,7 +33,8 @@ public class GUIRegistrarSedes extends JFrame{
 	private BaseDeDatos bd;
 	private ActionListener listener;
 	private int pX,pY;
-	
+
+	//Constructor
 	public GUIRegistrarSedes(BaseDeDatos bdIn){
 	    super("REGISTRAR SEDE");
 		this.setUndecorated(true);
@@ -40,7 +42,6 @@ public class GUIRegistrarSedes extends JFrame{
         bd = bdIn;
 		crearComponentes();
 	}
-
 
 	//Funcion que crea la interfaz y sus componentes
 	private void crearComponentes() {
@@ -203,7 +204,7 @@ public class GUIRegistrarSedes extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 			if(actionEvent.getSource() == cancelar){
-				dispose();
+                dispose();
 			}
 			else if(actionEvent.getSource() == registrar){
 				if(validar1()) {
@@ -220,7 +221,8 @@ public class GUIRegistrarSedes extends JFrame{
 								telefonoIn.getText(),encargado,nombreIn.getText());
 						if (var) JOptionPane.showMessageDialog(null, "Sede registrada exitosamente");
 						else JOptionPane.showMessageDialog(null, "Error al actualizar usuario.");
-						dispose();
+
+                        dispose();
 					}
 					else JOptionPane.showMessageDialog(null, validar2());
 				}

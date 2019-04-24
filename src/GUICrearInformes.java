@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 @SuppressWarnings("serial")
 public class GUICrearInformes  extends JFrame {
 
+    //Variables y componentes de la GUI
     private final BaseDeDatos bd;
     private Container contenedor;
     private JComboBox<String> informe, periodo, sedes;

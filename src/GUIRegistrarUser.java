@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("serial")
 public class GUIRegistrarUser extends JFrame {
 
+    //Variables y componentes de la GUI
 	private Container contenedor;
 	private JLabel id, nombre, apellido, direccion, celular;
 	private JLabel eMail, contrasena, tipoEmpleado, sede;
@@ -25,6 +26,7 @@ public class GUIRegistrarUser extends JFrame {
 	private JLabel fondoAzul, fondoGris, icono, titulo;
 	private int pX,pY;
 
+	//Constructor
 	public GUIRegistrarUser(BaseDeDatos bdIn){
 		super("CREAR EMPLEADO");
 		this.setUndecorated(true);
@@ -33,168 +35,175 @@ public class GUIRegistrarUser extends JFrame {
 		crearComponentes();
 	}
 
-
+    //Inicializa los componentes de la GUI
     private void crearComponentes() {
 
-		//Configuraciones de la ventana principal
-		contenedor = getContentPane();
-		contenedor.removeAll();
-		getContentPane().setLayout(null);
-		ActionListener listener = new ManejadorDeBotones();
-		manejadorDesplazamientoVentana(this);
-		JPanel panelUsuario = new JPanel();
-		panelUsuario.setBackground(Color.BLACK);
-		panelUsuario.setBounds(0, 0, 400, 602);
-		contenedor.add(panelUsuario);
-		panelUsuario.setLayout(null);
-    
-		nombre = new JLabel("Nombre:");
-		nombre.setFont(font);
-		nombre.setBounds(22, 138, 105, 32);
-		panelUsuario.add(nombre);
+		String[] sedes = bd.cambiarDimension(bd.consultarSede(null,"id_Sede,nombre"));
 
-		nombreIn = new JTextField();
-		nombreIn.setFont(font);
-		nombreIn.setBounds(137, 138, 234, 32);
-		panelUsuario.add(nombreIn);
+		if(sedes.length!=0) {
+            //Configuraciones de la ventana principal
+            contenedor = getContentPane();
+            contenedor.removeAll();
+            getContentPane().setLayout(null);
+            ActionListener listener = new ManejadorDeBotones();
+            manejadorDesplazamientoVentana(this);
+            JPanel panelUsuario = new JPanel();
+            panelUsuario.setBackground(Color.BLACK);
+            panelUsuario.setBounds(0, 0, 400, 602);
+            contenedor.add(panelUsuario);
+            panelUsuario.setLayout(null);
 
-		apellido = new JLabel("Apellidos:");
-		apellido.setFont(font);
-		apellido.setBounds(22, 177, 105, 32);
-		panelUsuario.add(apellido);
+            nombre = new JLabel("Nombre:");
+            nombre.setFont(font);
+            nombre.setBounds(22, 138, 105, 32);
+            panelUsuario.add(nombre);
 
-		apellidoIn = new JTextField();
-		apellidoIn.setFont(font);
-		apellidoIn.setBounds(137, 178, 234, 32);
-		panelUsuario.add(apellidoIn);
+            nombreIn = new JTextField();
+            nombreIn.setFont(font);
+            nombreIn.setBounds(137, 138, 234, 32);
+            panelUsuario.add(nombreIn);
 
-		id =  new JLabel("Id/Documento:");
-		id.setFont(font);
-		id.setBounds(22, 220, 105, 32);
-		panelUsuario.add(id);
+            apellido = new JLabel("Apellidos:");
+            apellido.setFont(font);
+            apellido.setBounds(22, 177, 105, 32);
+            panelUsuario.add(apellido);
 
-		idIn = new JTextField();
-		idIn.setFont(font);
-		idIn.setBounds(137, 221, 234, 32);
-		panelUsuario.add(idIn);
+            apellidoIn = new JTextField();
+            apellidoIn.setFont(font);
+            apellidoIn.setBounds(137, 178, 234, 32);
+            panelUsuario.add(apellidoIn);
 
-		contrasena = new JLabel("Contrasena:");
-		contrasena.setFont(font);
-		contrasena.setBounds(22, 263, 105, 32);
-		panelUsuario.add(contrasena);
+            id = new JLabel("Id/Documento:");
+            id.setFont(font);
+            id.setBounds(22, 220, 105, 32);
+            panelUsuario.add(id);
 
-		contrasenaIn = new JPasswordField();
-		contrasenaIn.setFont(font);
-		contrasenaIn.setBounds(137, 264, 234, 32);
-		panelUsuario.add(contrasenaIn);
+            idIn = new JTextField();
+            idIn.setFont(font);
+            idIn.setBounds(137, 221, 234, 32);
+            panelUsuario.add(idIn);
 
-		direccion = new JLabel("Direccion:");
-		direccion.setFont(font);
-		direccion.setBounds(22, 306, 105, 32);
-		panelUsuario.add(direccion);
+            contrasena = new JLabel("Contrasena:");
+            contrasena.setFont(font);
+            contrasena.setBounds(22, 263, 105, 32);
+            panelUsuario.add(contrasena);
 
-		direccionIn = new JTextField();
-		direccionIn.setFont(font);
-		direccionIn.setBounds(137, 307, 234, 32);
-		panelUsuario.add(direccionIn);
+            contrasenaIn = new JPasswordField();
+            contrasenaIn.setFont(font);
+            contrasenaIn.setBounds(137, 264, 234, 32);
+            panelUsuario.add(contrasenaIn);
 
-		celular =  new JLabel("Celular:");
-		celular.setFont(font);
-		celular.setBounds(22, 349, 105, 32);
-		panelUsuario.add(celular);
+            direccion = new JLabel("Direccion:");
+            direccion.setFont(font);
+            direccion.setBounds(22, 306, 105, 32);
+            panelUsuario.add(direccion);
 
-		celularIn = new JTextField();
-		celularIn.setFont(font);
-		celularIn.setBounds(137, 350, 234, 32);
-		panelUsuario.add(celularIn);
+            direccionIn = new JTextField();
+            direccionIn.setFont(font);
+            direccionIn.setBounds(137, 307, 234, 32);
+            panelUsuario.add(direccionIn);
 
-		eMail = new JLabel("E-Mail:");
-		eMail.setFont(font);
-		eMail.setBounds(22, 392, 105, 32);
-		panelUsuario.add(eMail);
+            celular = new JLabel("Celular:");
+            celular.setFont(font);
+            celular.setBounds(22, 349, 105, 32);
+            panelUsuario.add(celular);
 
-		eMailIn = new JTextField();
-		eMailIn.setFont(font);
-		eMailIn.setBounds(137, 393, 234, 32);
-		panelUsuario.add(eMailIn);
+            celularIn = new JTextField();
+            celularIn.setFont(font);
+            celularIn.setBounds(137, 350, 234, 32);
+            panelUsuario.add(celularIn);
 
-		tipoEmpleado = new JLabel("Tipo de Empleado:");
-		tipoEmpleado.setFont(font);
-		tipoEmpleado.setBounds(22, 442, 138, 32);
-		panelUsuario.add(tipoEmpleado);
+            eMail = new JLabel("E-Mail:");
+            eMail.setFont(font);
+            eMail.setBounds(22, 392, 105, 32);
+            panelUsuario.add(eMail);
 
-		String[] listaTipo = new String[] { "Jefe de taller", "Vendedor"};
-		tipoEmpleadoIn = new JComboBox<>(listaTipo);
-		tipoEmpleadoIn.setEditable(false);
-		tipoEmpleadoIn.setFont(font);
-		tipoEmpleadoIn.setBounds(170, 443, 201, 32);
-		panelUsuario.add(tipoEmpleadoIn);
+            eMailIn = new JTextField();
+            eMailIn.setFont(font);
+            eMailIn.setBounds(137, 393, 234, 32);
+            panelUsuario.add(eMailIn);
 
-		sede = new JLabel("Sede:");
-		sede.setFont(font);
-		sede.setBounds(22, 485, 138, 32);
-		panelUsuario.add(sede);
+            tipoEmpleado = new JLabel("Tipo de Empleado:");
+            tipoEmpleado.setFont(font);
+            tipoEmpleado.setBounds(22, 442, 138, 32);
+            panelUsuario.add(tipoEmpleado);
 
-		sedeIn = new JComboBox<>(bd.cambiarDimension(bd.consultarSede(null,"id_Sede,nombre")));
-		sedeIn.setEditable(false);
-		sedeIn.setFont(font);
-		sedeIn.setBounds(170, 486, 201, 32);
-		panelUsuario.add(sedeIn);
+            String[] listaTipo = new String[]{"Jefe de taller", "Vendedor"};
+            tipoEmpleadoIn = new JComboBox<>(listaTipo);
+            tipoEmpleadoIn.setEditable(false);
+            tipoEmpleadoIn.setFont(font);
+            tipoEmpleadoIn.setBounds(170, 443, 201, 32);
+            panelUsuario.add(tipoEmpleadoIn);
 
-		cancelar = new JButton("Cancelar");
-		cancelar.setOpaque(true);
-		cancelar.setBackground(new Color(227, 227, 227));
-		cancelar.setFont(font);
-		cancelar.setBounds(121, 563, 120, 28);
-		cancelar.addActionListener(listener);
-		panelUsuario.add(cancelar);
+            sede = new JLabel("Sede:");
+            sede.setFont(font);
+            sede.setBounds(22, 485, 138, 32);
+            panelUsuario.add(sede);
 
-		crear = new JButton("Crear Usuario");
-		crear.setOpaque(true);
-		crear.setBackground(new Color(227, 227, 227));
-		crear.setFont(font);
-		crear.setBounds(251, 563, 120, 28);
-		crear.addActionListener(listener);
-		panelUsuario.add(crear);
+            sedeIn = new JComboBox<>(sedes);
+            sedeIn.setEditable(false);
+            sedeIn.setFont(font);
+            sedeIn.setBounds(170, 486, 201, 32);
+            panelUsuario.add(sedeIn);
 
-		//Separador inferior
-		separator = new JSeparator();
-		separator.setBounds(22, 550, 349, 2);
-		panelUsuario.add(separator);
+            cancelar = new JButton("Cancelar");
+            cancelar.setOpaque(true);
+            cancelar.setBackground(new Color(227, 227, 227));
+            cancelar.setFont(font);
+            cancelar.setBounds(121, 563, 120, 28);
+            cancelar.addActionListener(listener);
+            panelUsuario.add(cancelar);
 
-		//Icono a la izquierda del titulo
-		icono = new JLabel("");
-		icono.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/titulo_flecha.png")));
-		icono.setBounds(11, 1, 48, 90);
-		panelUsuario.add(icono);
-		
-		//Etiqueta titulo de la ventana
-		titulo = new JLabel("REGISTRAR USUARIO");
-		titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
-		titulo.setForeground(Color.WHITE);
-		titulo.setBounds(61, 30, 211, 32);
-		panelUsuario.add(titulo);
-		
-		// -- Fondos azul y gris -- //
-		fondoAzul = new JLabel("");
-		fondoAzul.setBounds(1, 1, 398, 90);
-		fondoAzul.setOpaque(true);
-		fondoAzul.setBackground(new Color(45, 118, 232));
-		panelUsuario.add(fondoAzul);
-		fondoGris = new JLabel("");
-		fondoGris.setBounds(1, 89, 398, 512);
-		fondoGris.setOpaque(true);
-		fondoGris.setBackground(new Color(227,227,227));//Gris
-		panelUsuario.add(fondoGris);
-		
-		//Configuraciones adicionales de la ventana principal
-		setSize(400,602);
-		setVisible(true);
-		setResizable(false);
-		setLocationRelativeTo(null);
+            crear = new JButton("Crear Usuario");
+            crear.setOpaque(true);
+            crear.setBackground(new Color(227, 227, 227));
+            crear.setFont(font);
+            crear.setBounds(251, 563, 120, 28);
+            crear.addActionListener(listener);
+            panelUsuario.add(crear);
+
+            //Separador inferior
+            separator = new JSeparator();
+            separator.setBounds(22, 550, 349, 2);
+            panelUsuario.add(separator);
+
+            //Icono a la izquierda del titulo
+            icono = new JLabel("");
+            icono.setIcon(new ImageIcon(GUIRegistrarUser.class.getResource("/images/titulo_flecha.png")));
+            icono.setBounds(11, 1, 48, 90);
+            panelUsuario.add(icono);
+
+            //Etiqueta titulo de la ventana
+            titulo = new JLabel("REGISTRAR USUARIO");
+            titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+            titulo.setForeground(Color.WHITE);
+            titulo.setBounds(61, 30, 211, 32);
+            panelUsuario.add(titulo);
+
+            // -- Fondos azul y gris -- //
+            fondoAzul = new JLabel("");
+            fondoAzul.setBounds(1, 1, 398, 90);
+            fondoAzul.setOpaque(true);
+            fondoAzul.setBackground(new Color(45, 118, 232));
+            panelUsuario.add(fondoAzul);
+            fondoGris = new JLabel("");
+            fondoGris.setBounds(1, 89, 398, 512);
+            fondoGris.setOpaque(true);
+            fondoGris.setBackground(new Color(227, 227, 227));//Gris
+            panelUsuario.add(fondoGris);
+
+            //Configuraciones adicionales de la ventana principal
+            setSize(400, 602);
+            setVisible(true);
+            setResizable(false);
+            setLocationRelativeTo(null);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Actualmente no hay productos para crear ordenes");
+        }
 	}
 
-
+    //Funcion que valida si algun campo a registrar esta vacio
 	private boolean validar(){
 
         if(nombreIn.getText().compareTo("")==0){
@@ -222,6 +231,7 @@ public class GUIRegistrarUser extends JFrame {
         return true;
     }
 
+    //Funcion para validar el dominio de los datos ingresados
     private String validar2(){
         String mensaje = "";
 
@@ -292,14 +302,18 @@ public class GUIRegistrarUser extends JFrame {
                                 idSede, celularIn.getText());
                         if (var) {
                             JOptionPane.showMessageDialog(null, "Usuario creado exitosamente");
-                            dispose();
+
                         } else JOptionPane.showMessageDialog(null, "Error al crear usuario.");
+
+                        dispose();
+
                     } else JOptionPane.showMessageDialog(null, validar2());
 
                 } else JOptionPane.showMessageDialog(null, "Debe llenar todas los campos");
             }
-            if (actionEvent.getSource() == cancelar)
+            if (actionEvent.getSource() == cancelar) {
                 dispose();
+            }
         }
     }
 
