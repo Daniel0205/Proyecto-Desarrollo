@@ -17,19 +17,21 @@ public class GUIConsultarOrden extends JFrame {
 	private JSeparator separador;
 	private Font font;
 	private ActionListener listener;
+	private String idJefe;
 	private int pX, pY;
 
 	// Creacion y despliegue de la interfaz de consulta
 	public GUIConsultarOrden(BaseDeDatos bdIn, String idJefe) {
+	    this.idJefe=idJefe;
+        bd = bdIn;
 
-        String[] ordenes = (bdIn.cambiarDimension(bdIn.consultarOrden("User",idJefe,"id_ordenes,nombre")));
-
+        String[] ordenes = (bd.cambiarDimension(bd.consultarOrden("User",idJefe,"id_ordenes,nombre")));
 
         if(ordenes.length!=0) {
 
             // Configuraciones de la ventana principal
             getContentPane().setBackground(Color.BLACK);
-            bd = bdIn;
+
             font = new Font("Tahoma", Font.PLAIN, 14);
             getContentPane().setLayout(null);
             this.setUndecorated(true);
@@ -102,6 +104,9 @@ public class GUIConsultarOrden extends JFrame {
         }
         else{
             JOptionPane.showMessageDialog(null, "Actualmente no hay ordenes disponibles");
+            GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
+            menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            dispose();
         }
 	}
 
@@ -117,7 +122,10 @@ public class GUIConsultarOrden extends JFrame {
 				String[][] resultado = bd.consultarOrden(idOrden, campos);
 				resultadosConsultaGUI(resultado);
 			} else if (actionEvent.getSource() == salir) {
-				dispose();
+                GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
+                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			    dispose();
+
 			}
 		}
 	}

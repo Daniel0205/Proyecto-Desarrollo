@@ -34,14 +34,13 @@ public class GUIConsultarUser extends JFrame {
 	
 		//Configuraciones de la ventana principal
 		super("Consultar Usuario");
+        bd = bdIn;
 
-        String[] users = bdIn.cambiarDimension(bdIn.consultarUsuarios(null,null,"cedula,nombres"));
+        String[] users = bd.cambiarDimension(bd.consultarUsuarios(null,null,"cedula,nombres"));
 
         if(users.length!=0) {
 
             getContentPane().setForeground(Color.BLACK);
-            bd = bdIn;
-
             font = new Font("Tahoma", Font.PLAIN, 14);
             getContentPane().setLayout(null);
             this.setUndecorated(true);
@@ -111,11 +110,14 @@ public class GUIConsultarUser extends JFrame {
 
             setSize(561, 264);
             setVisible(true);
-            setLocationRelativeTo(null);
             setResizable(false);
+            setLocationRelativeTo(null);
         }
         else{
             JOptionPane.showMessageDialog(null, "Actualmente no hay usuarios creados");
+            GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+            menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            dispose();
         }
 	}
 
@@ -133,8 +135,12 @@ public class GUIConsultarUser extends JFrame {
 						"cedula, nombres, apellidos, direccion, numero, email, tipo_usuario,  sede, activo");
 				resultadosConsultaGUI(resultado);
 			}
-			else if (actionEvent.getSource() == salir)
-				dispose();
+			else if (actionEvent.getSource() == salir) {
+                GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                dispose();
+            }
+
 		}
 	}
 
@@ -155,6 +161,7 @@ public class GUIConsultarUser extends JFrame {
 			frame.getContentPane().add(sp);
 			frame.setSize(1200,400);
 			frame.setVisible(true);
+            frame.setLocationRelativeTo(null);
 		}
 	}
 	

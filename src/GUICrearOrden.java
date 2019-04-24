@@ -161,6 +161,9 @@ public class GUICrearOrden extends JFrame {
         }
         else{
             JOptionPane.showMessageDialog(null, "Actualmente no hay productos para crear ordenes");
+            GUIMenuJefe menu = new GUIMenuJefe(bd, idenfier);
+            menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            dispose();
         }
 	}
 
@@ -221,6 +224,8 @@ public class GUICrearOrden extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 			if (actionEvent.getSource() == salir) {
+                GUIMenuJefe menu = new GUIMenuJefe(bd, idenfier);
+                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				dispose();
 			} else if (actionEvent.getSource() == crearOrden) {
 				if (validar1()) {
@@ -235,6 +240,8 @@ public class GUICrearOrden extends JFrame {
 							JOptionPane.showMessageDialog(null, "Orden de trabajo registrada exitosamente");
 						else
 							JOptionPane.showMessageDialog(null, "Error al crear orden de trabajo.");
+                        GUIMenuJefe menu = new GUIMenuJefe(bd, idenfier);
+                        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 						dispose();
 					} else
 						JOptionPane.showMessageDialog(null, validar2());

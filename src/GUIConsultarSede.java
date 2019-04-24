@@ -31,14 +31,13 @@ public class GUIConsultarSede extends JFrame {
     //Creacion y despliegue de la interfaz de consulta
     public GUIConsultarSede(BaseDeDatos bdIn) {
         super("Consultar Sede");
-
-        String[] sedes = bdIn.cambiarDimension(bdIn.consultarSede(null, "id_Sede,nombre"));
+        bd = bdIn;
+        String[] sedes = bd.cambiarDimension(bd.consultarSede(null, "id_Sede,nombre"));
 
         if(sedes.length!=0) {
 
             //Configuraciones de la ventana principal
             getContentPane().setForeground(Color.BLACK);
-            bd = bdIn;
             font = new Font("Tahoma", Font.PLAIN, 14);
             getContentPane().setLayout(null);
             this.setUndecorated(true);
@@ -108,13 +107,16 @@ public class GUIConsultarSede extends JFrame {
             getContentPane().add(fondoNegro);
 
             //Configuraciones adicionales de la ventana
+            setResizable(false);
             setSize(561, 264);
             setVisible(true);
             setLocationRelativeTo(null);
-            setResizable(false);
         }
         else{
             JOptionPane.showMessageDialog(null, "Actualmente no hay sedes creadas");
+            GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+            menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            dispose();
         }
     }
 
@@ -130,8 +132,11 @@ public class GUIConsultarSede extends JFrame {
                 String[][] resultado = bd.consultarSede(str,campos);
                 resultadosConsultaGUI(resultado);
             }
-            else if (actionEvent.getSource() == salir)
+            else if (actionEvent.getSource() == salir) {
+                GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 dispose();
+            }
         }
     }
 
@@ -157,6 +162,7 @@ public class GUIConsultarSede extends JFrame {
             frame.getContentPane().add(sp);
             frame.setSize(1200,400);
             frame.setVisible(true);
+            frame.setLocationRelativeTo(null);
         }
     }
     

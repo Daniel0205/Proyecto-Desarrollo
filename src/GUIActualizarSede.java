@@ -114,6 +114,9 @@ public class GUIActualizarSede extends JFrame {
         }
 		else{
 			JOptionPane.showMessageDialog(null, "Actualmente no hay sedes creadas");
+            GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+            menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            dispose();
 		}
 	}
 
@@ -292,8 +295,9 @@ public class GUIActualizarSede extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == salir1 || e.getSource() == cancelar2) {
+                GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				dispose();
-				return;
 			}
 
 			String aCargo, identifier = idIn.getSelectedItem().toString();
@@ -316,9 +320,11 @@ public class GUIActualizarSede extends JFrame {
 
                         if (var) {
                             JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");
-                            dispose();
+
                         } else
                             JOptionPane.showMessageDialog(null, "Error al actualizar usuario");
+                        GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+                        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         dispose();
                     }
                     else JOptionPane.showMessageDialog(null, validar2());

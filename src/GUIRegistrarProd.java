@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.GroupLayout.Alignment;
 
 public class GUIRegistrarProd extends JFrame {
@@ -138,6 +140,46 @@ public class GUIRegistrarProd extends JFrame {
         setLocationRelativeTo(null);
     }
 
+
+    //Funcion que valida si algun campo a registrar esta vacio
+    private boolean validar1(){
+        boolean val=true;
+        val = (costoIn.getText().compareTo("")==0 ||
+                precioIn.getText().compareTo("")==0 ||
+                nombreIn.getText().compareTo("")==0) ? false : true;
+
+        return val;
+    }
+
+    //Funcion para validar el dominio de los datos ingresados
+    private String validar2(){
+        String mensaje = "";
+
+
+        Pattern patron = Pattern.compile("[^A-Za-z0-9 #-]");
+        Matcher nombre = patron.matcher(nombreIn.getText());
+        if(nombre.find()|| nombreIn.getText().length()>20)
+            mensaje = mensaje + " Digite un nombre valido \n";
+
+        Matcher direccion = patron.matcher(descripcionIn.getText());
+        if(direccion.find()|| descripcionIn.getText().length()>40)
+            mensaje = mensaje + " Digite una descripcion valida \n";
+
+        patron = Pattern.compile("[^0-9]");
+        Matcher pre = patron.matcher(precioIn.getText());
+        if(pre.find())
+            mensaje = mensaje + " Digite un precio valido \n";
+
+        Matcher cos = patron.matcher(costoIn.getText());
+        if(cos.find())
+            mensaje = mensaje + " Digite un costo valido \n";
+
+        if(mensaje.compareTo("")==0)
+            mensaje="true";
+
+        return mensaje;
+    }
+
     //Manejador de eventos
     private class ManejadorDeBotones implements ActionListener {
 
@@ -145,19 +187,32 @@ public class GUIRegistrarProd extends JFrame {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == crear){
-                boolean var;
-                String descrip = null;
-                if (descripcionIn.getText().compareTo("")!=0)descrip=descripcionIn.getText();
+                if(validar1()) {
+                    if(validar2().compareTo("true")==0) {
+                        boolean var;
+                        String descrip = "";
+                        if (descripcionIn.getText().compareTo("")!=0)descrip=descripcionIn.getText();
 
-                var= bd.registrarProducto(nombreIn.getText(),costoIn.getText() ,precioIn.getText(),descrip);
-                if (var) {
-                    JOptionPane.showMessageDialog(null, "Producto creado exitosamente");
-                    dispose();
-                } else JOptionPane.showMessageDialog(null, "Error al crear producto.");
+                        var= bd.registrarProducto(nombreIn.getText(),costoIn.getText() ,precioIn.getText(),descrip);
+                        if (var) {
+                            JOptionPane.showMessageDialog(null, "Producto creado exitosamente");
+
+                        } else JOptionPane.showMessageDialog(null, "Error al crear producto.");
+
+                        GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+                        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        dispose();
+                    }
+                    else JOptionPane.showMessageDialog(null, validar2());
+                }
+                else JOptionPane.showMessageDialog(null, "Digite todos los campos");
             }
 
-            if (actionEvent.getSource() == cancelar)
+            if (actionEvent.getSource() == cancelar){
+                GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 dispose();
+            }
         }
     }
 

@@ -82,7 +82,7 @@ public class GUILogin extends JFrame {
 		getContentPane().add(id);
 		id.setColumns(10);
 
-		//JText para ingresar la contraseña (Contrase\u00F1a)		
+		//JText para ingresar la contraseï¿½a (Contrase\u00F1a)		
 		password = new JPasswordField();
 		password.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		password.setFont(font);
@@ -157,23 +157,23 @@ public class GUILogin extends JFrame {
 
 					if (user.compareTo("admin") == 0 && pass.compareTo("admin") == 0) {
 						GUIMenuAdmin menu = new GUIMenuAdmin(bd);
-						menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-						setVisible(false);
+						menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						dispose();
 
 					} else {
 						String tipo_user = bd.validarLogin(user, pass);
 						if (tipo_user.compareTo("") != 0) {
 							if (tipo_user.compareTo("Jefe de taller") == 0) {
 								GUIMenuJefe menu = new GUIMenuJefe(bd, user);
-								menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+								menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 							}
 							if (tipo_user.compareTo("Vendedor      ") == 0) {
 								GUIMenuVendedor menu = new GUIMenuVendedor(bd, id.getText());
-								menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+								menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 							}
-							setVisible(false);
+                            dispose();
 
 						} else
 							JOptionPane.showMessageDialog(null, "Campos erroneos o usuario inactivo");

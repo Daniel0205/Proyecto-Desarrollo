@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
-public class GUICotizacion extends JFrame {
+public class GUICotizacionVenta extends JFrame {
 
 	//Variables y componentes de la GUI
 	private final BaseDeDatos bd;
@@ -19,8 +19,8 @@ public class GUICotizacion extends JFrame {
 	private String[] datos;
 
 	//Constructor
-	public GUICotizacion(BaseDeDatos bd, String id, String nombre_cliente, String fnt) {
-		super("Cotizacion");
+	public GUICotizacionVenta(BaseDeDatos bd, String id, String nombre_cliente, String fnt) {
+        super("Cotizacion - Venta");
 		this.bd = bd;
 		this.id = id;
 		this.nombre_cliente = nombre_cliente;
@@ -200,6 +200,8 @@ public class GUICotizacion extends JFrame {
 
 				if (bd.cancelarCoti(id_cotizacion)) {
 					JOptionPane.showMessageDialog(null, "Factura cancelada");
+                    GUIMenuVendedor menu = new GUIMenuVendedor(bd, id);
+                    menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					dispose();
 				}
 
@@ -207,6 +209,8 @@ public class GUICotizacion extends JFrame {
 
 				if (bd.actualizarCoti(id_cotizacion, total2.getText())) {
 					JOptionPane.showMessageDialog(null, "Factura cotizada");
+                    GUIMenuVendedor menu = new GUIMenuVendedor(bd, id);
+                    menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					dispose();
 				}
 
@@ -214,6 +218,8 @@ public class GUICotizacion extends JFrame {
 
 				if (bd.actualizarCoti(id_cotizacion, total2.getText())) {
 					JOptionPane.showMessageDialog(null, "Factura vendida");
+                    GUIMenuVendedor menu = new GUIMenuVendedor(bd, id);
+                    menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					dispose();
 				}
 

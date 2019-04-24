@@ -179,14 +179,16 @@ public class GUIMenuVendedor extends JFrame {
 					if (nombre_cliente.equals("")) {
 						JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
 					} else {
-						GUICotizacion cot = new GUICotizacion(bd, id, nombre_cliente, "C");
+						GUICotizacionVenta cot = new GUICotizacionVenta(bd, id, nombre_cliente, "C");
 						cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                        dispose();
 					}
 				}
 
 			} else if (actionEvent.getSource() == consultaProducto) {
 				GUIProductos prod = new GUIProductos(bd, id);
 				prod.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+				dispose();
 			} else if (actionEvent.getSource() == salir) {
 				GUILogin login = new GUILogin();
 				login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -201,8 +203,9 @@ public class GUIMenuVendedor extends JFrame {
 					if (nombre_cliente.equals("")) {
 						JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
 					} else {
-						GUICotizacion cot = new GUICotizacion(bd, id, nombre_cliente, "V");
+						GUICotizacionVenta cot = new GUICotizacionVenta(bd, id, nombre_cliente, "V");
 						cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                        dispose();
 					}
 				}
 			}

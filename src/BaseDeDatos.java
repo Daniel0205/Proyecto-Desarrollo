@@ -379,11 +379,23 @@ public class BaseDeDatos {
     }
 
     //Funcion para transformar matrices bidimensionales a unidimensionales
+    //juntando dos atributos
     public String[] cambiarDimension(String[][] array){
         String[] aux = new String[array.length];
         for (int i=0;i < array.length;i++){
 
             aux[i]=array[i][0].trim()+"-"+array[i][1].trim();
+
+        }
+        return aux;
+    }
+
+    //Funcion para transformar matrices bidimensionales a unidimensionales
+    public String[] cambiarDimension2(String[][] array){
+        String[] aux = new String[array.length];
+        for (int i=0;i < array.length;i++){
+
+            aux[i]=array[i][0].trim();
 
         }
         return aux;
@@ -792,10 +804,14 @@ public class BaseDeDatos {
     public String[][] listarProductos(String criterio, String busqueda,String campos,String sede) {
         String sql = "SELECT "+campos+" FROM public.producto NATURAL JOIN public.inventario";
 
-        if(criterio=="Id") sql += " WHERE id_producto = " + busqueda;
+
+
+        if(criterio=="Id_producto") sql += " WHERE id_producto = " + busqueda;
         if(criterio=="Nombre") sql += " WHERE nombre = '" + busqueda + "'";
 
         sql += " AND id_sede = " + sede;
+
+        System.out.print(sql);
 
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,

@@ -175,19 +175,21 @@ public class GUIMenuJefe extends JFrame {
         public void actionPerformed(ActionEvent actionEvent) {
         	if (actionEvent.getSource() == crearOrden) {
         		GUICrearOrden crearOrden = new GUICrearOrden(bd,idJefe);
+                crearOrden.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         	}
         	else if(actionEvent.getSource() == salir){
                 GUILogin login = new GUILogin();
-                login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                dispose();
+                login.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
         	else if(actionEvent.getSource() == modificarOrden){
                 GUIActualizarOrden actualizarOrden = new GUIActualizarOrden(bd,idJefe);
+                actualizarOrden.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
             else if(actionEvent.getSource() == consultarOrden){
                 GUIConsultarOrden consultarOrden = new GUIConsultarOrden(bd,idJefe);
+                consultarOrden.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
-
+            dispose();
         }
     }
     

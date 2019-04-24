@@ -303,14 +303,22 @@ public class GUIRegistrarUser extends JFrame {
                                 idSede, celularIn.getText());
                         if (var) {
                             JOptionPane.showMessageDialog(null, "Usuario creado exitosamente");
-                            dispose();
+
                         } else JOptionPane.showMessageDialog(null, "Error al crear usuario.");
+
+                        GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+                        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        dispose();
+
                     } else JOptionPane.showMessageDialog(null, validar2());
 
                 } else JOptionPane.showMessageDialog(null, "Debe llenar todas los campos");
             }
-            if (actionEvent.getSource() == cancelar)
+            if (actionEvent.getSource() == cancelar) {
+                GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 dispose();
+            }
         }
     }
 

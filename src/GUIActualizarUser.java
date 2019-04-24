@@ -121,6 +121,9 @@ public class GUIActualizarUser extends JFrame {
 		}
         else{
             JOptionPane.showMessageDialog(null, "Actualmente no hay usuarios creados");
+            GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+            menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            dispose();
         }
 	}
 	
@@ -296,10 +299,10 @@ public class GUIActualizarUser extends JFrame {
 		ventana.add(fondoGris);
 		
 		//Configuraciones adicionales de la ventana principal
-		this.setSize(400,610);
+        this.setResizable(false);
+        this.setSize(400,610);
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
-		this.setResizable(false);
 	}
 
     //Funcion que valida si algun campo a registrar esta vacio
@@ -387,8 +390,9 @@ public class GUIActualizarUser extends JFrame {
         public void actionPerformed(ActionEvent e) {
 
             if(e.getSource()==salir1 || e.getSource()==cancelar2){
+                GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 dispose();
-                return;
             }
 
 			String identifier = idIn.getSelectedItem().toString();
@@ -420,9 +424,11 @@ public class GUIActualizarUser extends JFrame {
                         if (var){
 
                             JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");
-                            dispose();
                         }
                         else JOptionPane.showMessageDialog(null, "Error al actualizar usuario.");
+
+                        GUIMenuAdmin menu = new GUIMenuAdmin(bd);
+                        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         dispose();
 
                     } else JOptionPane.showMessageDialog(null, validar2());

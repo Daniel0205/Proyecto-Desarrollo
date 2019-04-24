@@ -111,6 +111,9 @@ public class GUIActualizarOrden extends JFrame {
 		}
 		else{
             JOptionPane.showMessageDialog(null, "Actualmente no hay ordenes disponibles");
+            GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
+            menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            dispose();
         }
 	}
 
@@ -268,6 +271,17 @@ public class GUIActualizarOrden extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
+
+    // Funcion que valida si algun campo a registrar esta vacio
+    private boolean validar1() {
+        boolean val = true;
+        val = ( fechaEntregaIn.getText().compareTo("") == 0 || cantidadIn.getText().compareTo("") == 0
+                || asignadoAIn.getText().compareTo("") == 0)
+                ? false : true;
+
+        return val;
+    }
+
 	// Funcion para validar el dominio de los datos ingresados
 	private String validar2() {
 		String mensaje = "";
@@ -314,13 +328,15 @@ public class GUIActualizarOrden extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == salir || e.getSource() == salir2) {
+
+		    if (e.getSource() == salir || e.getSource() == salir2) {
+                GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
+                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				dispose();
-				return;
 			}
 
-			String identifier = idOrdenIn.getSelectedItem().toString();
-			identifier = identifier.substring(0, identifier.indexOf("-"));
+            String identifier = idOrdenIn.getSelectedItem().toString();
+            identifier = identifier.substring(0, identifier.indexOf("-"));
 
 			if (e.getSource() == buscar) {
 				dispose();
@@ -331,16 +347,21 @@ public class GUIActualizarOrden extends JFrame {
 			idProducto = idProducto.substring(0, idProducto.indexOf("-"));
 
 			if (e.getSource() == actualizarOrden) {
-				if (validar2().compareTo("true") == 0) {
+                if (validar1()) {
+                    if (validar2().compareTo("true") == 0) {
 
-					if (bd.actualizarOrden(identifier, fechaEntregaIn.getText(), cantidadIn.getText(), idProducto,
-                            asignadoAIn.getText(), "false")) {
-						JOptionPane.showMessageDialog(null, "Orden de trabajo actualizada exitosamente");
-					} else
-						JOptionPane.showMessageDialog(null, "Error al actualizar orden de trabajo.");
-					dispose();
-				} else
-					JOptionPane.showMessageDialog(null, validar2());
+                        if (bd.actualizarOrden(identifier, fechaEntregaIn.getText(), cantidadIn.getText(), idProducto,
+                                asignadoAIn.getText(), "false")) {
+                            JOptionPane.showMessageDialog(null, "Orden de trabajo actualizada exitosamente");
+                        } else
+                            JOptionPane.showMessageDialog(null, "Error al actualizar orden de trabajo.");
+                        GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
+                        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        dispose();
+                    } else
+                        JOptionPane.showMessageDialog(null, validar2());
+                } else
+                    JOptionPane.showMessageDialog(null, "Digite todos los campos");
 			}
 
 			if (e.getSource() == finalizar) {
@@ -350,6 +371,8 @@ public class GUIActualizarOrden extends JFrame {
 					JOptionPane.showMessageDialog(null, "Orden de trabajo finalizada exitosamente");
 				} else
 					JOptionPane.showMessageDialog(null, "Error al finalizar orden de trabajo.");
+                GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
+                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				dispose();
 			}
 
@@ -359,6 +382,8 @@ public class GUIActualizarOrden extends JFrame {
 					JOptionPane.showMessageDialog(null, "Orden de trabajo cancelada");
 				} else
 					JOptionPane.showMessageDialog(null, "Error al cancelar orden de trabajo.");
+                GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
+                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				dispose();
 			}
 		}

@@ -27,7 +27,7 @@ public class GUIMenuAdmin extends JFrame {
 	}
 
     //Funcion para inicializar todos los elementos graficos
-	private void initGUI() {
+	public void initGUI() {
 		
 		//Configuraciones de la ventana principal
 		contenedor = getContentPane();
@@ -267,7 +267,7 @@ public class GUIMenuAdmin extends JFrame {
 			if (actionEvent.getSource() == registrarUsuario){
 				JFrame formulario1 = new GUIRegistrarUser(bd);
 				formulario1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			} 
+			}
 			else if (actionEvent.getSource() == actualizarUsuario){
 				JFrame formulario2 = new GUIActualizarUser(bd);
 				formulario2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -292,12 +292,13 @@ public class GUIMenuAdmin extends JFrame {
                 JFrame formulario6 = new GUIRegistrarProd(bd);
                 formulario6.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 formulario6.setPreferredSize(new Dimension(400,400));
+
             }
 			else if (actionEvent.getSource() == salir){
                 GUILogin login = new GUILogin();
                 login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                dispose();
 			}
+            dispose();
 		}
 
 	}
