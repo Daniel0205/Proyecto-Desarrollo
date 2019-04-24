@@ -891,7 +891,7 @@ public class BaseDeDatos {
 
         String sql = "SELECT nombre,sum(cantidad_disponible),id_sede FROM informeInventario ";
 
-        if(sede!=0) sql += " WHERE id_sede =" + sede +"";
+        if(sede!=0) sql += " WHERE sede =" + sede +"";
 
         sql += " GROUP BY nombre,id_producto,id_sede" ;
 
@@ -983,6 +983,7 @@ public class BaseDeDatos {
 
         sql += " GROUP BY id_producto,nombre,sede" ;
 
+
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
@@ -1007,6 +1008,48 @@ public class BaseDeDatos {
             return resultadoConsulta;
         }
         catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String[][] informeOrden(int sede) {
+
+        String sql = "SELECT id_producto,sum(cantidad),sede FROM informeOrden ";
+
+        if (sede != 0) sql += " WHERE sede =" + sede + "";
+
+        sql += " GROUP BY id_producto,sede";
+
+        System.out.print(sql);
+
+
+        try (Connection connection = DriverManager.getConnection(URL, USUARIO, PASSWORD)) {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            resultSet.last();
+            int rows = resultSet.getRow(); //# de filas resulado de la consulta
+            resultSet.beforeFirst();
+
+            Array arraySQL = null;
+            int columns = 3; //# de columnas a mostrar (predeterminado)
+            String[][] resultadoConsulta = new String[rows][columns];
+
+            int j = 0;
+            while (resultSet.next()) {
+                for (int i = 0; i < columns; i++) {
+                    arraySQL = resultSet.getArray(i + 1);
+                    if(arraySQL==null)resultadoConsulta[j][i] = "0";
+                    else resultadoConsulta[j][i] = arraySQL.toString().trim();
+                }
+                j++;
+            }
+
+            return resultadoConsulta;
+        } catch (SQLException e) {
             System.out.println("Connection failure");
             e.printStackTrace();
             return null;

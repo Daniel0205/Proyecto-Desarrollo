@@ -207,6 +207,27 @@ public class GUICrearInformes  extends JFrame {
             llenarTabla(columns,rep);
 
         }else if(informe.getSelectedItem()=="Ordenes de trabajo"){
+            String idSede = sedes.getSelectedItem().toString();
+            idSede=idSede.substring(0,idSede.indexOf("-"));
+            int sed = Integer.parseInt(idSede);
+
+            String[][] rep =  bd.informeOrden(sed);
+
+            for(int i=0;i<rep.length;i++){
+                datainv.addValue(Integer.parseInt(rep[i][1]),rep[i][2],rep[i][0]);
+            }
+
+            if(panel!=null)getContentPane().remove(panel);
+            JFreeChart chart = ChartFactory.createBarChart("Productos realizados por ordenes de trabajo","Productos","Cantidad",datainv, PlotOrientation.VERTICAL,true,true,false);
+            panel = new ChartPanel(chart);
+            panel.setBounds(25, 155, 629,314);
+            panel.setVisible(true);
+            getContentPane().remove(panel);
+            getContentPane().add(panel);
+
+            String[] columns = new String[]{"Nombre del producto","Cantidad disponible","Sede correspondiente"};
+
+            llenarTabla(columns,rep);
 
 
         }
