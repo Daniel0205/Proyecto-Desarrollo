@@ -1,17 +1,14 @@
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.xy.DefaultXYDataset;
-
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 
 @SuppressWarnings("serial")
 public class GUICrearInformes  extends JFrame {
@@ -106,6 +103,7 @@ public class GUICrearInformes  extends JFrame {
     private void graficar() {
 
         DefaultPieDataset data = new DefaultPieDataset();
+        DefaultCategoryDataset datainv = new DefaultCategoryDataset();
 
         if(informe.getSelectedItem()=="Productos populares"){
 
@@ -121,45 +119,42 @@ public class GUICrearInformes  extends JFrame {
 
             if(panel!=null)getContentPane().remove(panel);
             JFreeChart chart = ChartFactory.createPieChart("Productos populares",data,true,true,false);
-
             panel = new ChartPanel(chart);
             panel.setBounds(25, 155, 629,314);
             panel.setVisible(true);
             getContentPane().remove(panel);
             getContentPane().add(panel);
 
-            llenarTabla("Nombre del producto","Cantidad vendida o cotizada",rep);
+            String[] columns = new String[]{"Nombre del producto","Cantidad vendida o cotizada"};
+
+            llenarTabla(columns,rep);
 
         }else if(informe.getSelectedItem()=="Ganancias"){
-            DefaultXYDataset dataset = new DefaultXYDataset();
-            dataset.addSeries("firefox", new double[][] {{ 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 }, { 25, 29.1, 32.1, 32.9, 31.9, 25.5, 20.1, 18.4, 15.3, 11.4, 9.5 }});
-            dataset.addSeries("ie", new double[][] {{ 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 }, { 67.7, 63.1, 60.2, 50.6, 41.1, 31.8, 27.6, 20.4, 17.3, 12.3, 8.1 }});
-            dataset.addSeries("chrome", new double[][] {{ 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 }, { 0.2, 6.4, 14.6, 25.3, 30.1, 34.3, 43.2, 47.3, 58.4 }});
-
-            XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-            renderer.setSeriesPaint(0, Color.ORANGE);
-            renderer.setSeriesPaint(1, Color.BLUE);
-            renderer.setSeriesPaint(2, Color.GREEN);
-            renderer.setSeriesStroke(0, new BasicStroke(2));
-            renderer.setSeriesStroke(1, new BasicStroke(2));
-            renderer.setSeriesStroke(2, new BasicStroke(2));
-
-            if(panel!=null)getContentPane().remove(panel);
-            JFreeChart chart = ChartFactory.createXYLineChart("Browser Quota", "Year", "Quota", dataset);
-            chart.getXYPlot().getRangeAxis().setRange(0, 100);
-            ((NumberAxis) chart.getXYPlot().getRangeAxis()).setNumberFormatOverride(new DecimalFormat("#'%'"));
-            chart.getXYPlot().setRenderer(renderer);
-
-            panel = new ChartPanel(chart);
-            panel.setBounds(25, 155, 629,314);
-            panel.setVisible(true);
-            getContentPane().remove(panel);
-            getContentPane().add(panel);
-
 
 
         }else if(informe.getSelectedItem()=="Inventario"){
 
+            String idSede = sedes.getSelectedItem().toString();
+            idSede=idSede.substring(0,idSede.indexOf("-"));
+            int sed = Integer.parseInt(idSede);
+
+            String[][] rep =  bd.informeInventario(sed);
+
+            for(int i=0;i<rep.length;i++){
+                datainv.addValue(Integer.parseInt(rep[i][1]),rep[i][2],rep[i][0]);
+            }
+
+            if(panel!=null)getContentPane().remove(panel);
+            JFreeChart chart = ChartFactory.createBarChart("Inventario de productos","Productos","Disponibilidad",datainv, PlotOrientation.VERTICAL,true,true,false);
+            ChartPanel panel = new ChartPanel(chart);
+            panel.setBounds(25, 155, 629,314);
+            panel.setVisible(true);
+            getContentPane().remove(panel);
+            getContentPane().add(panel);
+
+            String[] columns = new String[]{"Nombre del producto","Cantidad disponible","Sede correspondiente"};
+
+            llenarTabla(columns,rep);
 
 
         }else if(informe.getSelectedItem()=="Ventas"){
@@ -179,15 +174,20 @@ public class GUICrearInformes  extends JFrame {
 
     }
 
-    private void llenarTabla(String column1, String column2,String[][] datos){
+    private void llenarTabla(String[] columns,String[][] datos){
 
         modelo = new DefaultTableModel();
 
-        modelo.addColumn(column1);
-        modelo.addColumn(column2);
+        for(int i =0;i<columns.length;i++){
+            modelo.addColumn(columns[i]);
+        }
 
-        for (int i=0;i<datos.length ; i++){
-            String[] vec = new String[]{datos[i][0],datos[i][1]};
+        for(int i=0;i<datos.length ; i++){
+
+            String[] vec = new String[datos[i].length];
+            for(int j=0;j<datos[i].length;j++){
+                vec[j] = datos[i][j];
+            }
             modelo.addRow(vec);
         }
 

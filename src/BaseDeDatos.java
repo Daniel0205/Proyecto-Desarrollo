@@ -842,6 +842,7 @@ public class BaseDeDatos {
     }
 
     // Esto va aaa generar los datos
+
     public String[][] informeProductos(String intervalo, int sede) {
 
         String sql = "SELECT nombre,sum(cantidad_compra) FROM informeProducto WHERE fecha_cotizacion BETWEEN NOW()-INTERVAL'";
@@ -886,9 +887,43 @@ public class BaseDeDatos {
         }
     }
 
+    public String[][] informeInventario(int sede) {
 
+        String sql = "SELECT nombre,sum(cantidad_disponible),id_sede FROM informeInventario ";
 
+        if(sede!=0) sql += " WHERE sede =" + sede +"";
 
+        sql += " GROUP BY nombre,id_producto,id_sede" ;
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            resultSet.last();
+            int rows = resultSet.getRow(); //# de filas resulado de la consulta
+            resultSet.beforeFirst();
+
+            Array arraySQL = null;
+            int columns = 3; //# de columnas a mostrar (predeterminado)
+            String[][] resultadoConsulta = new String[rows][columns];
+
+            int j = 0;
+            while (resultSet.next()) {
+                for (int i = 0; i < columns; i++) {
+                    arraySQL = resultSet.getArray(i+1);
+                    resultadoConsulta[j][i] = arraySQL.toString().trim();
+                } j++;
+            }
+
+            return resultadoConsulta;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 

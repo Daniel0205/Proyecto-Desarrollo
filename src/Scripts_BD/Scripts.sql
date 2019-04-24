@@ -210,8 +210,8 @@ insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,pre
 insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1628344, '2019-06-16' ,'Ramiro Cuellar',2800000,'V');
 insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1630536, '2019-07-16' ,'Carlos Huertado',98000,'C');
 insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1630536, '2019-06-16' ,'Ramiro Cuellar',7000000,'V');
-insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(30, '2019-06-14' ,'Mauricio Lopez',1400000,'C');
-insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(30, '2019-06-16' ,'Maria Molina',700000,'V');
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(30, '2018-06-14' ,'Mauricio Lopez',1400000,'C');
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(30, '2018-07-16' ,'Maria Molina',700000,'V');
 
 insert into ventas_cotizaciones_producto values(1,260,1);
 insert into ventas_cotizaciones_producto values(2,26,1);
@@ -236,13 +236,10 @@ insert into ventas_cotizaciones_producto values(1,9,6);
 insert into ventas_cotizaciones_producto values(5,8,6);
 
 ----------VISTAS--------
-DROP VIEW IF EXISTS informeProducto;
-CREATE VIEW informeProducto AS ( SELECT ventas_cotizaciones_producto.id_producto,
-    producto.nombre,
-    ventas_cotizaciones_producto.cantidad_compra,
-    venta_cotizaciones.fecha_cotizacion,
-    empleados.sede
-   FROM ventas_cotizaciones_producto
-     JOIN venta_cotizaciones USING (id_cotizacion)
-     JOIN producto USING (id_producto)
-     JOIN empleados ON empleados.cedula = venta_cotizaciones.id_empleado);
+DROP VIEW IF EXISTS imformeProducto;
+CREATE VIEW informeProducto AS (SELECT id_producto, nombre, cantidad_compra,fecha_cotizacion,sede
+   FROM ventas_cotizaciones_producto NATURAL JOIN venta_cotizaciones NATURAL JOIN producto INNER JOIN empleados ON empleados.cedula = venta_cotizaciones.id_empleado);
+
+DROP VIEW IF EXISTS informeInventario;
+CREATE VIEW informeInventario AS (SELECT id_producto,nombre, cantidad_disponible, id_sede
+	FROM inventario NATURAL JOIN producto);
