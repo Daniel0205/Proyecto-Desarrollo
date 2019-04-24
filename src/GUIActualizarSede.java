@@ -4,13 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("serial")
 public class GUIActualizarSede extends JFrame {
 
-    //Variables y componentes de la GUI
+	// Variables y componentes de la GUI
 	private BaseDeDatos bd;
 	private Font font;
 	private ActionListener listener = new ManejadorDeBotones();
@@ -20,10 +20,11 @@ public class GUIActualizarSede extends JFrame {
 	private JSeparator separador;
 	private JButton salir1, cancelar2, buscar, actualizar;
 	private JTextField direccionIn, celularIn, nombreIn, idT;
+	@SuppressWarnings("rawtypes")
 	private JComboBox idIn, aCargoDeIn;
 	private int pX, pY;
 
-	//Contructor
+	// Contructor
 	public GUIActualizarSede(BaseDeDatos bdIn) {
 		super("ACTUALIZAR SEDE");
 		getContentPane().setBackground(Color.BLACK);
@@ -36,87 +37,83 @@ public class GUIActualizarSede extends JFrame {
 	private void initGUI() {
 		String[] sedes = bd.cambiarDimension(bd.consultarSede(null, "id_Sede,nombre"));
 
-		if(sedes.length!=0) {
-            // Configuraciones generales de la primer ventana
-            this.setUndecorated(true);
-            contenedor = getContentPane();
-            contenedor.removeAll();
-            getContentPane().setLayout(null);
+		if (sedes.length != 0) {
+			// Configuraciones generales de la primer ventana
+			this.setUndecorated(true);
+			contenedor = getContentPane();
+			contenedor.removeAll();
+			getContentPane().setLayout(null);
 
-            // Etiqueta que describe el funcionamiento
-            instruccion = new JLabel("Id-Nombre de sede");
-            instruccion.setFont(font);
-            instruccion.setBounds(21, 112, 138, 32);
-            getContentPane().add(instruccion);
+			// Etiqueta que describe el funcionamiento
+			instruccion = new JLabel("Id-Nombre de sede");
+			instruccion.setFont(font);
+			instruccion.setBounds(21, 112, 138, 32);
+			getContentPane().add(instruccion);
 
-            idIn = new JComboBox<>(bd.cambiarDimension(bd.consultarSede(null, "id_Sede,nombre")));
-            idIn.setFont(font);
-            idIn.setBounds(164, 113, 250, 32);
-            getContentPane().add(idIn);
+			idIn = new JComboBox<>(bd.cambiarDimension(bd.consultarSede(null, "id_Sede,nombre")));
+			idIn.setFont(font);
+			idIn.setBounds(164, 113, 250, 32);
+			getContentPane().add(idIn);
 
-            salir1 = new JButton("Salir");
-            salir1.setOpaque(true);
-            salir1.setBackground(new Color(227, 227, 227));
-            salir1.setFont(font);
-            salir1.setBounds(424, 196, 100, 32);
-            salir1.addActionListener(listener);
-            getContentPane().add(salir1);
+			salir1 = new JButton("Salir");
+			salir1.setOpaque(true);
+			salir1.setBackground(new Color(227, 227, 227));
+			salir1.setFont(font);
+			salir1.setBounds(424, 196, 100, 32);
+			salir1.addActionListener(listener);
+			getContentPane().add(salir1);
 
-            buscar = new JButton("Buscar");
-            buscar.setOpaque(true);
-            buscar.setBackground(new Color(227, 227, 227));
-            buscar.setBounds(424, 113, 100, 32);
-            buscar.setFont(font);
-            buscar.addActionListener(listener);
-            getContentPane().add(buscar);
+			buscar = new JButton("Buscar");
+			buscar.setOpaque(true);
+			buscar.setBackground(new Color(227, 227, 227));
+			buscar.setBounds(424, 113, 100, 32);
+			buscar.setFont(font);
+			buscar.addActionListener(listener);
+			getContentPane().add(buscar);
 
-            JSeparator separator = new JSeparator();
-            separator.setBounds(22, 184, 502, 2);
-            getContentPane().add(separator);
+			JSeparator separator = new JSeparator();
+			separator.setBounds(22, 184, 502, 2);
+			getContentPane().add(separator);
 
-            // Icono a la izquierda del titulo
-            JLabel icono = new JLabel("");
-            icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/actualizar.png")));
-            icono.setBounds(11, 1, 48, 90);
-            getContentPane().add(icono);
+			// Icono a la izquierda del titulo
+			JLabel icono = new JLabel("");
+			icono.setIcon(new ImageIcon(GUIConsultarUser.class.getResource("/images/actualizar.png")));
+			icono.setBounds(11, 1, 48, 90);
+			getContentPane().add(icono);
 
-            // Etiqueta del titulo de la ventana
-            JLabel titulo = new JLabel("ACTUALIZAR SEDE");
-            titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
-            titulo.setForeground(Color.WHITE);
-            titulo.setBounds(69, 28, 175, 32);
-            getContentPane().add(titulo);
+			// Etiqueta del titulo de la ventana
+			JLabel titulo = new JLabel("ACTUALIZAR SEDE");
+			titulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+			titulo.setForeground(Color.WHITE);
+			titulo.setBounds(69, 28, 175, 32);
+			getContentPane().add(titulo);
 
-            // -- Fondos azul y gris -- //
-            JLabel fondoAzul = new JLabel("");
-            fondoAzul.setBounds(1, 1, 560, 90);
-            fondoAzul.setOpaque(true);
-            fondoAzul.setBackground(new Color(45, 118, 232));
-            getContentPane().add(fondoAzul);
-            JLabel fondoGris = new JLabel("");
-            fondoGris.setBounds(1, 89, 560, 166);
-            fondoGris.setOpaque(true);
-            fondoGris.setBackground(new Color(227, 227, 227));
-            getContentPane().add(fondoGris);
+			// -- Fondos azul y gris -- //
+			JLabel fondoAzul = new JLabel("");
+			fondoAzul.setBounds(1, 1, 560, 90);
+			fondoAzul.setOpaque(true);
+			fondoAzul.setBackground(new Color(45, 118, 232));
+			getContentPane().add(fondoAzul);
+			JLabel fondoGris = new JLabel("");
+			fondoGris.setBounds(1, 89, 560, 166);
+			fondoGris.setOpaque(true);
+			fondoGris.setBackground(new Color(227, 227, 227));
+			getContentPane().add(fondoGris);
 
-            // Fondo negro para las margenes
-            JLabel fondoNegro = new JLabel("");
-            fondoNegro.setBackground(Color.BLACK);
-            fondoNegro.setForeground(Color.RED);
-            fondoNegro.setOpaque(true);
-            fondoNegro.setBounds(0, 0, 562, 264);
-            getContentPane().add(fondoNegro);
+			// Fondo negro para las margenes
+			JLabel fondoNegro = new JLabel("");
+			fondoNegro.setBackground(Color.BLACK);
+			fondoNegro.setForeground(Color.RED);
+			fondoNegro.setOpaque(true);
+			fondoNegro.setBounds(0, 0, 562, 264);
+			getContentPane().add(fondoNegro);
 
-            setResizable(false);
-            setSize(562, 256);
-            setVisible(true);
-            setLocationRelativeTo(null);
-        }
-		else{
+			setResizable(false);
+			setSize(562, 256);
+			setVisible(true);
+			setLocationRelativeTo(null);
+		} else {
 			JOptionPane.showMessageDialog(null, "Actualmente no hay sedes creadas");
-            GUIMenuAdmin menu = new GUIMenuAdmin(bd);
-            menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            dispose();
 		}
 	}
 
@@ -235,8 +232,10 @@ public class GUIActualizarSede extends JFrame {
 
 	}
 
-	//Funcion para seleccionar el empleado que se encuentra a cargo actualmente en la sede
-    //De no haber un usuario encargado deja vacio el campo
+	// Funcion para seleccionar el empleado que se encuentra a cargo actualmente
+	// en la sede
+	// De no haber un usuario encargado deja vacio el campo
+	@SuppressWarnings("unchecked")
 	private void seleccionarEmpleado(String identifier) {
 		if (bd.obtenerSede(identifier, "empleado_a_cargo") != null) {
 			String[][] aux = bd.consultarUsuarios("Id", bd.obtenerSede(identifier, "empleado_a_cargo"),
@@ -251,42 +250,38 @@ public class GUIActualizarSede extends JFrame {
 			aCargoDeIn.setSelectedItem(null);
 	}
 
+	// Funcion que valida si algun campo a registrar esta vacio
+	private boolean validar1() {
+		boolean val = true;
+		val = (direccionIn.getText().compareTo("") == 0 || celularIn.getText().compareTo("") == 0
+				|| nombreIn.getText().compareTo("") == 0) ? false : true;
 
-    //Funcion que valida si algun campo a registrar esta vacio
-    private boolean validar1(){
-        boolean val=true;
-        val = (direccionIn.getText().compareTo("")==0 ||
-                celularIn.getText().compareTo("")==0 ||
-                nombreIn.getText().compareTo("")==0) ? false : true;
+		return val;
+	}
 
-        return val;
-    }
+	// Funcion para validar el dominio de los datos ingresados
+	private String validar2() {
+		String mensaje = "";
 
+		Pattern patron = Pattern.compile("[^A-Za-z0-9 #-]");
+		Matcher direccion = patron.matcher(direccionIn.getText());
+		if (direccion.find() || direccionIn.getText().length() > 40)
+			mensaje = mensaje + " Digite una direccion valida \n";
 
-    //Funcion para validar el dominio de los datos ingresados
-    private String validar2(){
-        String mensaje = "";
+		Matcher nombre = patron.matcher(nombreIn.getText());
+		if (nombre.find() || nombreIn.getText().length() > 40)
+			mensaje = mensaje + " Digite un nombre valido \n";
 
+		patron = Pattern.compile("[^0-9]");
+		Matcher tel = patron.matcher(celularIn.getText());
+		if (tel.find() || celularIn.getText().length() > 40 || celularIn.getText().length() < 7)
+			mensaje = mensaje + " Digite un numero de telefono valido \n";
 
-        Pattern patron = Pattern.compile("[^A-Za-z0-9 #-]");
-        Matcher direccion = patron.matcher(direccionIn.getText());
-        if(direccion.find()|| direccionIn.getText().length()>40)
-            mensaje = mensaje + " Digite una direccion valida \n";
+		if (mensaje.compareTo("") == 0)
+			mensaje = "true";
 
-        Matcher nombre = patron.matcher(nombreIn.getText());
-        if(nombre.find()|| nombreIn.getText().length()>40)
-            mensaje = mensaje + " Digite un nombre valido \n";
-
-        patron = Pattern.compile("[^0-9]");
-        Matcher tel = patron.matcher(celularIn.getText());
-        if(tel.find()|| celularIn.getText().length()>40|| celularIn.getText().length()<7)
-            mensaje = mensaje + " Digite un numero de telefono valido \n";
-
-        if(mensaje.compareTo("")==0)
-            mensaje="true";
-
-        return mensaje;
-    }
+		return mensaje;
+	}
 
 	// Clase para manejar los eventos sobre los botones
 	private class ManejadorDeBotones implements ActionListener {
@@ -295,9 +290,8 @@ public class GUIActualizarSede extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == salir1 || e.getSource() == cancelar2) {
-                GUIMenuAdmin menu = new GUIMenuAdmin(bd);
-                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				dispose();
+				return;
 			}
 
 			String aCargo, identifier = idIn.getSelectedItem().toString();
@@ -308,33 +302,32 @@ public class GUIActualizarSede extends JFrame {
 			}
 
 			if (e.getSource() == actualizar) {
-                if(validar1()) {
-                    if (validar2().compareTo("true") == 0) {
-                        if (aCargoDeIn.getSelectedItem() != null) {
-                            aCargo = aCargoDeIn.getSelectedItem().toString();
-                            aCargo = aCargo.substring(0, aCargo.indexOf("-"));
-                        } else
-                            aCargo = null;
+				if (validar1()) {
+					if (validar2().compareTo("true") == 0) {
+						if (aCargoDeIn.getSelectedItem() != null) {
+							aCargo = aCargoDeIn.getSelectedItem().toString();
+							aCargo = aCargo.substring(0, aCargo.indexOf("-"));
+						} else
+							aCargo = null;
 
-                        boolean var = bd.actualizarSede(identifier, direccionIn.getText(), celularIn.getText(), aCargo);
+						boolean var = bd.actualizarSede(identifier, direccionIn.getText(), celularIn.getText(), aCargo);
 
-                        if (var) {
-                            JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");
-
-                        } else
-                            JOptionPane.showMessageDialog(null, "Error al actualizar usuario");
-                        GUIMenuAdmin menu = new GUIMenuAdmin(bd);
-                        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                        dispose();
-                    }
-                    else JOptionPane.showMessageDialog(null, validar2());
-                }
-                else JOptionPane.showMessageDialog(null, "Digite todos los campos");
+						if (var) {
+							JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");
+							dispose();
+						} else
+							JOptionPane.showMessageDialog(null, "Error al actualizar usuario");
+						dispose();
+					} else
+						JOptionPane.showMessageDialog(null, validar2());
+				} else
+					JOptionPane.showMessageDialog(null, "Digite todos los campos");
 			}
 		}
 	}
 
-	// Manejador del desplazamiento de la ventana causado por el arrastre del mouse
+	// Manejador del desplazamiento de la ventana causado por el arrastre del
+	// mouse
 	private void manejadorDesplazamientoVentana(JFrame frame) {
 		frame.addMouseListener(new MouseAdapter() {
 			@Override

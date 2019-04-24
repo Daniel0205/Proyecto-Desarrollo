@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("serial")
 public class GUIMenuVendedor extends JFrame {
 
-    //Variables y componentes de la GUI
+	// Variables y componentes de la GUI
 	private final BaseDeDatos bd;
 	private final String id;
 	private Container contenedor;
@@ -23,7 +23,6 @@ public class GUIMenuVendedor extends JFrame {
 	private int pX, pY;
 
 	public GUIMenuVendedor(BaseDeDatos bd, String id) {
-		super("MENU VENDEDOR");
 		this.id = id;
 		this.bd = bd;
 		initGUI();
@@ -60,7 +59,7 @@ public class GUIMenuVendedor extends JFrame {
 		getContentPane().add(imagenLogo);
 
 		// Boton para consultar la disponibilidad de un producto
-		consultaProducto = new JButton("CONSULTAR PRODUCTOS");
+		consultaProducto = new JButton("CONSULTAR");
 		consultaProducto.setForeground(SystemColor.textHighlight);
 		consultaProducto.setVerticalTextPosition(SwingConstants.BOTTOM);
 		consultaProducto.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -187,14 +186,12 @@ public class GUIMenuVendedor extends JFrame {
 					} else {
 						GUICotizacionVenta cot = new GUICotizacionVenta(bd, id, nombre_cliente, "C");
 						cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-                        dispose();
 					}
 				}
 
 			} else if (actionEvent.getSource() == consultaProducto) {
-				GUIProductos prod = new GUIProductos(bd, id);
+				GUIConsultarProductos prod = new GUIConsultarProductos(bd, id);
 				prod.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-				dispose();
 			} else if (actionEvent.getSource() == salir) {
 				GUILogin login = new GUILogin();
 				login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -214,14 +211,14 @@ public class GUIMenuVendedor extends JFrame {
 					} else {
 						GUICotizacionVenta cot = new GUICotizacionVenta(bd, id, nombre_cliente, "V");
 						cot.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-                        dispose();
 					}
 				}
 			}
 		}
 	}
 
-	// Manejador del desplazamiento de la ventana causado por el arrastre del mouse
+	// Manejador del desplazamiento de la ventana causado por el arrastre del
+	// mouse
 	private void manejadorDesplazamientoVentana(JFrame frame) {
 		frame.addMouseListener(new MouseAdapter() {
 			@Override
