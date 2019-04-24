@@ -206,10 +206,10 @@ UPDATE inventario SET cantidad_disponible=400 WHERE id_sede=2;
 UPDATE inventario SET cantidad_disponible=600 WHERE id_sede=3;
 UPDATE inventario SET cantidad_disponible=800 WHERE id_sede=4;
 
-insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1628344, '2019-05-16' ,'carolina herrera',28000000,'C');
-insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1628344, '2019-06-16' ,'Ramiro Cuellar',2800000,'V');
-insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1630536, '2019-07-16' ,'Carlos Huertado',98000,'C');
-insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1630536, '2019-06-16' ,'Ramiro Cuellar',7000000,'V');
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1628344, '2019-04-16' ,'carolina herrera',28000000,'C');
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1628344, '2019-04-16' ,'Ramiro Cuellar',2800000,'V');
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1630536, '2019-04-16' ,'Carlos Huertado',98000,'C');
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1630536, '2019-04-16' ,'Ramiro Cuellar',7000000,'V');
 insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(30, '2018-06-14' ,'Mauricio Lopez',1400000,'C');
 insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(30, '2018-07-16' ,'Maria Molina',700000,'V');
 
@@ -254,8 +254,10 @@ CREATE VIEW informeCotizaciones AS (SELECT id_producto, nombre, cantidad_compra,
    FROM ventas_cotizaciones_producto NATURAL JOIN venta_cotizaciones NATURAL JOIN producto INNER JOIN empleados ON empleados.cedula = venta_cotizaciones.id_empleado
    	WHERE tipo = 'C' );
 
-DROP VIEW IF EXISTS informeOrdenes;
-CREATE VIEW informeOrdenes AS
-(SELECT id_producto, nombre, cantidad,empleados.sede
-   FROM ordenes_de_trabajo NATURAL JOIN producto
-   INNER JOIN empleados ON empleados.cedula = ordenes_de_trabajo.id_usuario);
+DROP VIEW IF EXISTS informeOrden;
+CREATE VIEW informeOrden AS (SELECT id_producto, nombre, cantidad,empleados.sede
+   FROM ordenes_de_trabajo NATURAL JOIN producto INNER JOIN empleados ON empleados.cedula = ordenes_de_trabajo.id_usuario);
+
+DROP VIEW IF EXISTS informeGanancias;
+CREATE VIEW informeGanancias AS (SELECT id_cotizacion,id_producto,id_empleado, fecha_cotizacion,precio,costo,producto.nombre,sede,cantidad_compra
+FROM venta_cotizaciones NATURAL JOIN ventas_cotizaciones_producto NATURAL JOIN producto INNER JOIN empleados ON tipo='V' AND empleados.cedula=venta_cotizaciones.id_empleado);

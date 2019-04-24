@@ -133,6 +133,28 @@ public class GUICrearInformes  extends JFrame {
 
         }else if(informe.getSelectedItem()=="Ganancias"){
 
+            String idSede = sedes.getSelectedItem().toString();
+            idSede=idSede.substring(0,idSede.indexOf("-"));
+            int sed = Integer.parseInt(idSede);
+
+            String[][] rep =  bd.informeGanancias(periodo.getSelectedItem().toString(),sed);
+
+            for(int i=0;i<rep.length;i++){
+                datainv.addValue(Integer.parseInt(rep[i][1])," ",rep[i][0]);
+            }
+
+            if(panel!=null)getContentPane().remove(panel);
+            JFreeChart chart = ChartFactory.createBarChart("Ganancias","Sedes","Ganancia",datainv, PlotOrientation.VERTICAL,true,true,false);
+            panel = new ChartPanel(chart);
+            panel.setBounds(25, 155, 629,314);
+            panel.setVisible(true);
+            getContentPane().remove(panel);
+            getContentPane().add(panel);
+
+            String[] columns = new String[]{"Sede","Ganancias"};
+
+            llenarTabla(columns,rep);
+
 
         }else if(informe.getSelectedItem()=="Inventario"){
 
