@@ -138,25 +138,111 @@ CREATE TRIGGER reduInve AFTER UPDATE ON venta_cotizaciones FOR EACH ROW EXECUTE 
 
 --Insertar valores a la tabla
 
+
 INSERT INTO sedes(direccion,nombre,telefono,empleado_a_cargo) VALUES ('Cra 100 #86-03','Melendez',3890543,null);
-INSERT INTO sedes(direccion,nombre,telefono,empleado_a_cargo) VALUES ('Cll 15 #13-06','San Fernando',5359834,null);
+INSERT INTO sedes(direccion,nombre,telefono,empleado_a_cargo) VALUES ('Calle 22 #13-06','San Fernando',5359834,null);
+INSERT INTO sedes(direccion,nombre,telefono,empleado_a_cargo) VALUES ('Cra 66 #86-3','Jamundi',3890543,null);
+INSERT INTO sedes(direccion,nombre,telefono,empleado_a_cargo) VALUES ('Cll 15 #13N-06','Palmira',5359834,null);
+
 
 INSERT INTO empleados
-	VALUES (3743, crypt('1234', gen_salt('md5')), 'Pepito', 'Perez', 'Cra 100 #86-06', 31273954335, 'pepito.perez@xyz.com','Jefe de taller',1,true);
+	VALUES (1670129, crypt('1234', gen_salt('md5')), 'Steban', 'Cadena', 'Calle 33 #86-06', 3222204261, 'cadena.esteban@xyz.com','Jefe de taller',1,true);
 INSERT INTO empleados
-	VALUES (3225, crypt('1234', gen_salt('md5')), 'Manuela', 'Diaz', 'Cra 101 #85-05', 3127325837,'manuela.diaz@xyz.com','Jefe de taller',2,true);
+	VALUES (1629338, crypt('1234', gen_salt('md5')), 'Daniel', 'Diaz', 'Cra 10 #8-05', 3017829351,'daniel.diaz@xyz.com','Jefe de taller',2,true);
 INSERT INTO empleados
-	VALUES (3653, crypt('1234', gen_salt('md5')),'Melissa', 'Fuentes' , 'Cra 102 #84-05', 3127399281,'melissa.fuentes@xyz.com','Vendedor',1,true);
+	VALUES (1628344, crypt('1234', gen_salt('md5')),'Cristina', 'Mejia' , 'Calle 12 #89-105', 3137379109,'cristina.mejia@xyz.com','Vendedor',1,true);
 INSERT INTO empleados
-	VALUES (3414, crypt('1234', gen_salt('md5')), 'Jempool' , 'Rivera', 'Cra 103 #83-04', 3205465535,'valeria.rivera@xyz.com','Vendedor',1,true);
+	VALUES (1630536, crypt('1234', gen_salt('md5')), 'Jempool' , 'Suarez', 'Cra 103 #83-04', 3148432071,'jem.suarez@xyz.com','Vendedor',1,true);
 INSERT INTO empleados
-	VALUES (3369, crypt('1234', gen_salt('md5')), 'Felipe', 'Gil', 'Cra 104 #82-03', 3126249102,'felipin.gil@xyz.com','Vendedor',2,true);
+	VALUES (1, crypt('1234', gen_salt('md5')), 'Nicola', 'Tesla', 'Cra 104 #82-03', 3003003000,'nicola.tesla@xyz.com','Jefe de taller',2,true);
+INSERT INTO empleados
+	VALUES (2, crypt('1234', gen_salt('md5')), 'Thomas', 'Edison', 'Cra 55 #52N-93', 3004004000,'thomas.edison@xyz.com','Vendedor',2,true);
+INSERT INTO empleados
+	VALUES (289, crypt('1234', gen_salt('md5')), 'Brayan', 'Chaparro', 'Cra 56 #52N-93', 3004004000,'brayan.chaparro@xyz.com','Jefe de taller',3,true);
+INSERT INTO empleados
+	VALUES (30, crypt('1234', gen_salt('md5')), 'Dario', 'Rojas', 'Cra 45 #52N-93', 3004004000,'dario.rojas@xyz.com','Vendedor',3,true);
+INSERT INTO empleados
+	VALUES (45, crypt('1234', gen_salt('md5')), 'Steven', 'Morales', 'Cra 86 #52N-93', 3004004000,'steven.morales@xyz.com','Jefe de taller',4,true);
+INSERT INTO empleados
+	VALUES (308, crypt('1234', gen_salt('md5')), 'Margarita', 'Osorio', 'Cra 45 #52N-93', 3004004000,'margarita.osorio@xyz.com','Vendedor',4,true);
 
-UPDATE sedes SET empleado_a_cargo = 3743 where id_sede = 1;
-UPDATE sedes SET empleado_a_cargo = 3225 where id_sede = 2;
 
-INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Nochero',50000,150000,'Mesa de noche de tama�o mediano');
-INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Camarote',150000,530000,'Cama de dos pisos :v');
-INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Silla',30000,50000,'Silla de 4 patas');
+UPDATE sedes SET empleado_a_cargo = 1670129 where id_sede = 1;
+UPDATE sedes SET empleado_a_cargo = 1629338 where id_sede = 2;
+UPDATE sedes SET empleado_a_cargo = 1628344 where id_sede = 3;
+UPDATE sedes SET empleado_a_cargo = 1630536 where id_sede = 4;
+
+
+
+INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Nochero',50000,150000,'Madera 50x50x80');
+INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Camarote',150000,530000,'Madera 120X100X180');
+INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Silla',34000,59000,'Mecedora 80X90X100');
+INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Silla',40000,70000,'Estudio 70X90X80');
+INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Sofa',1000000,1400000,'Espuma rosada 220X100X80');
+INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Escritorio',2000000,2400000,'Madera de roble');
+INSERT INTO producto(nombre,costo,precio,descripcion) VALUES('Mecedora',102000,140000,'Madera y espuma cafe');
+
+
+
+INSERT INTO public.ordenes_de_trabajo( asignada_a, fecha_entrega, cantidad, finalizada, id_producto, id_usuario)
+VALUES ('pedro zamora', '2019-10-05', 15, false, 1, 1630536);
+INSERT INTO public.ordenes_de_trabajo( asignada_a, fecha_entrega, cantidad, finalizada, id_producto, id_usuario)
+VALUES ('carlos perez', '2019-01-16', 15, true, 2, 1629338);
+INSERT INTO public.ordenes_de_trabajo( asignada_a, fecha_entrega, cantidad, finalizada, id_producto, id_usuario)
+VALUES ('Roberto Sanchez', '2019-05-16', 45, true, 3, 1629338);
+INSERT INTO public.ordenes_de_trabajo( asignada_a, fecha_entrega, cantidad, finalizada, id_producto, id_usuario)
+VALUES ('Camilo Rodriguez', '2019-10-06', 450, true, 4, 1670129);
+INSERT INTO public.ordenes_de_trabajo( asignada_a, fecha_entrega, cantidad, finalizada, id_producto, id_usuario)
+VALUES ('Mario Mejia', '2019-11-06', 4500, true, 5, 1670129);
+INSERT INTO public.ordenes_de_trabajo( asignada_a, fecha_entrega, cantidad, finalizada, id_producto, id_usuario)
+VALUES ('Agelica Ramirez', '2019-08-09', 80, true, 6, 1670129);
+INSERT INTO public.ordenes_de_trabajo( asignada_a, fecha_entrega, cantidad, finalizada, id_producto, id_usuario)
+VALUES ('Alejandro Pinerez', '2019-08-05', 800, true, 7, 1670129);
+
+
 
 UPDATE inventario SET cantidad_disponible=500 WHERE id_sede=1;
+UPDATE inventario SET cantidad_disponible=400 WHERE id_sede=2;
+UPDATE inventario SET cantidad_disponible=600 WHERE id_sede=3;
+UPDATE inventario SET cantidad_disponible=800 WHERE id_sede=4;
+
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1628344, '2019-05-16' ,'carolina herrera',28000000,'C');
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1628344, '2019-06-16' ,'Ramiro Cuellar',2800000,'V');
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1630536, '2019-07-16' ,'Carlos Huertado',98000,'C');
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(1630536, '2019-06-16' ,'Ramiro Cuellar',7000000,'V');
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(30, '2019-06-14' ,'Mauricio Lopez',1400000,'C');
+insert into venta_cotizaciones(id_empleado,fecha_cotizacion,nombre_cotizante,precio_final,tipo) values(30, '2019-06-16' ,'Maria Molina',700000,'V');
+
+insert into ventas_cotizaciones_producto values(1,260,1);
+insert into ventas_cotizaciones_producto values(2,26,1);
+insert into ventas_cotizaciones_producto values(3,2,1);
+
+insert into ventas_cotizaciones_producto values(3,26,2);
+insert into ventas_cotizaciones_producto values(4,260,2);
+insert into ventas_cotizaciones_producto values(7,2,2);
+
+insert into ventas_cotizaciones_producto values(5,2,3);
+insert into ventas_cotizaciones_producto values(6,1,3);
+insert into ventas_cotizaciones_producto values(4,26,3);
+
+insert into ventas_cotizaciones_producto values(1,26,4);
+insert into ventas_cotizaciones_producto values(2,200,4);
+
+insert into ventas_cotizaciones_producto values(6,2,5);
+insert into ventas_cotizaciones_producto values(1,10,5);
+
+insert into ventas_cotizaciones_producto values(7,6,6);
+insert into ventas_cotizaciones_producto values(1,9,6);
+insert into ventas_cotizaciones_producto values(5,8,6);
+
+----------VISTAS--------
+DROP VIEW IF EXISTS informeProducto;
+CREATE VIEW informeProducto AS ( SELECT ventas_cotizaciones_producto.id_producto,
+    producto.nombre,
+    ventas_cotizaciones_producto.cantidad_compra,
+    venta_cotizaciones.fecha_cotizacion,
+    empleados.sede
+   FROM ventas_cotizaciones_producto
+     JOIN venta_cotizaciones USING (id_cotizacion)
+     JOIN producto USING (id_producto)
+     JOIN empleados ON empleados.cedula = venta_cotizaciones.id_empleado);

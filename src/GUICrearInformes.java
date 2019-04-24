@@ -1,12 +1,17 @@
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.xy.DefaultXYDataset;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 @SuppressWarnings("serial")
 public class GUICrearInformes  extends JFrame {
@@ -21,7 +26,7 @@ public class GUICrearInformes  extends JFrame {
     private DefaultTableModel modelo;
     private JTable tabla;
     private JScrollPane scroll;
-
+    private ChartPanel panel;
 
     public GUICrearInformes(BaseDeDatos bd){
         super("Informes");
@@ -31,6 +36,9 @@ public class GUICrearInformes  extends JFrame {
     }
 
     private void initGUI() {
+
+
+
         contenedor = getContentPane();
         contenedor.removeAll();
         getContentPane().setLayout(null);
@@ -111,8 +119,10 @@ public class GUICrearInformes  extends JFrame {
                     data.setValue(rep[i][0], (Integer.parseInt(rep[i][1])));
             }
 
+            if(panel!=null)getContentPane().remove(panel);
             JFreeChart chart = ChartFactory.createPieChart("Productos populares",data,true,true,false);
-            ChartPanel panel = new ChartPanel(chart);
+
+            panel = new ChartPanel(chart);
             panel.setBounds(25, 155, 629,314);
             panel.setVisible(true);
             getContentPane().remove(panel);
@@ -121,6 +131,31 @@ public class GUICrearInformes  extends JFrame {
             llenarTabla("Nombre del producto","Cantidad vendida o cotizada",rep);
 
         }else if(informe.getSelectedItem()=="Ganancias"){
+            DefaultXYDataset dataset = new DefaultXYDataset();
+            dataset.addSeries("firefox", new double[][] {{ 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 }, { 25, 29.1, 32.1, 32.9, 31.9, 25.5, 20.1, 18.4, 15.3, 11.4, 9.5 }});
+            dataset.addSeries("ie", new double[][] {{ 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 }, { 67.7, 63.1, 60.2, 50.6, 41.1, 31.8, 27.6, 20.4, 17.3, 12.3, 8.1 }});
+            dataset.addSeries("chrome", new double[][] {{ 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 }, { 0.2, 6.4, 14.6, 25.3, 30.1, 34.3, 43.2, 47.3, 58.4 }});
+
+            XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+            renderer.setSeriesPaint(0, Color.ORANGE);
+            renderer.setSeriesPaint(1, Color.BLUE);
+            renderer.setSeriesPaint(2, Color.GREEN);
+            renderer.setSeriesStroke(0, new BasicStroke(2));
+            renderer.setSeriesStroke(1, new BasicStroke(2));
+            renderer.setSeriesStroke(2, new BasicStroke(2));
+
+            if(panel!=null)getContentPane().remove(panel);
+            JFreeChart chart = ChartFactory.createXYLineChart("Browser Quota", "Year", "Quota", dataset);
+            chart.getXYPlot().getRangeAxis().setRange(0, 100);
+            ((NumberAxis) chart.getXYPlot().getRangeAxis()).setNumberFormatOverride(new DecimalFormat("#'%'"));
+            chart.getXYPlot().setRenderer(renderer);
+
+            panel = new ChartPanel(chart);
+            panel.setBounds(25, 155, 629,314);
+            panel.setVisible(true);
+            getContentPane().remove(panel);
+            getContentPane().add(panel);
+
 
 
         }else if(informe.getSelectedItem()=="Inventario"){
@@ -140,6 +175,7 @@ public class GUICrearInformes  extends JFrame {
         }
 
         paintAll(getGraphics());
+        repaint();
 
     }
 
