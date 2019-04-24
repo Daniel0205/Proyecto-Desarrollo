@@ -294,8 +294,7 @@ public class GUICrearInformes  extends JFrame {
         public void actionPerformed(ActionEvent actionEvent) {
             if(actionEvent.getSource()==informe){
                 if(informe.getSelectedItem().toString()=="Inventario"||
-                informe.getSelectedItem().toString()=="Ordenes de trabajo" ||
-                informe.getSelectedItem().toString()=="Ganancias"){
+                informe.getSelectedItem().toString()=="Ordenes de trabajo"){
                     periodo.setEnabled(false);
                 }
                 else periodo.setEnabled(true);
