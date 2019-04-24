@@ -63,7 +63,8 @@ public class GUICotizacionVenta extends JFrame {
 		fecha2.setBounds(92, 97, 220, 32);
 		getContentPane().add(fecha2);
 
-		coti1 = new JLabel("Factura No: ");
+        if(fnt=="C")coti1 = new JLabel("Cotizacion No: ");
+        else coti1 = new JLabel("Venta No: ");
 		coti1.setFont(font);
 		coti1.setBounds(32, 129, 110, 32);
 		getContentPane().add(coti1);
