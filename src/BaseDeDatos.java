@@ -889,9 +889,10 @@ public class BaseDeDatos {
 
     public String[][] informeInventario(int sede) {
 
+
         String sql = "SELECT nombre,sum(cantidad_disponible),id_sede FROM informeInventario ";
 
-        if(sede!=0) sql += " WHERE sede =" + sede +"";
+        if(sede!=0) sql += " WHERE id_sede =" + sede +"";
 
         sql += " GROUP BY nombre,id_producto,id_sede" ;
 

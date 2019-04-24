@@ -53,6 +53,7 @@ public class GUICrearInformes  extends JFrame {
 
         String[] tipInfo = new String[]{"Productos populares","Ganancias","Inventario","Ventas","Cotizaciones","Ordenes de trabajo"};
         informe= new JComboBox<>(tipInfo);
+        informe.addActionListener(listener);
         informe.setBounds(25,50,200,20);
         getContentPane().add(informe);
 
@@ -269,6 +270,14 @@ public class GUICrearInformes  extends JFrame {
     private class BotonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
+            if(actionEvent.getSource()==informe){
+                if(informe.getSelectedItem().toString()=="Inventario"||
+                informe.getSelectedItem().toString()=="Ordenes de trabajo" ||
+                informe.getSelectedItem().toString()=="Ganancias"){
+                    periodo.setEnabled(false);
+                }
+                else periodo.setEnabled(true);
+            }
 
             if (actionEvent.getSource()==salir){
                 dispose();
