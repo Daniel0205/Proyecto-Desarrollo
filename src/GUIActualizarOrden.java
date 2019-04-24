@@ -111,9 +111,6 @@ public class GUIActualizarOrden extends JFrame {
 		}
 		else{
             JOptionPane.showMessageDialog(null, "Actualmente no hay ordenes disponibles");
-            GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
-            menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            dispose();
         }
 	}
 
@@ -330,8 +327,6 @@ public class GUIActualizarOrden extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 
 		    if (e.getSource() == salir || e.getSource() == salir2) {
-                GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
-                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				dispose();
 			}
 
@@ -355,8 +350,6 @@ public class GUIActualizarOrden extends JFrame {
                             JOptionPane.showMessageDialog(null, "Orden de trabajo actualizada exitosamente");
                         } else
                             JOptionPane.showMessageDialog(null, "Error al actualizar orden de trabajo.");
-                        GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
-                        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         dispose();
                     } else
                         JOptionPane.showMessageDialog(null, validar2());
@@ -371,8 +364,6 @@ public class GUIActualizarOrden extends JFrame {
 					JOptionPane.showMessageDialog(null, "Orden de trabajo finalizada exitosamente");
 				} else
 					JOptionPane.showMessageDialog(null, "Error al finalizar orden de trabajo.");
-                GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
-                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				dispose();
 			}
 
@@ -382,8 +373,6 @@ public class GUIActualizarOrden extends JFrame {
 					JOptionPane.showMessageDialog(null, "Orden de trabajo cancelada");
 				} else
 					JOptionPane.showMessageDialog(null, "Error al cancelar orden de trabajo.");
-                GUIMenuJefe menu = new GUIMenuJefe(bd, idJefe);
-                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				dispose();
 			}
 		}

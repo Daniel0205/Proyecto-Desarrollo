@@ -55,22 +55,22 @@ public class GUICotizacionVenta extends JFrame {
 
 		fecha1 = new JLabel("Fecha: ");
 		fecha1.setFont(font);
-		fecha1.setBounds(32, 97, 45, 32);
+		fecha1.setBounds(32, 97, 55, 32);
 		getContentPane().add(fecha1);
 
 		fecha2 = new JLabel(fecha_f);
 		fecha2.setFont(font);
-		fecha2.setBounds(82, 97, 220, 32);
+		fecha2.setBounds(92, 97, 220, 32);
 		getContentPane().add(fecha2);
 
 		coti1 = new JLabel("Cotizacion No: ");
 		coti1.setFont(font);
-		coti1.setBounds(32, 129, 100, 32);
+		coti1.setBounds(32, 129, 110, 32);
 		getContentPane().add(coti1);
 
 		coti2 = new JLabel(id_cotizacion);
 		coti2.setFont(font);
-		coti2.setBounds(127, 129, 100, 32);
+		coti2.setBounds(137, 129, 100, 32);
 		getContentPane().add(coti2);
 
 		vendedor1 = new JLabel("Vendedor: ");
@@ -80,7 +80,7 @@ public class GUICotizacionVenta extends JFrame {
 
 		vendedor2 = new JLabel(nombre);
 		vendedor2.setFont(font);
-		vendedor2.setBounds(380, 97, 100, 32);
+		vendedor2.setBounds(385, 97, 100, 32);
 		getContentPane().add(vendedor2);
 
 		cliente1 = new JLabel("Cliente: ");
@@ -90,7 +90,7 @@ public class GUICotizacionVenta extends JFrame {
 
 		cliente2 = new JLabel(nombre_cliente);
 		cliente2.setFont(font);
-		cliente2.setBounds(360, 129, 200, 32);
+		cliente2.setBounds(365, 129, 200, 32);
 		getContentPane().add(cliente2);
 
 		productos = new JTable(modelo);

@@ -383,8 +383,7 @@ public class GUIActualizarUser extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == salir1 || e.getSource() == cancelar2) {
-				dispose();
-				return;
+			    dispose();
 			}
 
 			String identifier = idIn.getSelectedItem().toString();
@@ -393,7 +392,6 @@ public class GUIActualizarUser extends JFrame {
 			if (e.getSource() == buscar) {
 				dispose();
 				initGUI2(identifier);
-
 			}
 
 			if (e.getSource() == actualizar) {
@@ -414,9 +412,7 @@ public class GUIActualizarUser extends JFrame {
 								Boolean.parseBoolean((String) estadoIn.getSelectedItem()), pass);
 
 						if (var) {
-
 							JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");
-							dispose();
 						} else
 							JOptionPane.showMessageDialog(null, "Error al actualizar usuario.");
 						dispose();

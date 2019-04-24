@@ -297,8 +297,9 @@ public class GUIMenuAdmin extends JFrame {
 			else if (actionEvent.getSource() == salir){
                 GUILogin login = new GUILogin();
                 login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                dispose();
 			}
-            dispose();
+
 		}
 
 	}

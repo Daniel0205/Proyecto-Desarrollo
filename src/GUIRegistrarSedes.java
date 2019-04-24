@@ -204,8 +204,6 @@ public class GUIRegistrarSedes extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent actionEvent) {
 			if(actionEvent.getSource() == cancelar){
-                GUIMenuAdmin menu = new GUIMenuAdmin(bd);
-                menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 dispose();
 			}
 			else if(actionEvent.getSource() == registrar){
@@ -224,8 +222,6 @@ public class GUIRegistrarSedes extends JFrame{
 						if (var) JOptionPane.showMessageDialog(null, "Sede registrada exitosamente");
 						else JOptionPane.showMessageDialog(null, "Error al actualizar usuario.");
 
-                        GUIMenuAdmin menu = new GUIMenuAdmin(bd);
-                        menu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         dispose();
 					}
 					else JOptionPane.showMessageDialog(null, validar2());
