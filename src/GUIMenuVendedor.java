@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("serial")
 public class GUIMenuVendedor extends JFrame {
@@ -173,8 +175,12 @@ public class GUIMenuVendedor extends JFrame {
 				String nombre_cliente = JOptionPane
 						.showInputDialog("Ingrese el nombre del cliente que solicita la transaccion: ");
 
-				if (nombre_cliente == null) {
+				Pattern patron = Pattern.compile("[^A-Za-z ]");
+				Matcher nombre = patron.matcher(nombre_cliente);
 
+
+				if(nombre.find()){
+					JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
 				} else {
 					if (nombre_cliente.equals("")) {
 						JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
@@ -197,8 +203,11 @@ public class GUIMenuVendedor extends JFrame {
 				String nombre_cliente = JOptionPane
 						.showInputDialog("Ingrese el nombre del cliente que solicita la transaccion: ");
 
-				if (nombre_cliente == null) {
+				Pattern patron = Pattern.compile("[^A-Za-z ]");
+				Matcher nombre = patron.matcher(nombre_cliente);
 
+				if(nombre.find()){
+					JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
 				} else {
 					if (nombre_cliente.equals("")) {
 						JOptionPane.showMessageDialog(null, "Error con el nombre del cliente");
