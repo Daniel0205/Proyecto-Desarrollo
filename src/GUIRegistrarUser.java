@@ -285,7 +285,6 @@ public class GUIRegistrarUser extends JFrame {
                     if (validar2().compareTo("true") == 0) {
                         String idSede = sedeIn.getSelectedItem().toString();
                         idSede=idSede.substring(0,idSede.indexOf("-"));
-                        System.out.print(idSede);
 
                         boolean var = bd.insertarUsuario(idIn.getText(), new String(contrasenaIn.getPassword()),
                                 nombreIn.getText(), apellidoIn.getText(), direccionIn.getText(),

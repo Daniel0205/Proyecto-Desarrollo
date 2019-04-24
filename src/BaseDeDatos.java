@@ -161,7 +161,7 @@ public class BaseDeDatos {
 		}
 	}
 
-	
+
 	private void eliminarEncargado(String encargadoId){
         try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
             String sql ="UPDATE sedes SET empleado_a_cargo = "+null+
@@ -268,7 +268,7 @@ public class BaseDeDatos {
 			ResultSet resultSet = statement.executeQuery(sql);
 
 			resultSet.last();
-			int rows = resultSet.getRow(); //# de filas resulado de la consulta 
+			int rows = resultSet.getRow(); //# de filas resulado de la consulta
 			resultSet.beforeFirst();
 
 			Array arraySQL = null;
@@ -496,7 +496,7 @@ public class BaseDeDatos {
   			ResultSet resultSet = statement.executeQuery(sql);
 
   			resultSet.last();
-  			int rows = resultSet.getRow(); //# de filas resulado de la consulta 
+  			int rows = resultSet.getRow(); //# de filas resulado de la consulta
   			resultSet.beforeFirst();
 
   			Array arraySQL = null;
@@ -814,5 +814,59 @@ public class BaseDeDatos {
             return null;
         }
     }
+
+    // Esto va aaa generar los datos
+    public String[][] informeProductos(String intervalo, int sede) {
+
+        String sql = "SELECT nombre,sum(cantidad_compra) FROM informeProducto WHERE fecha_cotizacion BETWEEN NOW()-INTERVAL'";
+
+        if(intervalo=="Mensual") sql += "1";
+        if(intervalo=="Anual") sql += "12";
+        if(intervalo=="Semestral") sql += "6";
+
+        sql += " month' AND NOW()";
+
+        if(sede!=0) sql += " AND sede =" + sede +"";
+
+        sql += " GROUP BY id_producto,nombre" ;
+
+        try (Connection connection = DriverManager.getConnection(URL,USUARIO,PASSWORD)) {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            resultSet.last();
+            int rows = resultSet.getRow(); //# de filas resulado de la consulta
+            resultSet.beforeFirst();
+
+            Array arraySQL = null;
+            int columns = 2; //# de columnas a mostrar (predeterminado)
+            String[][] resultadoConsulta = new String[rows][columns];
+
+            int j = 0;
+            while (resultSet.next()) {
+                for (int i = 0; i < columns; i++) {
+                    arraySQL = resultSet.getArray(i+1);
+                    resultadoConsulta[j][i] = arraySQL.toString().trim();
+                } j++;
+            }
+
+            return resultadoConsulta;
+        }
+        catch (SQLException e) {
+            System.out.println("Connection failure");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 }

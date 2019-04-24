@@ -10,12 +10,12 @@ public class GUIMenuAdmin extends JFrame {
 
 	private Container contenedor;
 	private JButton registrarUsuario, actualizarUsuario, mostrarUsuarios;
-	private JButton registrarSede, actualizarSede, mostrarSedes, salir,registrarProducto,informe;
+	private JButton registrarSede, actualizarSede, mostrarSedes, salir,registrarProducto, generarReporte;
 	private Font font;
 	private ActionListener listener;
 	private BaseDeDatos bd;
-	private JLabel fondoAzul,lblSalir, label_1, label_2, label_3;
-	private JSeparator separator_1, separator_2, separator_3;
+	private JLabel fondoAzul,lblSalir, label_1, label_2, label_3,label_4;
+	private JSeparator separator_1, separator_2, separator_3,separator_4;
     private int pX, pY;
     /**
      * @wbp.nonvisual location=711,689
@@ -163,21 +163,21 @@ public class GUIMenuAdmin extends JFrame {
 		registrarProducto.addActionListener(listener);
 		getContentPane().add(registrarProducto);
 
-		//Boton para registrar un productp
-		informe = new JButton("INFORMES");
-        informe.setForeground(SystemColor.textHighlight);
-        informe.setVerticalTextPosition(SwingConstants.BOTTOM);
-        informe.setHorizontalTextPosition(SwingConstants.CENTER);
-        informe.setIcon(new ImageIcon(GUIMenuAdmin.class.getResource("/images/producto_agregar.png")));
-        informe.setFocusPainted(false);
-        informe.setBorderPainted(false);
-        informe.setOpaque(true);
-        informe.setBackground(new Color(227, 227, 227));
-        informe.setFont(font);
-        informe.setBounds(268, 527, 140, 120);
-        informe.addActionListener(listener);
-		getContentPane().add(informe);
 
+		//--Botón para generar reportes--//
+        generarReporte = new JButton("INFORMES");
+        generarReporte.setForeground(SystemColor.textHighlight);
+        generarReporte.setVerticalTextPosition(SwingConstants.BOTTOM);
+        generarReporte.setHorizontalTextPosition(SwingConstants.CENTER);
+        generarReporte.setIcon(new ImageIcon(GUIMenuAdmin.class.getResource("/images/producto_agregar.png")));
+        generarReporte.setFocusPainted(false);
+        generarReporte.setBorderPainted(false);
+        generarReporte.setOpaque(true);
+        generarReporte.setBackground(new Color(227, 227, 227));
+        generarReporte.setFont(font);
+        generarReporte.setBounds(268, 527, 140, 120);
+        generarReporte.addActionListener(listener);
+        getContentPane().add(generarReporte);
 
 		//-- Eriquetas --//
 		label_1 = new JLabel("USUARIOS");
@@ -195,7 +195,13 @@ public class GUIMenuAdmin extends JFrame {
 		label_3.setFont(font);
 		label_3.setBounds(118, 501, 81, 14);
 		getContentPane().add(label_3);
-		
+
+        label_4 = new JLabel("INFORMES");
+        label_4.setForeground(SystemColor.textHighlight);
+        label_4.setFont(font);
+        label_4.setBounds(268, 501, 65, 14);
+        getContentPane().add(label_4);
+
 		//-- Separadores --//
 		separator_1 = new JSeparator();
 		separator_1.setForeground(SystemColor.textHighlight);
@@ -212,6 +218,12 @@ public class GUIMenuAdmin extends JFrame {
 		separator_3.setBackground(Color.WHITE);
 		separator_3.setBounds(206, 507, 52, 9);
 		getContentPane().add(separator_3);
+
+        separator_4 = new JSeparator();
+        separator_4.setForeground(SystemColor.textHighlight);
+        separator_4.setBackground(Color.WHITE);
+        separator_4.setBounds(340, 507, 68, 9);
+        getContentPane().add(separator_4);
 
 		//Boton salir
 		salir = new JButton("");
@@ -294,11 +306,15 @@ public class GUIMenuAdmin extends JFrame {
                 formulario6.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 formulario6.setPreferredSize(new Dimension(400,400));
             }
-			else if (actionEvent.getSource() == salir){
+			else if (actionEvent.getSource() == generarReporte){
+                GUICrearInformes report = new GUICrearInformes(bd);
+                report.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+            else if (actionEvent.getSource() == salir){
                 GUILogin login = new GUILogin();
                 login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 dispose();
-			}
+            }
 		}
 
 	}
