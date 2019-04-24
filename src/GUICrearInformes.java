@@ -111,7 +111,7 @@ public class GUICrearInformes  extends JFrame {
                     data.setValue(rep[i][0], (Integer.parseInt(rep[i][1])));
             }
 
-            JFreeChart chart = ChartFactory.createPieChart("Productos mas populares",data,true,true,false);
+            JFreeChart chart = ChartFactory.createPieChart("Productos populares",data,true,true,false);
             ChartPanel panel = new ChartPanel(chart);
             panel.setBounds(25, 155, 629,314);
             panel.setVisible(true);
@@ -138,6 +138,8 @@ public class GUICrearInformes  extends JFrame {
 
 
         }
+
+        paintAll(getGraphics());
 
     }
 

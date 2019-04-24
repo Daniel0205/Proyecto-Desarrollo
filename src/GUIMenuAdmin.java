@@ -215,7 +215,7 @@ public class GUIMenuAdmin extends JFrame {
 		separator_3 = new JSeparator();
 		separator_3.setForeground(SystemColor.textHighlight);
 		separator_3.setBackground(Color.WHITE);
-		separator_3.setBounds(206, 507, 202, 9);
+		separator_3.setBounds(206, 507, 52, 9);
 		getContentPane().add(separator_3);
 
         separator_4 = new JSeparator();
